@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  
+
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+  integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+
+  <title>freetechhub</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../../../static/home/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="../../../static/home/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+  <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_1635546_lpb8m1lca7.css">
+  <link rel="stylesheet" type="text/css" href="http://at.alicdn.com/t/font_1635543_0jf6omfa396v.css">
+  <!-- Custom styles for this template -->
+  <link href="../../../static/home/css/agency.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="../../../static/home/css/style.css">
+
+
+  <style type="text/css">
+   ul{ list-style:none;}
+   ul li ul{display:none;   color:white;}
+   ul li:hover ul{display:block;
+    color:black;}
+    #ADD{background-image: url("img/portfolio/cloud.jpg");  
+    height: 300px;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover; }
+    .about_img_left{
+      padding-top: 20px;
+      padding-bottom: 20px;
+
+      margin-left: 200px;
+      padding-right: 20px;
+    }
+    .about_text_right{
+      width: 400px;
+      padding:20px;
+      margin-right: 200px;
+
+    }
+    .about_img_right{
+      padding: 20px;
+      padding-left: 200px;
+      margin-right:350px
+    }
+    .about_text_left{
+      width: 400px;
+      margin-left: 150px;
+      padding: 20px;
+    }
+  </style>
+
+</head>
+
+<body id="page-top">
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav" style="background-color: black; height: 8%">
+    <div class="container">
+      <a class="navbar-brand js-scroll-trigger" href="#page-top">freetechhub</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        Menu
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav text-uppercase ml-auto">
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="{% url 'home:index' %}">home</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#contact">LANGUAGE</a>
+            <ul>
+              <li style="background-color: black; "><a class="nav-link js-scroll-trigger" href="#">chinese</a>   
+                <li style="background-color: black;"><a class="nav-link js-scroll-trigger" href="#">english</a>   
+                </ul>
+                
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      {% block content %}{% endblock content %}
+
+
+
+
+
+      <!-- Portfolio Modals -->
+
+      <script src="../../../static/home/js/app.js"></script>
+
+      <!-- Bootstrap core JavaScript -->
+      <script src="../../../static/home/vendor/jquery/jquery.min.js"></script>
+      <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+      <!-- Plugin JavaScript -->
+      <script src="../../../static/home/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+      <!-- Contact form JavaScript -->
+      <script src="../../../static/home/js/jqBootstrapValidation.js"></script>
+      <script src="../../../static/home/js/contact_me.js"></script>
+
+      <!-- Custom scripts for this template -->
+      <script src="../../../static/home/js/agency.min.js"></script>
+
+    </body>
+
+    </html>

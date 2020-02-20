@@ -1,0 +1,135 @@
+ {% extends "base2.html"  %}
+
+ {% block content %}
+ {% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if next %}
+{% if user.is_authenticated %}
+<p>Your account doesn't have access to this page. To proceed,
+please login with an account that has access.</p>
+{% else %}
+<p>Please login to see this page.</p>
+{% endif %}
+{% endif %}
+ <br />
+ <br>
+
+ <div class="containers">
+    
+      
+ 		<div class="row">
+ 			<div class="col-lg-12 col-xs-12 col-sm-12 col-lg-12 mx-auto text-center">
+ 				<div class="content first-content">
+ 					<div class="first-column">
+ 						<h2 class="title title-primary">welcome back!</h2>
+ 						<p class="description description-primary">To keep connected with us</p>
+ 						<p class="description description-primary">please login with your personal info</p>
+ 						<button id="signin" class="btns btns-primary">sign in</button>
+ 					</div>    
+ 					<div class="second-column">
+ 						<h2 class="title title-second">Log in</h2>
+ 						<div class="social-media">
+ 							<ul class="list-social-media">
+ 								<a class="link-social-media" href="#">
+ 									<li class="item-social-media">
+ 										<i class="fab fa-weixin"></i>        
+ 									</li>
+ 								</a>
+ 								<a class="link-social-media" href="#">
+ 									<li class="item-social-media">
+ 										<i class="fab fa-github"></i>
+ 									</li>
+ 								</a>
+ 								<a class="link-social-media" href="#">
+ 									<li class="item-social-media">
+ 										<i class="fab fa-qq"></i>
+ 									</li>
+ 								</a>
+ 							</ul>
+ 						</div><!-- social media -->
+ 					
+ 							<form  class="form" method="post" action="{% url 'home:login' %}">
+                            {% csrf_token %}
+ 							<label class="label-input" for="">
+ 								<i class="far fa-user icon-modify"></i>
+ 								 <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus="autofocus" maxlength="20"/>
+ 							</label>
+
+
+ 							<label class="label-input" for="">
+ 								<i class="fas fa-lock icon-modify"></i>
+ 								 <input class="form-control required" type="password" placeholder="Password" id="password" name="password" maxlength="20"/>
+ 							</label>
+
+ 							<a class="password" href="#">Forgot your password?</a>
+ 							  <button type="submit" class="btns btns-second" name="submit">LOGIN</button>
+                              <input type="hidden" name="next" value="{% url 'home:index' %}" > 
+ 							</form>      
+ 					
+ 					</div><!-- second column -->
+ 				</div><!-- first content -->
+ 			</div>
+ 		</div>
+ 	
+ 	<div class="content second-content">
+ 		<div class="first-column">
+ 			<h2 class="title title-primary">hello, friend!</h2>
+ 			<p class="description description-primary">Enter your personal details</p>
+ 			<p class="description description-primary">and start journey with us</p>
+ 			<button id="signup" class="btns btns-primary">sign up</button>
+ 		</div>
+ 		<div class="second-column">
+ 			<h2 class="title title-second">create account</h2>
+
+ 			<div class="social-media">
+ 				<ul class="list-social-media">
+ 					<a class="link-social-media" href="#">
+ 						<li class="item-social-media">
+ 							<i class="fab fa-weixin"></i>
+ 						</li>
+ 					</a>
+ 					<a class="link-social-media" href="#">
+ 						<li class="item-social-media">
+ 							<i class="fab fa-github"></i>
+ 						</li>
+ 					</a>
+ 					<a class="link-social-media" href="#">
+ 						<li class="item-social-media">
+ 							<i class="fab fa-qq"></i>
+ 						</li>
+ 					</a>
+ 				</ul>
+ 			</div><!-- social media -->
+ 			
+           <form class="form" method="post" action="{% url 'home:register' %}">
+		    {% csrf_token %}
+ 				<label class="label-input" for="">
+ 					<i class="far fa-user icon-modify"></i>
+ 					 <input type="text" placeholder="Username" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus required id="id_username"> 
+ 				</label>
+ 		
+
+ 				<label class="label-input" for="">
+ 					<i class="fas fa-lock icon-modify"></i>
+ 					<input type="password" placeholder="New Password" name="password1" autocomplete="new-password" required id="id_password1"> </p>
+ 				</label>
+ 				<label class="label-input" for="">
+ 					<i class="fas fa-lock icon-modify"></i>
+ 					<input type="password" placeholder="Retype New Password" name="password2" autocomplete="new-password" required id="id_password2"></p>
+ 				</label>
+
+ 				<a class="password" href="#">Already have one?</a>
+ 				<button class="btns btns-second" name='submit'>sign up</button>
+               <input type="hidden" name="text" value="/home/" />
+ 			</form>
+ 		</div><!-- second column -->
+ 	</div><!-- second-content -->
+ </div>
+ <script>
+$(function () { 
+  $("[data-toggle='popover']").popover();
+});
+</script>
+ {% endblock content %}
