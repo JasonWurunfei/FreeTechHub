@@ -32,7 +32,7 @@
  						</div><!-- social media -->
  					
  							<form  class="form" method="post" action="{% url 'home:login' %}">
-                                                         {% csrf_token %}
+                            {% csrf_token %}
  							<label class="label-input" for="">
  								<i class="far fa-user icon-modify"></i>
  								 <input class="form-control required" type="text" placeholder="Username" id="username" name="username" autofocus="autofocus" maxlength="20"/>
@@ -90,41 +90,28 @@
  			</div><!-- social media -->
  			
            <form class="form" method="post" action="{% url 'home:register' %}">
-           {% csrf_token %}
-
-                               <input type="hidden" name="csrfmiddlewaretoken" value="zwuPKqlgeyIdlJ0MTSTTkbIHBWMVKED3ydJEcIriLOChknD9RHf9hjys7wRjvTE2">
-		               
- 				<label class="label-input"  for="id_username">
+		    {% csrf_token %}
+ 				<label class="label-input" for="">
  					<i class="far fa-user icon-modify"></i>
- 					 <input type="text" placeholder="Username" name="username" maxlength="30" autocapitalize="none" autocomplete="username" autofocus required id="id_username"> 
- 
+ 					 <input type="text" placeholder="Username" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus required id="id_username"> 
  				</label>
- 		                 <label class="label-input" for="id_email">
+ 		                 <label class="label-input" for="">
                                        <i class="far fa-envelope icon-modify"></i>
-                                       <input type="email" placeholder="Email" name="email" maxlength="200" required id="id_email">
-
+                                       <input type="email" placeholder="Email">
                                  </label>
 
- 				<label class="label-input" for="id_password1">
+ 				<label class="label-input" for="">
  					<i class="fas fa-lock icon-modify"></i>
- 					<input type="password" placeholder="New Password" name="password1" autocomplete="new-password" required id="id_password1">
- 
+ 					<input type="password" placeholder="New Password" name="password1" autocomplete="new-password" required id="id_password1"> </p>
  				</label>
  				<label class="label-input" for="">
  					<i class="fas fa-lock icon-modify"></i>
- 					<input type="password" placeholder="Retype New Password" name="password2" autocomplete="new-password" required id="id_password2">
+ 					<input type="password" placeholder="Retype New Password" name="password2" autocomplete="new-password" required id="id_password2"></p>
  				</label>
 
  				<a class="password" href="#">Already have one?</a>
  				<button class="btns btns-second" name='submit'>sign up</button>
                <input type="hidden" name="text" value="/home/" />
-               {% if field.help_text %}
-               <small style="color: grey">{{ field.help_text }}</small>
-               {% endif %}
-               {% for error in field.errors %}
-               <p style="color: red">{{ error }}</p>
-              {% endfor %}
-
  			</form>
  		</div><!-- second column -->
  	</div><!-- second-content -->
