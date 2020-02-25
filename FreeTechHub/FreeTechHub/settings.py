@@ -37,8 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+     'social_django', # 新增
+     'six',
     #My app
     'home',
+ 
 ]
 
 MIDDLEWARE = [
@@ -49,8 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',  
 ]
-
 ROOT_URLCONF = 'FreeTechHub.urls'
 
 TEMPLATES = [
@@ -65,6 +68,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',  
+                'social_django.context_processors.login_redirect', # 
             ],
         },
     },
@@ -124,4 +129,16 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
         os.path.join(BASE_DIR,'static'),
    ]
+AUTHENTICATION_BACKENDS = (
+     'social_core.backends.github.GithubOAuth2',
+     'django.contrib.auth.backends.ModelBackend',
+ ) # 新增
 
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_GITHUB_KEY = 'cdcae5bb26298f86c742'
+SOCIAL_AUTH_GITHUB_SECRET = 'eb1bb00276fd64548515e8d90a5598ba8197bef3'
+SOCIAL_AUTH_GITHUB_USE_OPENID_AS_USERNAME = True
+ 
+ # 登陆成功后的回调路由
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'http://localhost:8000/home' # 登陆成功之后的路由
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
