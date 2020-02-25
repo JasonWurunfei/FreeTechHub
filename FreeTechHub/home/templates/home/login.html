@@ -37,7 +37,7 @@ please login with an account that has access.</p>
  										<i class="fab fa-weixin"></i>        
  									</li>
  								</a>
- 								<a class="link-social-media" href="#">
+ 								<a class="link-social-media" href="{% url 'social:begin' 'github' %}">
  									<li class="item-social-media">
  										<i class="fab fa-github"></i>
  									</li>
@@ -109,7 +109,10 @@ please login with an account that has access.</p>
  					<i class="far fa-user icon-modify"></i>
  					 <input type="text" placeholder="Username" name="username" maxlength="150" autocapitalize="none" autocomplete="username" autofocus required id="id_username"> 
  				</label>
- 		
+ 		                 <label class="label-input" for="">
+                                       <i class="far fa-envelope icon-modify"></i>
+                                       <input type="email" placeholder="Email">
+                                 </label>
 
  				<label class="label-input" for="">
  					<i class="fas fa-lock icon-modify"></i>
