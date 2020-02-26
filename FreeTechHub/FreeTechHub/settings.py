@@ -138,7 +138,7 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_GITHUB_KEY = 'cdcae5bb26298f86c742'
 SOCIAL_AUTH_GITHUB_SECRET = 'eb1bb00276fd64548515e8d90a5598ba8197bef3'
 SOCIAL_AUTH_GITHUB_USE_OPENID_AS_USERNAME = True
- 
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
  # 登陆成功后的回调路由
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'http://localhost:8000/home' # 登陆成功之后的路由
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'https://localhost:8000/login/github/complete/github/' # 登陆成功之后的路由
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
