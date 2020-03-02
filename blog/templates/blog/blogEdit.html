@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+     <!--<h1 align="center" style="color:Pink">Welcome! {{ user.username }}</h1>-->
+     <div>
+         <a type="submit" href="/show/">Homepage</a>
+     </div>
+     <hr/>
+    <!--<form method="POST" action="/post/{{ user.id }}/" enctype="multipart/form-data" class="bs-example form-horizontal">-->
+     <form method="POST" action="/post/" enctype="multipart/form-data" class="bs-example form-horizontal">
+        {% csrf_token %}
+        {{ form }}
+        {{ form.media }}
+        <h3>Please choose your photos</h3>
+        <input type="file" name="img" multiple="multiple"/><br/>
+        <h3>Please choose your video</h3>
+        <input type="file" name="video" multiple="multiple"><br/>
+        <button type="submit" class="btn btn-success">Submit</button><br/>
+    </form>
+</body>
+</html>
