@@ -4,7 +4,6 @@ from django.contrib import admin
 from . import views
 
 from django.contrib.auth.views import LoginView
-
 from django.conf.urls import url
 app_name='accounts'
 urlpatterns = [
