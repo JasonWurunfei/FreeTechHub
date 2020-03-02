@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	{% load crispy_forms_tags %}
-	<title>register</title>
-	<meta charset="utf-8">
+  {% load crispy_forms_tags %}
+  <title>register</title>
+  <meta charset="utf-8">
 </head>
 <body>   
-	<a href="/">Home</a> -
-	<a href="{% url 'accounts:login' %}">Login</a>
+  <a href="/">Home</a> -
+  <a href="{% url 'accounts:login' %}">Login</a>
 </br>
 <form method="post" class="form-group" action="{% url 'accounts:register' %}">
-	{% csrf_token %}
-	{{ form|crispy }}
-	<button type="submit" class="btn btn-success">Register</button>
+  {% csrf_token %}
+  {{ form|crispy }}
+  <button type="submit" class="btn btn-success">Register</button>
 </form>
 </body>
 </html>
