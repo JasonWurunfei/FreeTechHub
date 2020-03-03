@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+
 from .forms import CommentForm
 from .models import Comments
 from django.contrib.contenttypes.models import ContentType
@@ -33,4 +35,4 @@ def comment(request,post_id):
                 date=date,
                 parent=parent_obj,
             )
-            return redirect('/show_blog/%d/'% post_id)
+            return redirect(reverse('blog:post_detail', args=(post_id,)))

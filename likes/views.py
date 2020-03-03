@@ -1,6 +1,8 @@
 from django.http import HttpResponseRedirect
+from django.urls import reverse
+
 from .models import Likes
-from  django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.models import ContentType
 import datetime
 
 def Postlikes(request,post_id,like_type):
@@ -35,7 +37,7 @@ def Postlikes(request,post_id,like_type):
                 like_type=like_type,
             )
 
-        return HttpResponseRedirect('/show_blog/%d'% post_id)
+        return HttpResponseRedirect(reverse('blog:post_detail', args=(post_id,)))
 
     else:
-        HttpResponseRedirect('/accounts/')
+        return HttpResponseRedirect('accounts:login')

@@ -2,6 +2,8 @@ import datetime
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+
 from blog.forms import PostForm
 from blog.models import Post, Pic, Video
 from comment.forms import CommentForm
@@ -27,7 +29,7 @@ def post(request, user_id):
             for file in files2:
                 vid = Video(content=file, post=id)
                 vid.save()
-        return redirect('/show/')
+        return redirect('blog:show')
 
     else:
         form = PostForm()
@@ -47,14 +49,14 @@ def edit_post(request, post_id):
 
             files1 = request.FILES.getlist('img')
             for file in files1:
-                img = Pic(image=file, post=post_id)
+                img = Pic(image=file, post_id=post_id)
                 img.save()
             files2 = request.FILES.getlist('video')
             for file in files2:
-                vid = Video(content=file, post=post_id)
+                vid = Video(content=file, post_id=post_id)
                 vid.save()
 
-            return redirect('/show_blog/%d'% post_id)
+            return redirect(reverse('blog:post_detail', args=(post_id,)))
     else:
         new_post_form = PostForm(instance=post)
         return render(request, 'blog/blogEdit.html', {'new_post_form': new_post_form, 'post_id':post_id})
@@ -62,7 +64,7 @@ def edit_post(request, post_id):
 def delete_post(reqeust, post_id):
     post = Post.objects.get(id=post_id)
     post.delete()
-    return redirect('/show/')
+    return redirect('blog:show')
 
 def show(request):
     texts = Post.objects.all().order_by('-mod_date')

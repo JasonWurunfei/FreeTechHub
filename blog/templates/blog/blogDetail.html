@@ -47,9 +47,9 @@
     <div class="btn-group">
       <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/{{ post_detail.id }}/like">Like</a></button>
       <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/{{ post_detail.id }}/dislike">Dislike</a></button>
-      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'edit_post' post_detail.id %}">Edit</a></button>
-      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/delete_post/{{ post_detail.id }}/">Delete</a> </button>
-      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="/show/">Back</a></button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'blog:edit_post' post_detail.id %}">Edit</a></button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'blog:delete_post' post_detail.id %}">Delete</a> </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'blog:show' %}">Back</a></button>
     </div>
     <div class="text-muted text-right" style="margin-top: 4rem">{{ post_detail.mod_date }}</div>
   </div>
@@ -75,8 +75,8 @@
               </blockquote>
               <h4>Reply</h4>
               <form method="POST" style="margin-top: 1.3em;" action="{% url 'comment_page' post_id=post_detail.id %}">
-                {{ comment_form }}
                 {% csrf_token %}
+                {{ comment_form }}
                 <input type="hidden" name="parent_id" value="{{ comment.id }}">
                 <button type="submit" class="btn btn-primary btn-1g">Reply to the comment</button>
               </form>
@@ -93,8 +93,8 @@
       <div class="card-body">
         <h3>Leave a comment</h3>
         <form method="post" style="margin-top: 1.3em;" action="{% url 'comment_page' post_id=post_detail.id %}">
-          {{ comment_form }}
           {% csrf_token %}
+          {{ comment_form }}
           <button type="submit" class="btn btn-primary btn-1g">Submit</button>
         </form>
       </div>
