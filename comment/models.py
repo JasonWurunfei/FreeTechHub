@@ -7,7 +7,7 @@ from markdown import markdown
 
 
 class Comments(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     parent = models.ForeignKey('self', null=True, blank=True,on_delete=models.CASCADE)

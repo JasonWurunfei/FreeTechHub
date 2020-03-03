@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Likes(models.Model):
-    user = models.ForeignKey(User,models.CASCADE, null=True)
+    user = models.ForeignKey(User,models.CASCADE)
     like_type = models.BooleanField()     # 0 >>>likes  1 >>>undo
     date= models.DateTimeField(auto_now_add=True)
 

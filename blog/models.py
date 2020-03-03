@@ -11,7 +11,7 @@ class DateCreateModMixin(models.Model):
     mod_date = models.DateTimeField(auto_now_add=True)
 
 class Post(DateCreateModMixin):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, null=True)
     text = MarkdownxField()
 

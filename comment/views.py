@@ -5,7 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 import datetime
 
 def comment(request,post_id):
-    # user = request.user
+    user = request.user
     post_type = ContentType.objects.get(app_label="blog", model="post")
     date = datetime.datetime.now()
     parent_obj = None
@@ -26,7 +26,7 @@ def comment(request,post_id):
                     parent_obj = parent_qs.first()
 
             Comments.objects.create(
-                # user=user,
+                user=user,
                 content_type=post_type,
                 object_id=post_id,
                 text=text,
