@@ -12,7 +12,7 @@ def register(request):
 		if form.is_valid():
 			form.save()
 			return redirect("accounts:login")
-		else:
-			form = RegisterForm(request.POST)
+	else:
+		form = RegisterForm(request.POST)
 
-			return render(request, 'registration/register.html', context={'form': form})
+		return render(request, 'registration/register.html', context={'form': form})
