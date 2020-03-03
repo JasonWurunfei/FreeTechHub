@@ -14,5 +14,4 @@ def register(request):
 			return redirect("accounts:login")
 	else:
 		form = RegisterForm(request.POST)
-
 	return render(request, 'registration/register.html', context={'form': form})
