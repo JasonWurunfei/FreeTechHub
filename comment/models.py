@@ -5,7 +5,6 @@ from django.db import models
 from django.utils.safestring import mark_safe
 from markdown import markdown
 
-
 class Comments(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
@@ -27,3 +26,4 @@ class Comments(models.Model):
 
     def children(self):
         return Comments.objects.filter(parent=self)
+    
