@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'comment.apps.CommentConfig',
     'likes.apps.LikesConfig',
     'home.apps.HomeConfig',
+    'markdownx',
+    'django.forms',
 ]
 
 MIDDLEWARE = [

@@ -4,3 +4,4 @@ migrations/*
 !migrations/__init__.py
 db.sqlite3
 /static/
+.idea/
