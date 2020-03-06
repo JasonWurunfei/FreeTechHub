@@ -1,0 +1,12 @@
+asgiref==3.2.3
+Django==3.0.3
+django-crispy-forms==1.9.0
+django-haystack==2.8.1
+django-markdownx==3.0.1
+jieba==0.42.1
+Markdown==3.2.1
+Pillow==7.0.0
+pytz==2019.3
+six==1.14.0
+sqlparse==0.3.1
+Whoosh==2.7.4
