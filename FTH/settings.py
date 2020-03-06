@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'whoosh',
     'jieba',
     'markdownx',
+    'six',
 
     # system apps
     'accounts.apps.AccountsConfig',
@@ -152,3 +153,14 @@ MEDIA_URL = '/media/'
 LOGIN_URL = ''
 LOGIN_REDIRECT_URL = ''
 LOGOUT_REDIRECT_URL = ''
+#use email to register
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = False # 是否使用TLS安全传输协议(用于在两个通信应用程序之间提供保密性和数据完整性。)
+EMAIL_USE_SSL = True 
+EMAIL_HOST = 'smtp.163.com' 
+EMAIL_PORT = 465   
+EMAIL_HOST_USER = ''       # 自己的邮箱
+EMAIL_HOST_PASSWORD = ''       # 我的邮箱授权码
+EMAIL_SUBJECT_PREFIX = '[FREETECHHUB]'     # 为邮件Subject-line前缀,默认是'[django]'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # 与 EMAIL_HOST_USER 相同
+PASSWORD_RESET_TIMEOUT_DAYS = 1

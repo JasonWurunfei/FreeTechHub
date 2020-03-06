@@ -18,14 +18,13 @@ def post(request, user_id):
             post.user_id = user_id
             post.save()
 
-            id = Post.objects.get(text=post.text)
             files1 = request.FILES.getlist('img')
             for file in files1:
-                img = Pic(image=file, post=id)
+                img = Pic(image=file, post=post)
                 img.save()
             files2 = request.FILES.getlist('video')
             for file in files2:
-                vid = Video(content=file, post=id)
+                vid = Video(content=file, post=post)
                 vid.save()
         return redirect('blog:show')
 
