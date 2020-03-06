@@ -1,6 +1,5 @@
 from django import template
 from django.contrib.contenttypes.models import ContentType
-
 from ..models import Likes
 
 register = template.Library()
@@ -20,3 +19,4 @@ def get_dislikes_number(content_type_id, object_id):
         return count
     except ContentType.DoesNotExist:
         return 'Unknown'
+    

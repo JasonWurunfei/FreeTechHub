@@ -1,8 +1,6 @@
 from django import forms
 from markdownx.fields import MarkdownxFormField
-
 from blog.models import Post
-
 
 class PostForm(forms.ModelForm):
     title = forms.CharField(label='Title', max_length=100)
@@ -11,3 +9,4 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['title', 'text']
+    

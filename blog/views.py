@@ -89,12 +89,15 @@ def show(request):
         if len(videos) >= 2:
             for q in range(len(videos)):
                 video.append(videos[q])
+    context = {
+        'img':img,
+        'texts':texts,
+        'user':user,
+        'users':users,
+        'video':video,
+    }
 
-    return render(request, 'blog/blogs.html', {'img':img,
-                                         'texts':texts,
-                                         'user':user,
-                                         'users':users,
-                                         'video':video,})
+    return render(request, 'blog/blogs.html', context)
 
 def show_blog(request, post_id):
     post_detail = get_object_or_404(Post, pk=post_id)
@@ -124,11 +127,15 @@ def show_blog(request, post_id):
 
     comments = Comments.objects.filter(object_id=post_id, parent=None)
     comment_form = CommentForm()
-    return render(request, 'blog/blogDetail.html', {'img': img,
-                                                    'user': user,
-                                                    'users': users,
-                                                    'post_detail': post_detail,
-                                                    'post_type_id': post_type.id,
-                                                    'video': video,
-                                                    'comments': comments,
-                                                    'comment_form':comment_form},)
+    
+    context = {
+        'img': img,
+        'user': user,
+        'users': users,
+        'post_detail': post_detail,
+        'post_type_id': post_type.id,
+        'video': video,
+        'comments': comments,
+        'comment_form':comment_form,
+    }
+    return render(request, 'blog/blogDetail.html', context)
