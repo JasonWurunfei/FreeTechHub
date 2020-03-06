@@ -5,9 +5,9 @@
     <title>home_page</title>
 </head>
 <body>
-<form action="{% url 'home:index' %}" >
+<form action="{% url 'haystack_search' %}">
     {% csrf_token %}
-    <input type="search" name="search" placeholder="搜索">
+    <input type="search" name="q" placeholder="搜索">
     <input type="submit" value="搜索">
 </form>
 

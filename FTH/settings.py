@@ -37,14 +37,33 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # third part packages
     'crispy_forms',
+    'haystack',
+    'whoosh',
+    'jieba',
+    'markdownx',
+
     # system apps
     'accounts.apps.AccountsConfig',
     'blog.apps.BlogConfig',
     'comment.apps.CommentConfig',
     'likes.apps.LikesConfig',
     'home.apps.HomeConfig',
+    'django.forms',
 ]
+
+# add search engine (whoosh)
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'blog.whoosh_cn_backends.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    }
+}
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5      # 分页显示的数据量
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor' # 数据库改变自动更新索引
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -61,7 +80,7 @@ ROOT_URLCONF = 'FTH.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR+"/templates",],
+        'DIRS': [BASE_DIR + "/templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
