@@ -1,2 +1,19 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>home_page</title>
+</head>
+<body>
+<form action="{% url 'haystack_search' %}">
+  {% csrf_token %}
+  <input type="search" name="q" placeholder="搜索">
+  <input type="submit" value="搜索">
+</form>
+</body>
+</html>
+=======
 <a href="/">Home</a> -
 <a href="{% url 'accounts:login' %}">Login</a>
+>>>>>>> 72bc03b952d605679ed1c59a564bf1075ff40e4b

@@ -3,12 +3,10 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-
 from blog.forms import PostForm
 from blog.models import Post, Pic, Video
 from comment.forms import CommentForm
 from comment.models import Comments
-
 
 def post(request, user_id):
     if request.method == "POST":
@@ -139,3 +137,4 @@ def show_blog(request, post_id):
         'comment_form':comment_form,
     }
     return render(request, 'blog/blogDetail.html', context)
+
