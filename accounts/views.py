@@ -61,3 +61,8 @@ def register(request):
     else:
         form = RegisterForm()
     return render(request, 'registration/register.html', {'form': form})
+
+    
+def profile(request, user_id):
+    user = User.objects.get(id = user_id)
+    return render(request, 'registration/profile.html', context={'user': user})
