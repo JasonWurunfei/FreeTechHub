@@ -4,7 +4,7 @@ db.sqlite3
 /static/
 .idea/
 whoosh_index/
-media/
+#media/
 
 # django migrations
 **/migrations/**
