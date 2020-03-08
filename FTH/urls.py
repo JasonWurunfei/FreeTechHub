@@ -17,7 +17,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-
 from comment.views import comment
 from likes.views import Postlikes
 
@@ -29,5 +28,7 @@ urlpatterns = [
     path('<int:post_id>/', comment, name="comment_page"),
     path('<int:post_id>/<str:like_type>', Postlikes),
     path('markdownx/', include('markdownx.urls')),
+    path('search/',include('haystack.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 

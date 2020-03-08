@@ -8,6 +8,8 @@
 - Django 3.0.3
 
 ---
+> **About make index file **
+- cmd:python manage.py rebuild_index, make index file "whoosh_index/"
 > **About sign up with email **
 -  Start the SMTP service（Such as QQ, 163 ........)
 -  To configure the setting.py

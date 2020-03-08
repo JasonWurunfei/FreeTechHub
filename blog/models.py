@@ -3,6 +3,7 @@ from django.db import models
 from markdownx.utils import markdownify
 from comment.models import Comments
 from markdownx.models import MarkdownxField
+from django.urls import reverse
 
 class DateCreateModMixin(models.Model):
     class Meta:
@@ -20,6 +21,9 @@ class Post(DateCreateModMixin):
 
     def body_summary(self):
         return markdownify(self.text[:300] + "...")
+
+    def get_absolute_url(self):
+        return reverse('blog:post_detail', args=[self.id])
 
 def user_pic_directory_path(instance, filename):
     return 'photos/users/user_{0}/{1}'.format(instance.post.user.id, filename)
