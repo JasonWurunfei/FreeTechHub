@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
-
     # third part packages
     'crispy_forms',
     'haystack',
@@ -50,7 +49,6 @@ INSTALLED_APPS = [
     'jieba',
     'markdownx',
     'six',
-
     # system apps
     'blog.apps.BlogConfig',
     'comment.apps.CommentConfig',
@@ -95,7 +93,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                  # allauth 启动必须项
                 'django.template.context_processors.request',
-
             ],
         },
     },
