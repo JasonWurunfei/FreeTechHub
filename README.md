@@ -12,12 +12,13 @@
 - cd #进入家目录
 - cd .local/lib/python3.6/site-packages # 如果使用虚拟环境: cd venv/Lib/site_packages
 - cp six.py django/utils #将six.py拷贝进django/utils/目录下
-- # 将site-packages/haystack/inputs.py 中
-- from django.utils.encoding import force_text, python_2_unicode_compatible
+```python
+# 将site-packages/haystack/inputs.py 中
+from django.utils.encoding import force_text, python_2_unicode_compatible
 # 改为
-- from django.utils.encoding import force_text
-- from django.utils.six import python_2_unicode_compatible
-
+from django.utils.encoding import force_text
+from django.utils.six import python_2_unicode_compatible
+```
 
 > **About make index file **
 - cmd:python manage.py rebuild_index, make index file "whoosh_index/"
