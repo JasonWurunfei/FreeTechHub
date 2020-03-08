@@ -157,6 +157,8 @@ MEDIA_URL = '/media/'
 LOGIN_URL = ''
 LOGIN_REDIRECT_URL = ''
 LOGOUT_REDIRECT_URL = ''
+
+#django-allauth's settings
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 AUTHENTICATION_BACKENDS = (
@@ -175,6 +177,7 @@ ACCOUNT_EMAIL_VERIFICATION ="mandatory"
 LOGIN_REDIRECT_URL = '/blog/show/'
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL ='/accounts/login/'
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL ='/accounts/login/'
+
 #use email to register
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = False # 是否使用TLS安全传输协议(用于在两个通信应用程序之间提供保密性和数据完整性。)
@@ -186,4 +189,3 @@ EMAIL_HOST_PASSWORD = ''       # 我的邮箱授权码
 EMAIL_SUBJECT_PREFIX = '[FREETECHHUB]'     # 为邮件Subject-line前缀,默认是'[django]'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # 与 EMAIL_HOST_USER 相同
 PASSWORD_RESET_TIMEOUT_DAYS = 1
-
