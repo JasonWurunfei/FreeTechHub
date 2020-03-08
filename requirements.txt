@@ -3,7 +3,6 @@ asgiref==3.2.3
 Django==3.0.3
 django-crispy-forms==1.9.0
 django-haystack==3.0b1
-django-allauth==0.41.0
 django-markdownx==3.0.1
 jieba==0.42.1
 Markdown==3.2.1
