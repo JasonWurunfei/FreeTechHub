@@ -30,9 +30,9 @@ EMAIL_SUBJECT_PREFIX = '[FREETECHHUB]'     # 为邮件Subject-line前缀,默认�
  https://github.com/settings/applications/new
 
  Provide the information below:
- ![avatar](/1.png)
+ ![avatar](/media/readme/1.png)
 1. After hitting the "Register application" button you'll be redirected to the following page.
-![avatar](/2.png)
+![avatar](/media/readme/2.png)
 1. We need to configure the admin portion of our Django project. Create a new superuser so we can login! Follow the prompts after typing the command below:
 ```bash
 ./python manage.py createsuperuser
@@ -40,7 +40,7 @@ EMAIL_SUBJECT_PREFIX = '[FREETECHHUB]'     # 为邮件Subject-line前缀,默认�
 Now we can start the server again with `python manage.py runserver` and then navigate to the admin page http://127.0.0.1:8000/admin. Use your newly-created superuser credentials to login.
 
 The admin homepage should look like this now:
-![avatar](/3.png)
+![avatar](/media/readme/3.png)
 # And then you can follow this blog 
 ## By reading this blog, you will know how to complete it
 https://www.jianshu.com/p/8989be98fd6d
