@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.github',
+
     # third part packages
     'crispy_forms',
     'haystack',
@@ -51,7 +52,6 @@ INSTALLED_APPS = [
     'six',
 
     # system apps
-    #'accounts.apps.AccountsConfig',
     'blog.apps.BlogConfig',
     'comment.apps.CommentConfig',
     'likes.apps.LikesConfig',
@@ -95,6 +95,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                  # allauth 启动必须项
                 'django.template.context_processors.request',
+
             ],
         },
     },
@@ -186,5 +187,6 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = ''       # 我自己的邮箱
 EMAIL_HOST_PASSWORD = ''       # 我的邮箱授权码
 EMAIL_SUBJECT_PREFIX = '[FREETECHHUB]'     # 为邮件Subject-line前缀,默认是'[django]'
-
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # 与 EMAIL_HOST_USER 相同
+PASSWORD_RESET_TIMEOUT_DAYS = 1
+
