@@ -22,7 +22,7 @@ from likes.views import Postlikes
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/',include('accounts.urls', namespace='accounts')),
+    path('accounts/',include('allauth.urls')),
     path('', include('home.urls', namespace='home')),
     path('blog/', include('blog.urls', namespace='blog')),
     path('<int:post_id>/', comment, name="comment_page"),
