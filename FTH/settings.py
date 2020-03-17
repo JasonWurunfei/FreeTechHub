@@ -37,7 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
     # third part packages
     'crispy_forms',
     'haystack',
@@ -45,16 +49,14 @@ INSTALLED_APPS = [
     'jieba',
     'markdownx',
     'six',
-
     # system apps
-    'accounts.apps.AccountsConfig',
     'blog.apps.BlogConfig',
     'comment.apps.CommentConfig',
     'likes.apps.LikesConfig',
     'home.apps.HomeConfig',
     'django.forms',
 ]
-
+SITE_ID = 1
 # add search engine (whoosh)
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -89,6 +91,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                 # allauth 启动必须项
+                'django.template.context_processors.request',
             ],
         },
     },
@@ -153,13 +157,34 @@ MEDIA_URL = '/media/'
 LOGIN_URL = ''
 LOGIN_REDIRECT_URL = ''
 LOGOUT_REDIRECT_URL = ''
+
+#django-allauth's settings
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+)
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =3
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT =5
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION =False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE =True
+ACCOUNT_UNIQUE_EMAIL =True
+ACCOUNT_USERNAME_MIN_LENGTH =5
+SOCIALACCOUNT_AUTO_SIGNUP =False
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION =False
+ACCOUNT_EMAIL_VERIFICATION ="mandatory"
+LOGIN_REDIRECT_URL = '/blog/show/'
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL ='/accounts/login/'
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL ='/accounts/login/'
+
 #use email to register
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = False # 是否使用TLS安全传输协议(用于在两个通信应用程序之间提供保密性和数据完整性。)
 EMAIL_USE_SSL = True 
 EMAIL_HOST = 'smtp.163.com' 
 EMAIL_PORT = 465   
-EMAIL_HOST_USER = ''       # 自己的邮箱
+EMAIL_HOST_USER = ''       # 我自己的邮箱
 EMAIL_HOST_PASSWORD = ''       # 我的邮箱授权码
 EMAIL_SUBJECT_PREFIX = '[FREETECHHUB]'     # 为邮件Subject-line前缀,默认是'[django]'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # 与 EMAIL_HOST_USER 相同

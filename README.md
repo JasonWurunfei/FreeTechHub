@@ -6,23 +6,11 @@
 
 - Python 3.8
 - Django 3.0.3
-
 ---
-> **Import six.py to use haystack **
-- cd #进入家目录
-- cd .local/lib/python3.6/site-packages # 如果使用虚拟环境: cd venv/Lib/site_packages
-- cp six.py django/utils #将six.py拷贝进django/utils/目录下
-```python
-# 将site-packages/haystack/inputs.py 中
-from django.utils.encoding import force_text, python_2_unicode_compatible
-# 改为
-from django.utils.encoding import force_text
-from django.utils.six import python_2_unicode_compatible
-```
-
-> **About make index file **
+## About make index file 
 - cmd:python manage.py rebuild_index, make index file "whoosh_index/"
-> **About sign up with email **
+---
+## About sign up with email About sign up with email
 -  Start the SMTP service（Such as QQ, 163 ........)
 -  To configure the setting.py
 modify   `FTH/setting.py` ，as follows:
@@ -37,26 +25,24 @@ EMAIL_HOST_USER = ' EMAIL_HOST'       # 我自己的邮箱
 EMAIL_HOST_PASSWORD = ''       # 我的邮箱授权码
 EMAIL_SUBJECT_PREFIX = '[FREETECHHUB]'     # 为邮件Subject-line前缀,默认是'[django]'
 ```
-- if you do not want to use this function
-program annotation  modify    `accounts/views.py` ，as follows: 
-```bash
- if form.is_valid():
-              form.save()
-          #  user = form.save()
-         #    user.refresh_from_db()
-         #   user.profile.username = form.cleaned_data.get('username')
-         #   user.profile.email = form.cleaned_data.get('email')
-         #   user.is_active = False
-         #  user.save()
-         #  current_site = get_current_site(request)
-         #  subject = 'Please Activate Your Account'
-         #  message = render_to_string('registration/activation_request.html', {
-         #       'user': user,
-         #      'domain': current_site.domain,
-         #      'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-        #     'token': account_activation_token.make_token(user),
-        #  })
-       #  user.email_user(subject, message)
-            return redirect("accounts:activation_sent")
-```
 
+## If you want to test the login function
+1. Complete the previous step
+1. Log in to your GitHub account, go to Settings. In the left menu you will see Developer settings. Click on OAuth applications.In the OAuth applications screen click on Register a new application. Or simply click on the link below:
+ https://github.com/settings/applications/new
+
+ Provide the information below:
+ ![avatar](/image/readme/1.png)
+1. After hitting the "Register application" button you'll be redirected to the following page.
+![avatar](/image/readme/2.png)
+1. We need to configure the admin portion of our Django project. Create a new superuser so we can login! Follow the prompts after typing the command below:
+```bash
+./python manage.py createsuperuser
+```
+Now we can start the server again with `python manage.py runserver` and then navigate to the admin page http://127.0.0.1:8000/admin. Use your newly-created superuser credentials to login.
+
+The admin homepage should look like this now:
+![avatar](/image/readme/3.png)
+# And then you can follow this blog 
+## By reading this blog, you will know how to complete it
+https://www.jianshu.com/p/8989be98fd6d
