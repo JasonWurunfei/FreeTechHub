@@ -5,6 +5,23 @@ from comment.models import Comments
 from markdownx.models import MarkdownxField
 from django.urls import reverse
 
+class Category(models.Model):
+    name = models.CharField(max_length=250)
+
+    class Meta:
+        verbose_name = 'Category'
+        # A human-readable name for the object, singular;
+        # If this isn’t given, Django will use a munged version of the class name: CamelCase becomes camel case.
+        verbose_name_plural = "Categories"
+        # If this isn’t given, Django will use verbose_name + "s".
+        ordering = ['name']
+
+    def get_absolute_url(self):
+        return reverse('blog:post_by_category', args=[self.name])
+
+    def __str__(self):
+        return self.name
+
 class DateCreateModMixin(models.Model):
     class Meta:
         abstract=True
@@ -14,16 +31,15 @@ class DateCreateModMixin(models.Model):
 class Post(DateCreateModMixin):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, null=True)
+    category = models.ForeignKey(Category, verbose_name="Category", on_delete=models.CASCADE)
     text = MarkdownxField()
-
-    def formatted_markdown(self):
-        return markdownify(self.text)
 
     def body_summary(self):
         return markdownify(self.text[:300] + "...")
 
     def get_absolute_url(self):
         return reverse('blog:post_detail', args=[self.id])
+
 
 def user_pic_directory_path(instance, filename):
     return 'photos/users/user_{0}/{1}'.format(instance.post.user.id, filename)
