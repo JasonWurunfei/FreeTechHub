@@ -4,15 +4,19 @@
   <meta charset="UTF-8">
   <title>Title</title>
 </head>
+
 <body>
   <h1 align="center" style="color:Pink">Homepage</h1>
   <a type="submit" href="{% url 'blog:post' user.id %}">Post a blog</a>
+  <br/>
+  <a type="submit" href="{% url 'blog:categories' %}">Subject category</a>
   <hr/>
   {% csrf_token %}
   {% for content in texts %}
     <div class="card shadow bg-white">
       <div class="card-body">
         <h1 class="card-title"><a href="{% url 'blog:post_detail' content.id %}">{{ content.title }}</a></h1>
+        <p>Category: {{ content.category }}</p>
         {% for user in users %}
           {% if user.id == content.user_id %}
             <p>Author: {{ user.username }}</p>
