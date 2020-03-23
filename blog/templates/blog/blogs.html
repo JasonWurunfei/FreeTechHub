@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+  <h1 align="center" style="color:Pink">Homepage</h1>
+  <a type="submit" href="{% url 'blog:post' user.id %}">Post a blog</a>
+  <hr/>
+  {% csrf_token %}
+  {% for content in texts %}
+    <div class="card shadow bg-white">
+      <div class="card-body">
+        <h1 class="card-title"><a href="{% url 'blog:post_detail' content.id %}">{{ content.title }}</a></h1>
+        {% for user in users %}
+          {% if user.id == content.user_id %}
+            <p>Author: {{ user.username }}</p>
+          {% endif %}
+        {% endfor %}
+        <p class="card-text">{{ content.body_summary|striptags }}</p>
+        <div> {{ content.mod_date }}</div>
+      </div>
+    </div>
+    {% for item1 in img %}
+      {% if item1.post_id == content.id %}
+        <img src="/media/{{ item1.image }}" height="200" width="300"/>
+      {% endif %}
+    {% endfor %}
+    {% for item2 in video %}
+      {% if item2.post_id == content.id %}
+        <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
+      {% endif %}
+    {% endfor %}
+    <hr/>
+  {% endfor %}
+</body>
+</html>
