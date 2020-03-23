@@ -203,7 +203,6 @@ LOGIN_REDIRECT_URL = '/'
 #use email to register
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = False # 是否使用TLS安全传输协议(用于在两个通信应用程序之间提供保密性和数据完整性。)
-<<<<<<< HEAD
 EMAIL_USE_SSL = True 
 EMAIL_HOST = 'smtp.163.com' 
 EMAIL_PORT = 465   
@@ -212,28 +211,4 @@ EMAIL_HOST_PASSWORD = ''       # 我的邮箱授权码
 EMAIL_SUBJECT_PREFIX = '[FREETECHHUB]'     # 为邮件Subject-line前缀,默认是'[django]'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # 与 EMAIL_HOST_USER 相同
 PASSWORD_RESET_TIMEOUT_DAYS = 1
-=======
-EMAIL_USE_SSL = True
-EMAIL_HOST = 'smtp.163.com'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = '18358957971@163.com'       # 我自己的邮箱
-EMAIL_HOST_PASSWORD = 'PSXSKBCLLNHKNVWR'       # 我的邮箱授权码
-EMAIL_SUBJECT_PREFIX = '[FREETECHHUB]'     # 为邮件Subject-line前缀,默认是'[django]'
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # 与 EMAIL_HOST_USER 相同
-PASSWORD_RESET_TIMEOUT_DAYS = 1
 
-# markdownx options
-MARKDOWNX_EDITOR_RESIZABLE = False
-MARKDOWNX_MARKDOWN_EXTENSIONS = [
-    'markdown.extensions.extra',
-    'markdown.extensions.nl2br',
-    'markdown.extensions.codehilite',
-]
-MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdown/upload/%Y/%m/%d')
-MARKDOWNX_UPLOAD_MAX_SIZE = 4 * 1024 * 1024
-MARKDOWNX_UPLOAD_CONTENT_TYPES = ['image/jpeg', 'image/png', 'image/svg+xml']
-MARKDOWNX_IMAGE_MAX_SIZE = {
-    'size': (800, 500),
-    'quality': 90
-}
->>>>>>> 2ce616dfa3705438a07010d20711c384ed26b064
