@@ -27,7 +27,10 @@
         {% if user.is_authenticated %}
         <li><a href="{% url 'account_email' %}">Change E-mail</a></li>
         <li><a href="{% url 'account_logout' %}">Sign Out</a></li>
+<<<<<<< HEAD
         <li><a href="/accounts/profile/{{ user.id }}/">Profile</a></li>
+=======
+>>>>>>> 2ce616dfa3705438a07010d20711c384ed26b064
         {% else %}
         <li><a href="{% url 'account_login' %}">Sign In</a></li>
         <li><a href="{% url 'account_signup' %}">Sign Up</a></li>

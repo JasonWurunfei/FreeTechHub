@@ -1,15 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+<<<<<<< HEAD
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
 </head>
+=======
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  {{ form.media }}
+  <link rel="stylesheet" href="{% static 'code.css' %}">
+</head>
+
+>>>>>>> 2ce616dfa3705438a07010d20711c384ed26b064
 <body>
   {% if user.id and post_id %}
     <h1 align="center" style="color:Pink">Please edit!</h1>
     <hr/>
+<<<<<<< HEAD
     <form method="POST" action="{% url 'blog:edit_post' post_id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
       {% csrf_token %}
+=======
+    <form method="POST" action="{% url 'blog:edit_post' post_id category_id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
+      {% csrf_token %}
+      {{ new_category_form }}
+>>>>>>> 2ce616dfa3705438a07010d20711c384ed26b064
       {{ new_post_form }}
       {{ new_post_form.media }}
       <h3>Please choose your photos</h3>
@@ -24,6 +41,7 @@
       <a type="submit" href="{% url 'blog:show' %}">Homepage</a>
     </div>
     <hr/>
+<<<<<<< HEAD
     <form method="POST" action="{% url 'blog:post' user.id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
       {% csrf_token %}
       {{ form }}
@@ -34,6 +52,21 @@
       <input type="file" name="video" multiple="multiple"><br/>
       <button type="submit" class="btn btn-success">Submit</button><br/>
     </form>
+=======
+    <div class="editor">
+      <form method="POST" action="{% url 'blog:post' user.id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
+        {% csrf_token %}
+        {{ category_form|safe }}
+        <br/>
+        {{ form|safe }}
+        <h3>Please choose your photos</h3>
+        <input type="file" name="img" multiple="multiple"/><br/>
+        <h3>Please choose your video</h3>
+        <input type="file" name="video" multiple="multiple"><br/>
+        <button type="submit" class="btn btn-success">Submit</button><br/>
+      </form>
+    </div>
+>>>>>>> 2ce616dfa3705438a07010d20711c384ed26b064
   {% endif %}
 </body>
 </html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Categories</title>
+</head>
+<body>
+  {% for category in categories %}
+    <h1><a href="{% url 'blog:post_by_category' category.id %}">{{ category.name }}</a></h1>
+    <hr/>
+  {% endfor %}
+</body>
+</html>

@@ -6,6 +6,10 @@ django-haystack==3.0b1
 django-allauth==0.41.0
 django-markdownx==3.0.1
 jieba==0.42.1
+<<<<<<< HEAD
+=======
+Pygments==2.6.1
+>>>>>>> 2ce616dfa3705438a07010d20711c384ed26b064
 Markdown==3.2.1
 Pillow==7.0.0
 pytz==2019.3

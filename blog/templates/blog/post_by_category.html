@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Category</title>
+</head>
+<body>
+  <h1>{{ category.name }}</h1>
+  {% for post_belonged in post %}
+    <h2><a href="{% url 'blog:post_detail' post_belonged.id %}">{{ post_belonged.title }}</a></h2>
+    {% for user in users %}
+      {% if user.id == post_belonged.user_id %}
+        <p>Written by {{ user.username }} on {{ post_belonged.mod_date }}</p>
+      {% endif %}
+    {% endfor %}
+    {{ post_belonged.body_summary|striptags }}
+    <hr/>
+  {% endfor %}
+</body>
+</html>

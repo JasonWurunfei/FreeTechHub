@@ -22,10 +22,16 @@ from likes.views import Postlikes
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+<<<<<<< HEAD
     path('account/',include('allauth.urls')),
     path('accounts/',include('accounts.urls', namespace='accounts')),
     path('', include('home.urls', namespace='home')),
     path('blog/', include(('blog.urls', 'blog' ), namespace='blog')),
+=======
+    path('accounts/',include('allauth.urls')),
+    path('', include('home.urls', namespace='home')),
+    path('blog/', include('blog.urls', namespace='blog')),
+>>>>>>> 2ce616dfa3705438a07010d20711c384ed26b064
     path('<int:post_id>/', comment, name="comment_page"),
     path('<int:post_id>/<str:like_type>', Postlikes),
     path('markdownx/', include('markdownx.urls')),
