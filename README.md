@@ -46,3 +46,9 @@ The admin homepage should look like this now:
 # And then you can follow this blog 
 ## By reading this blog, you will know how to complete it
 https://www.jianshu.com/p/8989be98fd6d
+
+# How to realize Code highlighting
+1. You should install Pygments. If you have imported order:`pip install -Ur requirements.txt`. Just skip this step.
+2. Import order: `pygmentize -S default -f html -a .codehilite > code.css`. Then there will be a `code.css` generated on
+your directory structure.
+3. Put this `code.css` into `blog/static/` and then executive order: `python manage.py collectstatic`.
