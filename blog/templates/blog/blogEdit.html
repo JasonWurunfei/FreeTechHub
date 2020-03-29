@@ -12,16 +12,14 @@
   {% if user.id and post_id %}
     <h1 align="center" style="color:Pink">Please edit!</h1>
     <hr/>
-    <form method="POST" action="{% url 'blog:edit_post' post_id category_id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
+    <form method="POST" action="{% url 'blog:edit_post' post_id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
       {% csrf_token %}
       {{ new_category_form }}
       {{ new_post_form }}
       {{ new_post_form.media }}
-      <h3>Please choose your photos</h3>
-      <input type="file" name="img" multiple="multiple"/><br/>
       <h3>Please choose your video</h3>
       <input type="file" name="video" multiple="multiple"><br/>
-      <button type="submit" class="btn btn-success">Submit</button><br/>
+      <button type="submit" class="btn btn-success">Save</button><br/>
     </form>
   {% else %}
     <h1 align="center" style="color:Pink">Welcome! {{ user.username }}</h1>
@@ -32,11 +30,7 @@
     <div class="editor">
       <form method="POST" action="{% url 'blog:post' user.id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
         {% csrf_token %}
-        {{ category_form|safe }}
-        <br/>
         {{ form|safe }}
-        <h3>Please choose your photos</h3>
-        <input type="file" name="img" multiple="multiple"/><br/>
         <h3>Please choose your video</h3>
         <input type="file" name="video" multiple="multiple"><br/>
         <button type="submit" class="btn btn-success">Submit</button><br/>

@@ -20,7 +20,7 @@ def comment(request,post_id):
             try:
                 parent_id = int(request.POST.get('parent_id'))
             except:
-                parent_id=None
+                parent_id = None
 
             if parent_id:
                 parent_qs = Comments.objects.filter(id=parent_id)

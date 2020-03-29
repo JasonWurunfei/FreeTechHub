@@ -6,15 +6,13 @@
 </head>
 <body>
   <h1>{{ category.name }}</h1>
-  {% for post_belonged in post %}
+  {% for post_belonged in posts %}
     <h2><a href="{% url 'blog:post_detail' post_belonged.id %}">{{ post_belonged.title }}</a></h2>
-    {% for user in users %}
-      {% if user.id == post_belonged.user_id %}
-        <p>Written by {{ user.username }} on {{ post_belonged.mod_date }}</p>
-      {% endif %}
-    {% endfor %}
+    <p>Written by {{ user.username }} on {{ post_belonged.mod_date }}</p>
     {{ post_belonged.body_summary|striptags }}
+    <button type="submit"><a href="{% url 'blog:remove_blog' post_belonged.id %}">Remove</a> </button>
     <hr/>
   {% endfor %}
+  <button type="submit"><a href="{% url 'blog:categories' category.user_id %}">Back</a></button>
 </body>
 </html>

@@ -12,7 +12,8 @@ class PostForm(forms.ModelForm):
 
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(label='category', max_length=250)
+    content = forms.CharField(label='Introduction', max_length=500)
 
     class Meta:
         model = Category
-        fields = ['name',]
+        fields = ['name', 'content']

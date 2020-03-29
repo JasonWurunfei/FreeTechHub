@@ -9,7 +9,7 @@
   <h1 align="center" style="color:Pink">Homepage</h1>
   <a type="submit" href="{% url 'blog:post' user.id %}">Post a blog</a>
   <br/>
-  <a type="submit" href="{% url 'blog:categories' %}">Subject category</a>
+  <a type="submit" href="{% url 'blog:categories' user.id %}">Subject category</a>
   <hr/>
   {% csrf_token %}
   {% for content in texts %}
@@ -26,11 +26,6 @@
         <div> {{ content.mod_date }}</div>
       </div>
     </div>
-    {% for item1 in img %}
-      {% if item1.post_id == content.id %}
-        <img src="/media/{{ item1.image }}" height="200" width="300"/>
-      {% endif %}
-    {% endfor %}
     {% for item2 in video %}
       {% if item2.post_id == content.id %}
         <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
