@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from datetime import datetime
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -151,6 +153,7 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
@@ -173,19 +176,34 @@ ACCOUNT_UNIQUE_EMAIL =True
 ACCOUNT_USERNAME_MIN_LENGTH =5
 SOCIALACCOUNT_AUTO_SIGNUP =False
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION =False
-ACCOUNT_EMAIL_VERIFICATION ="mandatory"
-LOGIN_REDIRECT_URL = '/blog/show/'
+ACCOUNT_EMAIL_VERIFICATION ="none"
+LOGIN_REDIRECT_URL = '/'
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL ='/accounts/login/'
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL ='/accounts/login/'
 
 #use email to register
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = False # 是否使用TLS安全传输协议(用于在两个通信应用程序之间提供保密性和数据完整性。)
-EMAIL_USE_SSL = True 
-EMAIL_HOST = 'smtp.163.com' 
-EMAIL_PORT = 465   
+EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 465
 EMAIL_HOST_USER = ''       # 我自己的邮箱
 EMAIL_HOST_PASSWORD = ''       # 我的邮箱授权码
 EMAIL_SUBJECT_PREFIX = '[FREETECHHUB]'     # 为邮件Subject-line前缀,默认是'[django]'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER  # 与 EMAIL_HOST_USER 相同
 PASSWORD_RESET_TIMEOUT_DAYS = 1
+
+# markdownx options
+MARKDOWNX_EDITOR_RESIZABLE = False
+MARKDOWNX_MARKDOWN_EXTENSIONS = [
+    'markdown.extensions.extra',
+    'markdown.extensions.nl2br',
+    'markdown.extensions.codehilite',
+]
+MARKDOWNX_MEDIA_PATH = datetime.now().strftime('markdown/upload/%Y/%m/%d')
+MARKDOWNX_UPLOAD_MAX_SIZE = 4 * 1024 * 1024
+MARKDOWNX_UPLOAD_CONTENT_TYPES = ['image/jpeg', 'image/png', 'image/svg+xml']
+MARKDOWNX_IMAGE_MAX_SIZE = {
+    'size': (800, 500),
+    'quality': 90
+}

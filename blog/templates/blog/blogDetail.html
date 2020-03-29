@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
   <meta charset="UTF-8">
   <title>Show specific blog</title>
   <style>
         .comment-text {margin-bottom: 1.25rem;}
     </style>
+  <link rel="stylesheet" type="text/css" href="{% static 'code.css' %}">
 </head>
 
 {% load count_likes %}
@@ -23,16 +25,15 @@
     </div>
   </header>
   <p>Author:{{ user.username }}</p>
-
+  {% if post_detail.category != None %}
+    <a href="{% url 'blog:post_by_category' post_detail.category.id %}">Series:{{ post_detail.category }}</a>
+  {% else %}
+    <p>Series:{{ post_detail.category }}</p>
+  {% endif %}
+  
   <div id="blog">
-    <p class="card-text" id="post">{{ post_detail.formatted_markdown|safe }}</p>
+    <p class="detail_content" id="post">{{ post_detail.text|safe }}</p>
   </div>
-
-  {% for item1 in img %}
-    {% if item1.post_id == post_detail.id %}
-      <img src="/media/{{ item1.image }}" height="200" width="300"/>
-    {% endif %}
-  {% endfor %}
 
   {% for item2 in video %}
     {% if item2.post_id == post_detail.id %}

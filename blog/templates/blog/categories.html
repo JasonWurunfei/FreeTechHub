@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Categories</title>
+</head>
+<body>
+  {% for category in categories %}
+    <h1><a href="{% url 'blog:post_by_category' category.id %}">{{ category.name }}</a></h1>
+    <h2>{{ category.content }}</h2>
+    <button type="submit"><a href="{% url 'blog:edit_category' category.id %}">Edit</a></button>
+    <button type="submit"><a href="{% url 'blog:delete_category' category.id %}">Delete</a></button>
+    <hr/>
+  {% endfor %}
+  <button type="submit"><a href="{% url 'blog:add_category' user_id %}">Add category</a></button>
+  <button type="submit"><a href="{% url 'blog:show' %}">Back</a></button>
+</body>
+</html>
