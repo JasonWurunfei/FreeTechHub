@@ -24,7 +24,7 @@
       </div>
     </div>
   </header>
-  <p>Author:{{ post_detail.user.username }}</p>
+  <p>Author:{{ user.username }}</p>
   {% if post_detail.category != None %}
     <a href="{% url 'blog:post_by_category' post_detail.category.id %}">Series:{{ post_detail.category }}</a>
   {% else %}
