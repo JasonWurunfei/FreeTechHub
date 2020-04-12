@@ -8,6 +8,10 @@
         .comment-text {margin-bottom: 1.25rem;}
     </style>
   <link rel="stylesheet" type="text/css" href="{% static 'code.css' %}">
+  <link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
 {% load count_likes %}
@@ -69,7 +73,7 @@
                 <hr style="border:1px dotted #036" />
                 {% for child_comment in comment.children %}
                   <blockquote>
-                    <p>Reply:{{ child_comment.text }}</p>
+                    <p>Reply:{{ child_comment.text | safe }}</p>
                     <footer>Replied by author in {{ child_comment.date }}</footer>
                   </blockquote>
                 {% endfor %}
@@ -77,7 +81,8 @@
               <h4>Reply</h4>
               <form method="POST" style="margin-top: 1.3em;" action="{% url 'comment_page' post_id=post_detail.id %}">
                 {% csrf_token %}
-                {{ comment_form }}
+                {{ comment_form.media }}
+                {{ comment_form.as_p }}
                 <input type="hidden" name="parent_id" value="{{ comment.id }}">
                 <button type="submit" class="btn btn-primary btn-1g">Reply to the comment</button>
               </form>
@@ -95,7 +100,8 @@
         <h3>Leave a comment</h3>
         <form method="post" style="margin-top: 1.3em;" action="{% url 'comment_page' post_id=post_detail.id %}">
           {% csrf_token %}
-          {{ comment_form }}
+          {{ comment_form.media }}
+          {{ comment_form.as_p }}
           <button type="submit" class="btn btn-primary btn-1g">Submit</button>
         </form>
       </div>

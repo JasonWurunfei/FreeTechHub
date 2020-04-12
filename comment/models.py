@@ -1,3 +1,4 @@
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -5,10 +6,12 @@ from django.db import models
 from django.utils.safestring import mark_safe
 from markdown import markdown
 
+
 class Comments(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
-    text = models.TextField()
+    #text = models.TextField()
+    text = RichTextUploadingField()
     parent = models.ForeignKey('self', null=True, blank=True,on_delete=models.CASCADE)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
