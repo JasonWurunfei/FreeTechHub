@@ -2,14 +2,14 @@
 {% load crispy_forms_tags %}
 {% block head %}
 {% load static %}
-  <style>
-        .comment-text {margin-bottom: 1.25rem;}
-    </style>
-  <link rel="stylesheet" type="text/css" href="{% static 'code.css' %}">
-  <link rel='stylesheet' href="http://at.alicdn.com/t/font_1635546_7s44006ffgt.css"></link>
-  <link rel='stylesheet' href="http://at.alicdn.com/t/font_1635546_jc3yufr85i.css"></link>
-  <link rel='stylesheet' href="http://at.alicdn.com/t/font_1635546_vxkm3pve8af.css"></link>
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=style=Satisfy">
+<style>
+  .comment-text {margin-bottom: 1.25rem;}
+</style>
+<link rel="stylesheet" type="text/css" href="{% static 'code.css' %}">
+<link rel='stylesheet' href="http://at.alicdn.com/t/font_1635546_7s44006ffgt.css"></link>
+<link rel='stylesheet' href="http://at.alicdn.com/t/font_1635546_jc3yufr85i.css"></link>
+<link rel='stylesheet' href="http://at.alicdn.com/t/font_1635546_vxkm3pve8af.css"></link>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=style=Satisfy">
 {% load count_likes %}
 {% endblock %}
 {% block content %}
@@ -24,127 +24,126 @@
     <div class="dropdown-divider"></div>
   </div>
   <div class="container">
-        <div class="row">
-          <div class=" col-sm-3 col-md-1">
-            {% if user.profile.avatar %}
-            <img src="{{ user.profile.avatar.url }}" style="max-width:100%; border-radius: 50%;">
-            {% else %}
-            <i class="fas fa-user fa-fw" style="max-width:100%; border-radius: 50%;"></i>
-            {% endif %}
-          </div>
-          <div class=" col-sm-9 col-md-11">
-            <p  class="text-left">Author:{{ user.username }}</p>
-            {% if post_detail.category != None %}
-            <a class="text-left text-muted" href="{% url 'blog:post_by_category' post_detail.category.id %}">Series: <span class="badge badge-pill badge-warning">{{ post_detail.category }}</span></a>
-            {% else %}
-            <p>Series:{{ post_detail.category }}</p>
-            {% endif %}
-          </div>
-       </div>
-  </div>
-<br/>
-   <div class="container">
-        <div class="row">
-            <p>{{ post_detail.mod_date }}</p>
-          </div>
-   </div>
-  <div class="card bg-light text-dark">
-    <div class="card-body">
-       <p class="detail_content" id="post">{{ post_detail.text|safe }}</p>
+    <div class="row">
+      <div class=" col-sm-3 col-md-1">
+        {% if user.profile.avatar %}
+        <img src="{{ user.profile.avatar.url }}" style="max-width:100%; border-radius: 50%;">
+        {% else %}
+        <i class="fas fa-user fa-fw" style="max-width:100%; border-radius: 50%;"></i>
+        {% endif %}
+      </div>
+      <div class=" col-sm-9 col-md-11">
+        <p  class="text-left">Author:{{ user.username }}</p>
+        {% if post_detail.category != None %}
+        <a class="text-left text-muted" href="{% url 'blog:post_by_category' post_detail.category.id %}">Series: <span class="badge badge-pill badge-warning">{{ post_detail.category }}</span></a>
+        {% else %}
+        <p>Series:{{ post_detail.category }}</p>
+        {% endif %}
+      </div>
     </div>
   </div>
-
-
-
-
-  {% for item2 in video %}
-    {% if item2.post_id == post_detail.id %}
-      <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
-    {% endif %}
-  {% endfor %}
   <br/>
   <div class="container">
-        <div class="row">
-          <div class=" col-sm-3 col-md-3">
-            <a href="/{{ post_detail.id }}/like" class="text-dark"><i class="iconfont icon-zantianchongxiao"> <span class="badge badge-primary"> {% get_likes_number post_type_id post_detail.id %}</span></i></a>
-            <a href="/{{ post_detail.id }}/dislike" class="text-dark"><i class="iconfont icon-cai"> <span class="badge badge-primary"> {% get_dislikes_number post_type_id post_detail.id %}</span></i></a>
-            <span><i class="fas fa-eye" style="color: black;"></i>: {{ post_detail.total_views }}</span>
-          </div>
-
-         </div>
+    <div class="row">
+      <p>{{ post_detail.mod_date }}</p>
+    </div>
   </div>
- <div class="container">
- <div class="card">
+  <div class="card bg-light text-dark">
     <div class="card-body">
-      <h2 style=" font-family:Satisfy;">{{ comments.count }} comments:</h2>
-      {% for comment in comments %}
-        {% for commentator in users %}
-          {% if comment.user_id == commentator.id %}
+     <p class="detail_content" id="post">{{ post_detail.text|safe }}</p>
+   </div>
+ </div>
 
-        <div class="card mb-4 shadow-sm">
-           <div class="card-header">
-             <div class="row">
-              <div class="col-1">
-                 {% if user.profile.avatar %}
-                  <img src="{{ user.profile.avatar.url }}" style="max-width:100%; border-radius: 50%;">
-                  {% else %}
-                  {% endif %}
-              </div>
-              <div class="col mt-2">
-                via Commentator:<a href="/account/profile/{{ user.id }}/" class="text-dark">{{ commentator.username }}</a> in {{ comment.date }}
-              </div>
-             </div>
-           </div>
-             <div class="card-body">
-                <p>{{ comment.get_comment_text_md|linebreaks }}</p>
-             </div>
 
-              <div class="container">
-                {% for child_comment in comment.children %}
-                 <div class="card mb-4 shadow-sm">
-                    <div class="card-header">
-                     <div class="row">
-                      <div class="col-1">
-                         {% if user.profile.avatar %}
-                          <img src="{{ user.profile.avatar.url }}" style="max-width:100%; border-radius: 50%;">
-                          {% else %}
-                          {% endif %}
-                      </div>
-                      <div class="col mt-2">
-                        via Commentator:<a href="/account/profile/{{ user.id }}/" class="text-dark">{{ commentator.username }}</a> in {{ comment.date }}
-                      </div>
-                     </div>
-                   </div>
-                    <div class="card-body">
-                    Reply:{{ child_comment.text }}
-                    </div>
-                {% endfor %}
-                 </div>
-              </div>
-        </div>
 
-              <h4>Reply</h4>
-              <form method="POST" action="{% url 'comment_page' post_id=post_detail.id %}">
-                {% csrf_token %}
-                {{ comment_form|crispy  }}
-                <input type="hidden" name="parent_id" value="{{ comment.id }}">
-                <button type="submit" class="btn btn-primary btn-1g">Reply to the comment</button>
-              </form>
-            </div>
-            <hr/>
-          {% endif %}
-        {% endfor %}
-      {% endfor %}
-      </div>
 
-      <div class="card-body">
-        <h3>Leave a comment</h3>
-        <form method="post"  action="{% url 'comment_page' post_id=post_detail.id %}">
-          {% csrf_token %}
-          {{ comment_form|crispy  }}
-          <button type="submit" class="btn btn-primary btn-1g">Submit</button>
-        </form>
-      </div>
+ {% for item2 in video %}
+ {% if item2.post_id == post_detail.id %}
+ <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
+ {% endif %}
+ {% endfor %}
+ <br/>
+ <div class="container">
+  <div class="row">
+    <div class=" col-sm-3 col-md-3">
+      <a href="/{{ post_detail.id }}/like" class="text-dark"><i class="iconfont icon-zantianchongxiao"> <span class="badge badge-primary"> {% get_likes_number post_type_id post_detail.id %}</span></i></a>
+      <a href="/{{ post_detail.id }}/dislike" class="text-dark"><i class="iconfont icon-cai"> <span class="badge badge-primary"> {% get_dislikes_number post_type_id post_detail.id %}</span></i></a>
+      <span><i class="fas fa-eye" style="color: black;"></i>: {{ post_detail.total_views }}</span>
     </div>
 
+  </div>
+</div>
+<div class="container">
+ <div class="card">
+  <div class="card-body">
+    <h2 style=" font-family:Satisfy;">{{ comments.count }} comments:</h2>
+    {% for comment in comments %}
+    {% for commentator in users %}
+    {% if comment.user_id == commentator.id %}
+
+    <div class="card mb-4 shadow-sm">
+     <div class="card-header">
+       <div class="row">
+        <div class="col-1">
+         {% if user.profile.avatar %}
+         <img src="{{ user.profile.avatar.url }}" style="max-width:100%; border-radius: 50%;">
+         {% else %}
+         {% endif %}
+       </div>
+       <div class="col mt-2">
+        via Commentator:<a href="/account/profile/{{ user.id }}/" class="text-dark">{{ commentator.username }}</a> in {{ comment.date }}
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <p>{{ comment.get_comment_text_md|linebreaks }}</p>
+  </div>
+
+  <div class="container">
+    {% for child_comment in comment.children %}
+    <div class="card mb-4 shadow-sm">
+      <div class="card-header">
+       <div class="row">
+        <div class="col-1">
+         {% if user.profile.avatar %}
+         <img src="{{ user.profile.avatar.url }}" style="max-width:100%; border-radius: 50%;">
+         {% else %}
+         {% endif %}
+       </div>
+       <div class="col mt-2">
+        via Commentator:<a href="/account/profile/{{ user.id }}/" class="text-dark">{{ commentator.username }}</a> in {{ comment.date }}
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    Reply:{{ child_comment.text }}
+  </div>
+  {% endfor %}
+</div>
+</div>
+</div>
+
+<h4>Reply</h4>
+<form method="POST" action="{% url 'comment_page' post_id=post_detail.id %}">
+  {% csrf_token %}
+  {{ comment_form|crispy  }}
+  <input type="hidden" name="parent_id" value="{{ comment.id }}">
+  <button type="submit" class="btn btn-primary btn-1g">Reply to the comment</button>
+</form>
+</div>
+<hr/>
+{% endif %}
+{% endfor %}
+{% endfor %}
+</div>
+
+<div class="card-body">
+  <h3>Leave a comment</h3>
+  <form method="post"  action="{% url 'comment_page' post_id=post_detail.id %}">
+    {% csrf_token %}
+    {{ comment_form|crispy  }}
+    <button type="submit" class="btn btn-primary btn-1g">Submit</button>
+  </form>
+</div>
+</div>
 {% endblock %}

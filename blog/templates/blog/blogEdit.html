@@ -2,9 +2,9 @@
 {% load crispy_forms_tags %}
 {% block head %}
 {% load static %}
-  {{ form.media }}
-  <link rel="stylesheet" href="{% static 'code.css' %}">
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Caveat">
+{{ form.media }}
+<link rel="stylesheet" href="{% static 'code.css' %}">
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Caveat">
 {% endblock %}
 {% block content %}
 <br/>
@@ -12,32 +12,32 @@
 <br/>
 <div class="container">
   {% if user.id and post_id %}
-    <form method="POST" action="{% url 'blog:edit_post' post_id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
-      {% csrf_token %}
-      {{ new_category_form|crispy }}
-      {{ new_post_form|crispy }}
-      {{ new_post_form.media }}
-      <h3><i style="font-family:Caveat;">Please choose your video</i></h3>
-      <input type="file" name="video" multiple="multiple"><br/>
-     <div style="text-align:center">
-          <button type="submit" class="btn btn-primary btn-lg ">Submit</button>
-          <br/>
-     </div>
-    </form>
-  {% else %}
-    <div class="editor">
-      <form method="POST" action="{% url 'blog:post' user.id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
-        {% csrf_token %}
-        {{ form|safe  }}
-        <h3><i style="font-family:Caveat;">Please choose your video</i></h3>
-        <input type="file" name="video" multiple="multiple">
-        <br/>
-        <div style="text-align:center">
-          <button type="submit" class="btn btn-primary ">Submit</button>
-          <br/>
-        </div>
-      </form>
+  <form method="POST" action="{% url 'blog:edit_post' post_id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
+    {% csrf_token %}
+    {{ new_category_form|crispy }}
+    {{ new_post_form|crispy }}
+    {{ new_post_form.media }}
+    <h3><i style="font-family:Caveat;">Please choose your video</i></h3>
+    <input type="file" name="video" multiple="multiple"><br/>
+    <div style="text-align:center">
+      <button type="submit" class="btn btn-primary btn-lg ">Submit</button>
+      <br/>
     </div>
+  </form>
+  {% else %}
+  <div class="editor">
+    <form method="POST" action="{% url 'blog:post' user.id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
+      {% csrf_token %}
+      {{ form|safe  }}
+      <h3><i style="font-family:Caveat;">Please choose your video</i></h3>
+      <input type="file" name="video" multiple="multiple">
+      <br/>
+      <div style="text-align:center">
+        <button type="submit" class="btn btn-primary ">Submit</button>
+        <br/>
+      </div>
+    </form>
+  </div>
 </div>
-  {% endif %}
+{% endif %}
 {% endblock %}

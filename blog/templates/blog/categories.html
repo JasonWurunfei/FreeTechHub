@@ -6,30 +6,28 @@
 <br/>
 <br/>
 <br/>
- <div class="container">
-   <div class="row">
-       <div class="col-12 mb-12">
-          <div class=" mb-4">
-            <div>
-              <a href="{% url 'blog:add_category' user_id %}" type="button"  class="btn btn-success">Add category</a>
-              <a href="{% url 'blog:show' %}" class="btn btn-success"><i class="iconfont icon-back"></i></a>
-            </div>
-          </div>
-
-            {% for category in categories %}
-         <div class="card shadow bg-white">
-          <div class="card-body">
-              <h1 style=" font-family:Kite One;"><a href="{% url 'blog:post_by_category' category.id %}" class="text-dark">{{ category.name }} </a></h1>
-               <p><span class="badge badge-pill badge-warning">{{ category.content }}</span></p>
-             <div class="text-right">
-              <a href="{% url 'blog:edit_category' category.id %}" type="button" class="btn btn-primary ">Edit</a>
-              <a href="{% url 'blog:delete_category' category.id %}" type="button" class="btn btn-danger ">Delete></a>
-             </div>
-          </div>
-       </div>
+<div class="container">
+ <div class="row">
+   <div class="col-12 mb-12">
+    <div class=" mb-4">
+      <div>
+        <a href="{% url 'blog:add_category' user_id %}" type="button"  class="btn btn-success">Add category</a>
+        <a href="{% url 'blog:show' %}" class="btn btn-success"><i class="iconfont icon-back"></i></a>
+      </div>
+    </div>
+    {% for category in categories %}
+    <div class="card shadow bg-white">
+      <div class="card-body">
+        <h1 style=" font-family:Kite One;"><a href="{% url 'blog:post_by_category' category.id %}" class="text-dark">{{ category.name }} </a></h1>
+        <p><span class="badge badge-pill badge-warning">{{ category.content }}</span></p>
+        <div class="text-right">
+          <a href="{% url 'blog:edit_category' category.id %}" type="button" class="btn btn-primary ">Edit</a>
+          <a href="{% url 'blog:delete_category' category.id %}" type="button" class="btn btn-danger ">Delete></a>
+        </div>
+      </div>
+    </div>
     {% endfor %}
-       </div>
-   </div>
- </div>
-
+  </div>
+</div>
+</div>
 {% endblock %}
