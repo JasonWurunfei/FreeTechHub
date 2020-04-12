@@ -1,68 +1,71 @@
+import json
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import UserCreationForm
 from django.views.decorators.http import require_POST
-from .forms import RegisterForm
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
+from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_text
 from django.contrib.auth.models import User
-from django.db import IntegrityError
-from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from .tokens import account_activation_token
 from django.template.loader import render_to_string
-from .tokens import account_activation_token
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from blog.models import Post
+from .forms import ProfileForm
+from .models import Profile
+from django.views.decorators.csrf import csrf_protect
 
 
-def activation_sent_view(request):
-    return render(request, 'registration/activation_sent.html')
+def is_owner(func):
+    def check(request, *args, **kwargs):
+        id = kwargs["id"]
+        user = User.objects.get(id=id)
+        if not (user.id == request.user.id):
+            return render(request, 'permission.html')
+        return func(request, *args, **kwargs)
+    return check
 
 
-def activate(request, uidb64, token):
-    try:
-        uid = force_text(urlsafe_base64_decode(uidb64))
-        user = User.objects.get(pk=uid)
-    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-        user = None
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.profile.signup_confirmation = True
-        user.save()
-        login(request, user, backend='django.contrib.auth.backends.ModelBackend')
-        return HttpResponseRedirect(reverse('home:index'))
-    else:
-        return render(request, 'registration/activation_invalid.html')
+@login_required
+def profile(request, pk):
+    user = get_object_or_404(User, pk=pk)
+    contents = Post.objects.filter(user=user)
+    context = {
+        'user': user,
+        'contents': contents,
+    }
+    return render(request, 'registration/profile.html', context)
 
 
-def register(request):
-    if request.method  == 'POST':
-        form = RegisterForm(request.POST)
+@login_required
+def profile_account(request, id):
+    user = User.objects.get(id=id)
+    return render(request, 'registration/profile_account.html', {'user': user})
+
+
+@login_required
+@is_owner
+def profile_edit(request, id):
+    user = User.objects.get(id=id)
+    profile = Profile.objects.get(user_id=id)
+    initial_data = {
+        'user': user,
+        'college_major': profile.college_major,
+        'grade': profile.grade,
+        'bio': profile.bio,
+        'avatar': profile.avatar,
+    }
+
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
-            user = form.save()
-            user.refresh_from_db()
-            user.profile.username = form.cleaned_data.get('username')
-            user.profile.email = form.cleaned_data.get('email')
-            user.is_active = False
-            user.save()
-            current_site = get_current_site(request)
-            subject = 'Please Activate Your Account'
-            message = render_to_string('registration/activation_request.html', {
-                'user': user,
-                'domain': current_site.domain,
-                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                'token': account_activation_token.make_token(user),
-            })
-            user.email_user(subject, message)
-            return redirect("accounts:activation_sent")
+            form.save()
+            return render(request, 'registration/profile_account.html', {'user': user})
+        else:
+            return HttpResponse("The input of registration form is wrong. Please re-enter")
+    elif request.method == 'GET':
+        form = ProfileForm(initial=initial_data, instance=profile)
+        context = {'form': form, 'profile': profile, 'user': user }
+        return render(request, 'registration/edit.html', context)
     else:
-        form = RegisterForm()
-    return render(request, 'registration/register.html', {'form': form})
-
-    
-def profile(request, user_id):
-    user = User.objects.get(id = user_id)
-    return render(request, 'registration/profile.html', context={'user': user})
+        return HttpResponse("ERROR")

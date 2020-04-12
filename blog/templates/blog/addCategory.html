@@ -1,37 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>addCategory</title>
-</head>
-<body>
-  {% if category_id %}
-  <div class="editor">
-      <form method="POST" action="{% url 'blog:edit_category' category_id %}" class="bs-example form-horizontal">
-        {% csrf_token %}
-        {{ new_category_form }}
-        <p>Blog you want to add:</p>
-        {% for blog in Blogs %}
-          <input type="checkbox" class="custom-control-input" value="{{ blog.title }}" name="blog_title_list">{{ blog.title }}
-        {% endfor %}
-        <br/>
-        <button type="submit" class="btn btn-success">Submit</button>
-      </form>
-  </div>
-  {% else %}
-  <div class="editor">
-      <form method="POST" action="{% url 'blog:add_category' user_id %}" class="bs-example form-horizontal">
-        {% csrf_token %}
-        {{ category_form }}
-        <p>Blog you want to add:</p>
-        {% for blog in Blogs %}
-          <input type="checkbox" class="custom-control-input" value="{{ blog.title }}" name="blog_title_list">{{ blog.title }}
-        {% endfor %}
-        <br/>
-        <button type="submit" class="btn btn-success">Add</button>
-      </form>
-      <p style="color:red">{{ warning }}</p>
-  </div>
-  {% endif %}
-</body>
-</html>
+{% extends "Ybase.html" %}
+{% load crispy_forms_tags %}
+{% block head %}
+<link rel='stylesheet' href="http://at.alicdn.com/t/font_1635546_c012eszvxjc.css"></link>
+{% endblock %}
+{% block content %}
+<br/>
+<br/>
+<br/>
+ <div class="container">
+   <div class="row">
+       <div class="col-12 mb-12">
+        {% if category_id %}
+        <div class="editor">
+            <form method="POST" action="{% url 'blog:edit_category' category_id %}" class="bs-example form-horizontal">
+              {% csrf_token %}
+              {{ new_category_form|crispy  }}
+              <p>Blog you want to add:</p>
+              {% for blog in Blogs %}
+                <input type="checkbox" class="custom-control-input" value="{{ blog.title }}" name="blog_title_list">{{ blog.title }}
+              {% endfor %}
+              <br/>
+              <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+        </div>
+        {% else %}
+        <div class="editor">
+            <form method="POST" action="{% url 'blog:add_category' user_id %}" class="bs-example form-horizontal">
+              {% csrf_token %}
+              {{ category_form|crispy }}
+              <p>Blog you want to add:</p>
+              {% for blog in Blogs %}
+              <div class="form-check form-check-inline">
+                   <label class="form-check-label">
+                <input type="checkbox" class="form-check-input"  value="{{ blog.title }}" name="blog_title_list">{{ blog.title }}
+                </label>
+    </div>
+              {% endfor %}
+              <br/>
+              <button type="submit" class="btn btn-success">Add</button>
+            </form>
+            <p style="color:red">{{ warning }}</p>
+        </div>
+        {% endif %}
+       </div>
+   </div>
+ </div>
+{% endblock %}

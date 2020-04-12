@@ -50,8 +50,10 @@ INSTALLED_APPS = [
     'whoosh',
     'jieba',
     'markdownx',
+    'widget_tweaks',
     'six',
     # system apps
+    'accounts',
     'blog.apps.BlogConfig',
     'comment.apps.CommentConfig',
     'likes.apps.LikesConfig',
@@ -207,3 +209,5 @@ MARKDOWNX_IMAGE_MAX_SIZE = {
     'size': (800, 500),
     'quality': 90
 }
+# Crispy forms
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

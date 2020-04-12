@@ -1,0 +1,38 @@
+{% extends "YYYbase.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<br/>
+<br/>
+    <div class="container-fluid">
+      <div class="card mb-4">
+        <div class="card  shadow bg-white">
+          <div class="card-body">
+            <div class="container">
+              <div class="row">
+                <div class="col-12">
+                  <br>
+                     <h2  style=" font-family:Kite One;">My Profile:  <img src="{{ user.profile.avatar.url }}" style="max-width: 13%; border-radius: 50%;" class="col-md-4"></h2>
+                     {% if user.profile.avatar %}
+                     <div class="col-md-4"></div>
+                     {% else %}
+                     <h5 class="col-md-4"></h5>
+                     {% endif %}
+                     <ul>
+                         <li><span class="badge badge-success"><i style=" font-family:Kite One;font-size:20px">Class</i></span>: {{ user.profile.grade }} </li>
+                         <br/>
+                         <li><span class="badge badge-warning"><i style=" font-family:Kite One;font-size:20px">College_Major</i></span>: {{ user.profile.college_major }} </li>
+                         <br/>
+                         <li><span class="badge badge-danger"><i style=" font-family:Kite One;font-size:20px">Personalized signature</i>:</span> {{ user.profile.bio }} </li>
+                     </ul>
+                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+{% endblock %}

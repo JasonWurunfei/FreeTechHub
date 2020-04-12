@@ -1,307 +1,47 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <title>{{user_name}} profile page</title>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <style type="text/css">
-    body {
-      background: #F1F3FA;
-    }
-
-    /* Profile container */
-    .profile {
-      margin: 20px 0;
-    }
-
-    /* Profile sidebar */
-    .profile-sidebar {
-      padding: 20px 0 10px 0;
-      background: #fff;
-    }
-
-    .profile-userpic img {
-      float: none;
-      margin: 0 auto;
-      width: 50%;
-      height: 50%;
-      -webkit-border-radius: 50% !important;
-      -moz-border-radius: 50% !important;
-      border-radius: 50% !important;
-    }
-
-    .profile-usertitle {
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    .profile-usertitle-name {
-      color: #5a7391;
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 7px;
-    }
-
-    .profile-usertitle-job {
-      text-transform: uppercase;
-      color: #5b9bd1;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 15px;
-    }
-
-    .profile-userbuttons {
-      text-align: center;
-      margin-top: 10px;
-    }
-
-    .profile-userbuttons .btn {
-      text-transform: uppercase;
-      font-size: 11px;
-      font-weight: 600;
-      padding: 6px 15px;
-      margin-right: 5px;
-    }
-
-    .profile-userbuttons .btn:last-child {
-      margin-right: 0px;
-    }
-        
-    .profile-usermenu {
-      margin-top: 30px;
-    }
-
-    .profile-usermenu ul li {
-      border-bottom: 1px solid #f0f4f7;
-    }
-
-    .profile-usermenu ul li:last-child {
-      border-bottom: none;
-    }
-
-    .profile-usermenu ul li a {
-      color: #93a3b5;
-      font-size: 14px;
-      font-weight: 400;
-    }
-
-    .profile-usermenu ul li a i {
-      margin-right: 8px;
-      font-size: 14px;
-    }
-
-    .profile-usermenu ul li a:hover {
-      background-color: #fafcfd;
-      color: #5b9bd1;
-    }
-
-    .profile-usermenu ul li.active {
-      border-bottom: none;
-    }
-
-    .profile-usermenu ul li.active a {
-      color: #5b9bd1;
-      background-color: #f6f9fb;
-      border-left: 2px solid #5b9bd1;
-      margin-left: -2px;
-    }
-
-    /* Profile Content */
-    .profile-content {
-      padding: 20px;
-      background: #fff;
-      min-height: 460px;
-    }
-
-    .container{
-      height: 100%;
-      align-content: center;
-    }
-
-    .image_outer_container{
-      margin-top: auto;
-      margin-bottom: auto;
-      border-radius: 50%;
-      position: relative;
-    }
-
-    .image_inner_container{
-      border-radius: 50%;
-      padding: 5px;
-    background: #833ab4; 
-    background: -webkit-linear-gradient(to bottom, #fcb045, #fd1d1d, #833ab4); 
-    background: linear-gradient(to bottom, #fcb045, #fd1d1d, #833ab4);
-    }
-    .image_inner_container img{
-      height: 50px;
-      width: 50px;
-      border-radius: 50%;
-      border: 5px solid white;
-    }
-
-    .image_outer_container .green_icon{
-     background-color: #4cd137;
-     position: absolute;
-     right: 30px;
-     bottom: 10px;
-     height: 30px;    
-     width: 30px;
-     border:5px solid white;
-     border-radius: 50%;
-    }
-  </style>
-</head>
-<body>
-  <!-- Navigation -->
-  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-    <h2 class="my-0 mr-md-auto font-weight-normal text-info">NJIT</h2>
-    <nav class="my-2 my-md-0 mr-md-3">
-      <a class="p-2 text-dark" href="#">Home</a>
-      <a class="p-2 text-dark" href="#">Search</a>
-      <a class="p-2 text-dark" href="#">Wirting</a>
-    </nav>
-    <a href="#profile_detail" data-toggle='collapse'>
-       <div class="justify-content-right">
-        <div class="d-flex justify-content-center h-100">
-          <div class="image_outer_container">
-            <div class="image_inner_container">
-              <img src="https://i.pinimg.com/originals/43/96/61/439661dcc0d410d476d6d421b1812540.jpg">
-            </div>
-          </div>
-        </div>
+{% extends "YYbase.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Courgette">
+<div id="layoutSidenav_content">
+  <main>
+   <div class="container-fluid">
+    <div class="card mb-4">
+     {% for content in contents %}
+     <div class="card shadow bg-white">
+      <div class="card-body">
+        <h1 class="card-title" style=" font-family:Kite One;"><a href="{% url 'blog:post_detail' content.pk  %}">{{ content.title }}</a></h1>
+          <p><i style=" font-family:Damion;">Author: {{ user.username }}</i></p>
+        {% for user in users %}
+        {% if user.id == content.user_id %}
+          <p><i style=" font-family:Damion;">Author: {{ user.username }}</i></p>
+        {% endif %}
+        {% endfor %}
+          <p class="card-text"><i style=" font-family:Damion;">{{ content.body_summary|striptags }}</i></p>
+          <div><i style=" font-family:Damion;"> {{ content.mod_date }}</i></div>
+      <a href="/blog/edit_post/{{ content.id }}" type="button" class="btn btn-primary ">Edit</a>
+      <a href="/blog/delete_post/{{ content.id }}" type="button" class="btn btn-danger ">Delete></a>
       </div>
-    </a>  
-  </div>
-  <div class="col-md-3">
-    <div class="collapse" id='profile_detail'>
-      <div class="card">
-        <div class="card-body">
-          <div class="justify-content-right">
-            <div class="d-flex justify-content-center h-100">
-              <div class="image_outer_container">
-                <div class="image_inner_container">
-                  <img src="https://i.pinimg.com/originals/43/96/61/439661dcc0d410d476d6d421b1812540.jpg">
-                </div>
-              </div>
-            </div>
-          </div>
-          <h4 class="card-title">Hello {{user}}</h4>
-        </div>
       </div>
+      {% for item1 in img %}
+      {% if item1.post_id == content.id %}
+      <img src="/media/{{ item1.image }}" height="200" width="300"/>
+      {% endif %}
+      {% endfor %}
+      {% for item2 in video %}
+      {% if item2.post_id == content.id %}
+      <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
+      {% endif %}
+      {% endfor %}
+      <hr/>
+      {% endfor %}
     </div>
-  </div>
-  <!--Container-->
-  <div class="container">
-    <div class="row profile">
-      <div class="col-md-3">
-        <div class="profile-sidebar">
-          <!-- SIDEBAR USERPIC -->
-          <div class="profile-userpic">
-            <img src="http://keenthemes.com/preview/metronic/theme/assets/admin/pages/media/profile/profile_user.jpg" class="img-responsive" alt="">
-          </div>
-          <!-- END SIDEBAR USERPIC -->
-          <!-- SIDEBAR USER TITLE -->
-          <div class="profile-usertitle">
-            <div class="profile-usertitle-name">
-              Marcus Doe
-            </div>
-            <div class="profile-usertitle-job">
-              Developer
-            </div>
-          </div>
-          <div class="profile-usermenu justify-item-center">
-            <div class="button-groud">
-              <button type="button" class="btn button-outline-info" style="margin-left: 55px;"><a class="nav-link" href="#">Overviews</a></button>
-              <button type="button" class="btn button-outline-info" style="margin-left: 40px;"><a class="nav-link" href="#">Account Setting</a></button>
-              <button type="button" class="btn button-outline-info" style="margin-left: 75px;"><a class="nav-link" href="#">Task</a></button>
-            </div>
-          <!-- END MENU -->
-            <div class="profile-userbuttons">
-              <button type="button" class="btn btn-outline-success btn-sm"><a href="edit_user_information.html" class="text-info">Change</a></button>
-            </div>
-          </div>
-        </div>
-      </div>      
-      <div class="col-md-9">
-        <div class="profile-content">
-          <table class="table">
-            <tr>
-              <th>
-                <div class="card">
-                  <div class="card-body">
-                    <img src="#" class='card-img-top'>
-                    <a href="#" class="card-title card-link">Title1</a>
-                    <p class="card-text">Blog1</p>
-                  </div>
-                </div>
-              </th>
-              <th>
-                <div class="card">
-                  <div class="card-body">
-                    <img src="#" class="card-img-top">
-                    <a href="#" class="card-title card-link">Title2</a>
-                    <p class="card-text">Blog2</p>
-                  </div>
-                </div>
-              </th>              
-            </tr>
-            <tr>
-              <th>
-                <div class="card">
-                  <div class="card-body">
-                    <img src="#" class='card-img-top'>
-                    <a href="#" class="card-title card-link">Title3</a>
-                    <p class="card-text">Blog3</p>
-                  </div>
-                </div>
-              </th>
-              <th>
-                <div class="card">
-                  <div class="card-body">
-                    <img src="#" class="card-img-top">
-                    <a href="#" class="card-title card-link">Title4</a>
-                    <p class="card-text">Blog4</p>
-                  </div>
-                </div>
-              </th>              
-            </tr>
-            <tr>
-              <th>
-                <div class="card">
-                  <div class="card-body">
-                    <img src="#" class='card-img-top'>
-                    <a href="#" class="card-title card-link">Title5</a>
-                    <p class="card-text">Blog5</p>
-                  </div>
-                </div>
-              </th>
-              <th>
-                <div class="card">
-                  <div class="card-body">
-                    <img src="#" class="card-img-top">
-                    <a href="#" class="card-title card-link">Title6</a>
-                    <p class="card-text">Blog6</p>
-                  </div>
-                </div>
-              </th>              
-            </tr>
-          </table>
-        </div>
-      </div>
+    <div class=" mb-4">
+      <div>
+       <a type="submit" href="{% url 'blog:post' user.id %}"><button class="btn btn-primary" type="button"><i >Post a blog</i></button></a>
+     </div>
     </div>
-  </div>
-  <center>
-    <strong>Powered by <a href="http://j.mp/metronictheme" target="_blank">KeenThemes</a></strong>
-  </center>
-  <br/>
-   <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-</body>
-</html>
+    </div>
+  </main>
+</div>
+
+{% endblock %}

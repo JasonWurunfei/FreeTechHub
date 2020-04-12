@@ -34,6 +34,7 @@ class Post(DateCreateModMixin):
     title = models.CharField(max_length=50, null=True)
     category = models.ForeignKey(Category, verbose_name="Category", on_delete=models.SET_NULL, null=True)
     text = MarkdownxField()
+    total_views = models.PositiveIntegerField(default=0)
 
     def body_summary(self):
         return markdownify(self.text[:300] + "...")

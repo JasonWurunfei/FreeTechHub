@@ -6,10 +6,11 @@ django-haystack==3.0b1
 django-allauth==0.41.0
 django-markdownx==3.0.1
 jieba==0.42.1
-Pygments==2.6.1
 Markdown==3.2.1
 Pillow==7.0.0
 pytz==2019.3
 six==1.14.0
 sqlparse==0.3.1
 Whoosh==2.7.4
+Pygments==2.6.1
+django-widget-tweaks

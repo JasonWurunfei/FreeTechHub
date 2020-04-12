@@ -1,0 +1,51 @@
+{% extends "Ybase.html" %}
+{% load widget_tweaks %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load account socialaccount %}
+{% block content %}
+<link rel='stylesheet' href="http://at.alicdn.com/t/font_1635546_nc93s0zjjp.css"></link>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-7">
+      <div class="card shadow-lg border-0 rounded-lg mt-5">
+        <div class="card-header">
+          <h1 class="text-center font-weight-light my-4" style=" font-family:Kite One;">Login</h1>
+          <p  class="text-center "  style=" font-family:Satisfy;">{% blocktrans %}If you have not created an account yet, then please<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+         </div>
+          <div class="card-body">
+
+            {% get_providers as socialaccount_providers %}
+
+            {% if socialaccount_providers %}
+
+            <div class="socialaccount_ballot">
+
+              <ul class="socialaccount_providers">
+                {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+              </ul>
+
+            </div>
+
+            {% include "socialaccount/snippets/login_extra.html" %}
+
+              {% endif %}
+
+              <form class="login" method="POST" action="{% url 'account_login' %}">
+                {% csrf_token %}
+                 {{ form|crispy }}
+                {% if redirect_field_value %}
+                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                {% endif %}
+                 <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+                 <div style="text-align:center">
+                   <button type="submit" class="btn btn-primary ">{% trans "Sign In" %} &raquo;</button>
+                 </div>
+
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock %}

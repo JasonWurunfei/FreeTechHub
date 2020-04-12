@@ -1,37 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
+{% extends "Ybase.html" %}
+{% load widget_tweaks %}
+{% block content %}
+<br/>
+<br/>
+<br/>
+<div class="container">
+    <div class="row">
+       <div class="col-12 mb-12">
+         <div class=" mb-4">
+            <div>
+             <a type="submit" href="{% url 'blog:categories' user.id %}" class="btn btn-primary" type="button">Subject category</a>
+             <a type="submit" href="{% url 'blog:post' user.id %}" class="btn btn-warning" type="button">Post a blog</a>
+           </div>
+      </div>
+      {% for content in texts %}
 
-<body>
-  <h1 align="center" style="color:Pink">Homepage</h1>
-  <a type="submit" href="{% url 'blog:post' user.id %}">Post a blog</a>
-  <br/>
-  <a type="submit" href="{% url 'blog:categories' user.id %}">Subject category</a>
-  <hr/>
-  {% csrf_token %}
-  {% for content in texts %}
-    <div class="card shadow bg-white">
-      <div class="card-body">
-        <h1 class="card-title"><a href="{% url 'blog:post_detail' content.id %}">{{ content.title }}</a></h1>
-        <p>Category: {{ content.category }}</p>
-        {% for user in users %}
-          {% if user.id == content.user_id %}
-            <p>Author: {{ user.username }}</p>
+         <div class="card shadow bg-white">
+          <div class="card-body">
+            <h1 class="card-title" style=" font-family:Kite One;"><a href="{% url 'blog:post_detail' content.id %}">{{ content.title }}</a></h1>
+              <p><i style=" font-family:Damion;">Category: {{ content.category }}</i></p>
+            {% for user in users %}
+              {% if user.id == content.user_id %}
+              <p><i style=" font-family:Damion;">Author: {{ user.username }}</i></p>
+              {% endif %}
+            {% endfor %}
+              <p class="card-text"><i style=" font-family:Damion;">{{ content.body_summary|striptags }}</i></p>
+              <div> <i style=" font-family:Damion;" >{{ content.mod_date }}</i></div>
+          </div>
+        </div>
+        {% for item2 in video %}
+          {% if item2.post_id == content.id %}
+            <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
           {% endif %}
         {% endfor %}
-        <p class="card-text">{{ content.body_summary|striptags }}</p>
-        <div> {{ content.mod_date }}</div>
-      </div>
+        <hr/>
+      {% endfor %}
+       </div>
     </div>
-    {% for item2 in video %}
-      {% if item2.post_id == content.id %}
-        <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
-      {% endif %}
-    {% endfor %}
-    <hr/>
-  {% endfor %}
-</body>
-</html>
+</div>
+{% endblock %}
