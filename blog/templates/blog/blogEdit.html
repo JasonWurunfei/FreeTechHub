@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
-{% load crispy_forms_tags %}
+
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -22,7 +22,7 @@
       <form  method="POST" action="{% url 'blog:edit_post' post_id %}" enctype="multipart/form-data">
         {% csrf_token %}
         {{ new_category_form }}
-        {{ new_post_form | crispy}}
+        {{ new_post_form }}
         {{ new_post_form.media }}
         <h3>Please choose your video</h3>
         <input type="file" name="video" multiple="multiple"><br/>
