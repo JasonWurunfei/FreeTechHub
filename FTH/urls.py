@@ -29,6 +29,7 @@ urlpatterns = [
     path('<int:post_id>/<str:like_type>', Postlikes),
     path('markdownx/', include('markdownx.urls')),
     path('search/',include('haystack.urls')),
+    path('ckeditor/',include('ckeditor_uploader.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

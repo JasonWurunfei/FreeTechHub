@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'jieba',
     'markdownx',
     'six',
+    'ckeditor',
+    'ckeditor_uploader',
     # system apps
     'blog.apps.BlogConfig',
     'comment.apps.CommentConfig',
@@ -206,4 +208,14 @@ MARKDOWNX_UPLOAD_CONTENT_TYPES = ['image/jpeg', 'image/png', 'image/svg+xml']
 MARKDOWNX_IMAGE_MAX_SIZE = {
     'size': (800, 500),
     'quality': 90
+}
+
+# ckeditor options
+CKEDITOR_UPLOAD_PATH = 'upload/'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'extraPlugins':'codesnippet',
+    },
 }
