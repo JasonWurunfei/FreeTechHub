@@ -97,7 +97,6 @@ def show(request):
 @login_required
 def show_blog(request, post_id):
     post_detail = get_object_or_404(Post, pk=post_id)
-    post_detail.total_views += 1
     post_detail.text = markdown(post_detail.text, extensions=[
         'markdown.extensions.extra',
         'markdown.extensions.codehilite',
@@ -106,6 +105,7 @@ def show_blog(request, post_id):
     post_type = ContentType.objects.get(app_label='blog', model='post')
     users = User.objects.all()
     video = []
+
     videos = Video.objects.filter(post=post_detail.id)
     if len(videos) == 1:
         video.append(videos[0])
