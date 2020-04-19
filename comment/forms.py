@@ -1,9 +1,8 @@
-from ckeditor.widgets import CKEditorWidget
 from django import forms
 from comment.models import Comments
 
 class CommentForm(forms.ModelForm):
-    text = forms.CharField(widget=CKEditorWidget())
+    text = forms.CharField(widget=forms.Textarea)
 
     class Meta:
         model = Comments
