@@ -110,7 +110,6 @@ def show_blog(request, post_id):
     post_type = ContentType.objects.get(app_label='blog', model='post')
     users = User.objects.all()
     video = []
-
     videos = Video.objects.filter(post=post_detail.id)
     if len(videos) == 1:
         video.append(videos[0])

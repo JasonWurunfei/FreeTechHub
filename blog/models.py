@@ -38,6 +38,7 @@ class Post(DateCreateModMixin):
     text = MarkdownxField()
     tags = TaggableManager(blank=True)
 
+
     def body_summary(self):
         return markdownify(self.text[:300] + "...")
 

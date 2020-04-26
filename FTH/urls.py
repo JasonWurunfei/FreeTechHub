@@ -23,9 +23,10 @@ from vote.views import QuestionVotes, AnswerVotes
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),
+    path('account/',include('allauth.urls')),
+    path('account/',include('accounts.urls', namespace='accounts')),
     path('', include('home.urls', namespace='home')),
-    path('blog/', include('blog.urls', namespace='blog')),
+    path('blog/', include(('blog.urls', 'blog' ), namespace='blog')),
     path('<int:post_id>/', comment, name="comment_page"),
     path('like/<int:post_id>/<str:like_type>', Postlikes, name="post_like"),
     path('vote_question/<int:question_id>/<str:vote_type>', QuestionVotes, name="question_vote"),
@@ -34,5 +35,4 @@ urlpatterns = [
     path('search/', include('haystack.urls')),
     path('QA/', include('QA.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 
