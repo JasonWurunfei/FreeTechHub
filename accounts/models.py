@@ -24,3 +24,8 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+
+class Relationship(models.Model):
+    following = models.ForeignKey(User, related_name='following_users', on_delete=models.CASCADE)
+    follower = models.ForeignKey(User, related_name='follower_users', on_delete=models.CASCADE)

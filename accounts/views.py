@@ -12,9 +12,9 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from blog.models import Post
 from .forms import ProfileForm
-from .models import Profile
+from .models import Profile, Relationship
 from django.views.decorators.csrf import csrf_protect
-
+from django.db.models import Q
 
 def is_owner(func):
     def check(request, *args, **kwargs):
@@ -39,8 +39,44 @@ def profile(request, pk):
 
 @login_required
 def profile_account(request, id):
+    id = id
     user = User.objects.get(id=id)
-    return render(request, 'registration/profile_account.html', {'user': user})
+    user_info = User.objects.get(id=id)
+    self_user = request.user
+    to_follow_user = User.objects.get(id=id)
+
+    if not Relationship.objects.filter(follower=request.user, following=to_follow_user).exists():
+        show_button = "follow"
+        if request.method == "POST":
+            relationship = Relationship()
+            relationship.following = User.objects.get(username=to_follow_user)
+            relationship.follower = User.objects.get(username=self_user)
+            relationship.save()
+
+            return redirect('accounts:profile_account', id)
+        else:
+        #    all_lists = Relationship.objects.get(following_id=id)
+         #   all_lists = user.following_users.all()
+         #   relationship = Relationship.objects.all()
+            all_lists = Relationship.objects.filter(following_id=id)
+            followings =Relationship.objects.filter(follower_id=id)
+         #   users = User.objects.all()
+            return render(request, 'registration/profile_account.html', locals())
+    else:
+        show_button = "Unfollow"
+        if request.method == "POST":
+            relationship = Relationship.objects.get(Q(follower=self_user) & Q(following=to_follow_user))
+            relationship.delete()
+            return redirect('accounts:profile_account', id)
+        else:
+        #    all_lists = Relationship.objects.get(following_id=id)
+         #   all_lists = user.following_users.all()
+         #   relationship = Relationship.objects.all()
+            all_lists = Relationship.objects.filter(following_id=id)
+            followings = Relationship.objects.filter(follower_id=id)
+         #   users = User.objects.all()
+            return render(request, 'registration/profile_account.html', locals())
+
 
 
 @login_required
