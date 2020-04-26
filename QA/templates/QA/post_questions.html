@@ -5,18 +5,34 @@
   <meta charset="UTF-8">
   <title>post_questions</title>
   <link rel="stylesheet" href="{% static 'code.css' %}">
+  <link rel="stylesheet" href="{% static 'tagsinput.css' %}">
+  <script src="tagsinput.js"></script>
 </head>
 <body>
-  <h1 align="center" style="color:Pink">Ask a public question! {{ user.username }}</h1>
-    <hr/>
-    <div class="form-group">
-      <form method="POST" action="{% url 'QA:post_question' user.id%}" class="bs-example form-horizontal">
-        {% csrf_token %}
-        {{ question_form|safe }}
-        {{ question_form.media }}
-        <br/>
-        <button type="submit" class="btn btn-success">Finished</button><br/>
-      </form>
-    </div>
+  {% if question_id %}
+    <h1 align="center" style="color:Pink">Edit question!</h1>
+      <hr/>
+      <div class="form-group">
+        <form method="POST" action="{% url 'QA:edit_question' question_id %}" class="bs-example form-horizontal">
+          {% csrf_token %}
+          {{ new_question_form|safe }}
+          {{ new_question_form.media }}
+          <br/>
+          <button type="submit" class="btn btn-success">Edited</button><br/>
+        </form>
+      </div>
+  {% else %}
+    <h1 align="center" style="color:Pink">Ask a public question! {{ user.username }}</h1>
+      <hr/>
+      <div class="form-group">
+        <form method="POST" action="{% url 'QA:post_question' user.id%}" class="bs-example form-horizontal">
+          {% csrf_token %}
+          {{ question_form|safe }}
+          {{ question_form.media }}
+          <br/>
+          <button type="submit" class="btn btn-success">Finished</button><br/>
+        </form>
+      </div>
+  {% endif %}
 </body>
 </html>

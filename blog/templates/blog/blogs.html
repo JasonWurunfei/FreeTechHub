@@ -11,16 +11,20 @@
   <br/>
   <a type="submit" href="{% url 'blog:categories' user.id %}">Subject category</a>
   <hr/>
+  <p>Common Tags:
+    {% for tag in common_tags %}
+      <a class="badge badge-success" >{{ tag }}</a>
+    {% endfor %}
+  </p>
   {% csrf_token %}
   {% for content in texts %}
     <div class="card shadow bg-white">
       <div class="card-body">
         <h1 class="card-title"><a href="{% url 'blog:post_detail' content.id %}">{{ content.title }}</a></h1>
         <p>Category: {{ content.category }}</p>
-        {% for user in users %}
-          {% if user.id == content.user_id %}
-            <p>Author: {{ user.username }}</p>
-          {% endif %}
+        <p>Author: {{ content.user.username }}</p>
+        {% for tag in content.tags.all %}
+          <a class="mr-1 badge badge-info" data-role="tagsinput" href="{% url 'blog:tag_list' tag.slug %}">#{{ tag }}</a>
         {% endfor %}
         <p class="card-text">{{ content.body_summary|striptags }}</p>
         <div> {{ content.mod_date }}</div>

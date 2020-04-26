@@ -51,11 +51,14 @@ INSTALLED_APPS = [
     'jieba',
     'markdownx',
     'six',
+    'taggit',
     # system apps
     'blog.apps.BlogConfig',
     'comment.apps.CommentConfig',
     'likes.apps.LikesConfig',
     'home.apps.HomeConfig',
+    'QA.apps.QaConfig',
+    'vote.apps.VoteConfig',
     'django.forms',
 ]
 SITE_ID = 1
@@ -131,6 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 
 
 # Internationalization

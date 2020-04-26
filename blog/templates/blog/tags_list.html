@@ -2,9 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Tags</title>
 </head>
 <body>
-$END$
+  <h1 class="tag">Blogs tagged with {{ tag.name }}</h1>
+  {% for blog in blog_list %}
+    <div class="col-md-6">
+      <div class="cards">
+        <h1 class="card-title"><a href="{% url 'blog:post_detail' blog.id%}">{{ blog.title }}</a></h1>
+        <p>Author: {{ blog.user.username }}</p>
+        {% for tag in blog.tags.all %}
+          <a class="mr-1 badge badge-info" >#{{ tag }}</a>
+        {% endfor %}
+        <p class="mb-auto text-muted"> {{ blog.mod_date }}</p>
+      </div>
+    </div>
+    <hr/>
+  {% endfor %}
 </body>
 </html>

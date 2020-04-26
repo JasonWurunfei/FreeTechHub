@@ -2,9 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Title</title>
 </head>
 <body>
-$END$
+  <h1 class="tag">Questions tagged with {{ tag.name }}</h1>
+  {% for question in question_list %}
+    <div class="col-md-6">
+      <div class="cards">
+        <h1 class="card-title"><a href="{% url 'QA:show_question' question.id%}">{{ question.title }}</a></h1>
+        <p>Questioner: {{ question.user.username }}</p>
+        {% for tag in question.tags.all %}
+          <a class="mr-1 badge badge-info" >#{{ tag }}</a>
+        {% endfor %}
+        <p class="mb-auto text-muted"> {{ question.uploaded_at }}</p>
+      </div>
+    </div>
+    <hr/>
+  {% endfor %}
 </body>
 </html>

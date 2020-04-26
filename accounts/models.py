@@ -7,6 +7,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     email = models.EmailField(max_length=150)
     signup_confirmation = models.BooleanField(default=False)
+    coins = models.PositiveIntegerField(default=0, null=True)
 
     def __str__(self):
         return self.user.username

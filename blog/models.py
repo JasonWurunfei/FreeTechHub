@@ -3,6 +3,8 @@ from django.db import models
 from markdownx.utils import markdownify
 from markdownx.models import MarkdownxField
 from django.urls import reverse
+from taggit.managers import TaggableManager
+
 
 class Category(models.Model):
     name = models.CharField(max_length=250)
@@ -25,7 +27,7 @@ class Category(models.Model):
 
 class DateCreateModMixin(models.Model):
     class Meta:
-        abstract=True
+        abstract = True
 
     mod_date = models.DateTimeField(auto_now_add=True)
 
@@ -34,6 +36,7 @@ class Post(DateCreateModMixin):
     title = models.CharField(max_length=50, null=True)
     category = models.ForeignKey(Category, verbose_name="Category", on_delete=models.SET_NULL, null=True)
     text = MarkdownxField()
+    tags = TaggableManager(blank=True)
 
     def body_summary(self):
         return markdownify(self.text[:300] + "...")
@@ -47,3 +50,4 @@ def user_vid_directory_path(instance, filename):
 class Video(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     content = models.FileField(upload_to=user_vid_directory_path)
+

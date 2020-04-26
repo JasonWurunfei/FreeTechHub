@@ -5,6 +5,7 @@ django-crispy-forms==1.9.0
 django-haystack==3.0b1
 django-allauth==0.41.0
 django-markdownx==3.0.1
+django-taggit==1.2.0
 jieba==0.42.1
 Pygments==2.6.1
 Markdown==3.2.1

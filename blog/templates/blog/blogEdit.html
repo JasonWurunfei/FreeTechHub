@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  {% if user.id and post_id %}
+  {% if post_id %}
     <h1 align="center" style="color:Pink">Please edit!</h1>
     <hr/>
     <form method="POST" action="{% url 'blog:edit_post' post_id %}" enctype="multipart/form-data" class="bs-example form-horizontal">

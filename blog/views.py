@@ -5,6 +5,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.urls import reverse
 from markdown import markdown
+from taggit.models import Tag
+
 from blog.forms import PostForm, CategoryForm
 from blog.models import Post, Video, Category
 from comment.forms import CommentForm
@@ -53,6 +55,7 @@ def post(request, user_id):
             post.title = form.cleaned_data['title']
             post.user_id = user_id
             post.save()
+            form.save_m2m()
 
             files2 = request.FILES.getlist('video')
             for file in files2:
@@ -74,6 +77,7 @@ def post(request, user_id):
 def show(request):
     texts = Post.objects.all().order_by('-mod_date')
     video = []
+    common_tags = Post.tags.most_common()[:4]
     user = request.user
     users = User.objects.all()
     for i in range(len(texts)):
@@ -90,6 +94,7 @@ def show(request):
         'user': user,
         'users': users,
         'video': video,
+        'common_tags': common_tags,
     }
 
     return render(request, 'blog/blogs.html', context)
@@ -160,7 +165,7 @@ def edit_post(request, post_id):
 def delete_post(request, post_id):
     post = Post.objects.get(id=post_id)
     post.delete()
-    return redirect('blog:show')
+    return redirect(reverse('blog:show'))
 
 @login_required
 @is_post_owner
@@ -269,3 +274,17 @@ def delete_category(request, category_id):
     category = Category.objects.get(id=category_id)
     category.delete()
     return redirect(reverse('blog:categories', args=(user.id, )))
+
+@login_required
+def blogs_tagged(request, tag_slug=None):
+    blogs = Post.objects.all()
+    # tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        blog_list = blogs.filter(tags__in=[tag])
+
+        context = {
+            'tag': tag,
+            'blog_list': blog_list,
+        }
+        return render(request, 'blog/tags_list.html', context)
