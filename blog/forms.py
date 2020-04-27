@@ -8,7 +8,9 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['title', 'text']
+        fields = ['title',
+                  'text',
+                  'tags', ]
 
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(label='category', max_length=250)
@@ -17,4 +19,4 @@ class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
         fields = ['name', 'content']
-        
+

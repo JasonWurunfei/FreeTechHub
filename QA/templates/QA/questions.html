@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <title>Questions</title>
+  <link rel="stylesheet" href="{% static 'code.css' %}">
+  <link rel="stylesheet" href="{% static 'tagsinput.css' %}">
+  <script src="tagsinput.js"></script>
+</head>
+
+{% load count_votes %}
+
+<body>
+  <h1 align="center" style="color:Pink">Open questions</h1>
+  <a type="submit" href="{% url 'QA:post_question' user_id %}">Post a question</a>
+  <hr/>
+  <p>Common Tags:
+    {% for tag in common_tags %}
+      <a class="badge badge-success" >{{ tag }}</a>
+    {% endfor %}
+  </p>
+  {% csrf_token %}
+  {% for question in questions %}
+    <div class="col-md-6">
+      <div class="cards">
+        <h1 class="card-title"><a href="{% url 'QA:show_question' question.id%}">{{ question.title }}</a></h1>
+        <p>Questioner: {{ question.user.username }}</p>
+        {% for tag in question.tags.all %}
+          <a class="mr-1 badge badge-info" data-role="tagsinput" href="{% url 'QA:tag_list' tag.slug %}">#{{ tag }}</a>
+        {% endfor %}
+        <p class="mb-auto text-muted"> {{ question.uploaded_at }}</p>
+        <span class="views-count">Views:{{ question.views }}</span>
+        <span>Answers:{{ question.answer_number }}</span>
+        <span>Votes:{% get_up_number question.type_id question.id %}</span>
+      </div>
+    </div>
+    <hr/>
+  {% endfor %}
+</body>
+</html>

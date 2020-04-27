@@ -13,3 +13,4 @@ urlpatterns = [
     path('profile/edit/<int:id>/', views.profile_edit, name='edit'),
     path('profile/show/<int:id>/', views.profile_account, name='profile_account'),
 ]
+
