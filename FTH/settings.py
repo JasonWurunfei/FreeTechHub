@@ -165,7 +165,7 @@ MEDIA_URL = '/media/'
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = ''
-LOGOUT_REDIRECT_URL = ''
+LOGOUT_REDIRECT_URL = '/'
 
 #django-allauth's settings
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'

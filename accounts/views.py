@@ -16,6 +16,7 @@ from .models import Profile, Relationship
 from django.views.decorators.csrf import csrf_protect
 from django.db.models import Q
 
+
 def is_owner(func):
     def check(request, *args, **kwargs):
         id = kwargs["id"]
@@ -55,7 +56,7 @@ def profile_account(request, id):
 
             return redirect('accounts:profile_account', id)
         else:
-        #    all_lists = Relationship.objects.get(following_id=id)
+         #   all_lists = Relationship.objects.get(following_id=id)
          #   all_lists = user.following_users.all()
          #   relationship = Relationship.objects.all()
             all_lists = Relationship.objects.filter(following_id=id)

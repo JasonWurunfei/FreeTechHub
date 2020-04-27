@@ -49,7 +49,7 @@
             <a class="dropdown-item" href="/account/profile/{{ user.id }}/">profile</a>
             <a class="dropdown-item" href="{% url "accounts:profile_account" user.id %}">setting</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/account/LOGOUT/">Logout</a>
+            <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
            </div>
         {% else %}
         <li class="nav-item">
@@ -60,11 +60,8 @@
     </ul>
   </nav>
    <div class="container">
-
     <div class="row">
-
       <div class="col-lg-3">
-
         <h1 class="my-4" style=" font-family:Kite One;">Setting</h1>
         <div class="list-group">
           <a class="list-group-item" href="{% url "accounts:edit" user.id %}">Edit</a>
@@ -72,16 +69,12 @@
           <a class="list-group-item" href="{% url 'account_email' %}">Change Email</a>
           <a class="list-group-item"href="{% url 'account_change_password' %}">Change Password</a>
         </div>
-
       </div>
       <!-- /.col-lg-3 -->
 
       <div class="col-lg-9">
-             {% block content %}
-
-              {% endblock %}
-
-
+        {% block content %}
+        {% endblock %}
         <!-- /.row -->
       </div>
       <!-- /.col-lg-9 -->
