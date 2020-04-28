@@ -4,6 +4,7 @@ from markdownx.utils import markdownify
 from markdownx.models import MarkdownxField
 from django.urls import reverse
 from taggit.managers import TaggableManager
+from .cn_taggit import CnTaggedItem
 
 
 class Category(models.Model):
@@ -36,7 +37,7 @@ class Post(DateCreateModMixin):
     title = models.CharField(max_length=50, null=True)
     category = models.ForeignKey(Category, verbose_name="Category", on_delete=models.SET_NULL, null=True)
     text = MarkdownxField()
-    tags = TaggableManager(blank=True)
+    tags = TaggableManager(blank=True, through=CnTaggedItem)
 
 
     def body_summary(self):

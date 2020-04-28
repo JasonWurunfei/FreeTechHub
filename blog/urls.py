@@ -14,5 +14,5 @@ urlpatterns = [
     path('edit_category/<int:category_id>/', views.edit_category, name='edit_category'),
     path('delete_category/<int:category_id>/', views.delete_category, name='delete_category'),
     path('remove_blog/<int:post_id>/', views.remove_blog, name='remove_blog'),
-    path('tag_list/<slug:tag_slug>', views.blogs_tagged, name='tag_list'),
+    path('tag_list/<slug:tag_slug>/', views.blogs_tagged, name='tag_list'),
 ]
