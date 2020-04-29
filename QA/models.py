@@ -3,13 +3,13 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from markdownx.models import MarkdownxField
 from taggit.managers import TaggableManager
-# from .models import User
+from blog.cn_taggit import CnTaggedItem
 
 class Question(models.Model):
     title = models.TextField(max_length=50, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     body = MarkdownxField()
-    tags = TaggableManager(blank=True)
+    tags = TaggableManager(blank=True, through=CnTaggedItem)
     views = models.PositiveIntegerField(default=0)
 
     uploaded_at = models.DateTimeField(auto_now_add=True)
