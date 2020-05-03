@@ -30,3 +30,4 @@ def save_user_profile(sender, instance, **kwargs):
 class Relationship(models.Model):
     following = models.ForeignKey(User, related_name='following_users', on_delete=models.CASCADE)
     follower = models.ForeignKey(User, related_name='follower_users', on_delete=models.CASCADE)
+    

@@ -9,8 +9,11 @@ from taggit.models import Tag
 
 from blog.forms import PostForm, CategoryForm
 from blog.models import Post, Video, Category
+from accounts.models import Profile, Relationship
 from comment.forms import CommentForm
 from comment.models import Comments
+
+from django.db.models import Q
 
 def is_post_owner(func):
     def check(request, *args, **kwargs):
@@ -122,15 +125,65 @@ def show_blog(request, post_id):
     comments = Comments.objects.filter(object_id=post_id, parent=None)
     comment_form = CommentForm()
 
-    context = {
-        'users': users,
-        'post_detail': post_detail,
-        'post_type_id': post_type.id,
-        'video': video,
-        'comments': comments,
-        'comment_form': comment_form,
-    }
-    return render(request, 'blog/blogDetail.html', context)
+    post = Post.objects.get(id=post_id)
+    id = post.user_id
+    user = User.objects.get(id=id)
+    user_info = User.objects.get(id=id)
+    self_user = request.user
+    to_follow_user = User.objects.get(id=id)
+
+    if not Relationship.objects.filter(follower=request.user, following=to_follow_user).exists():
+        show_button = "follow"
+        if request.method == "POST":
+            relationship = Relationship()
+            relationship.following = User.objects.get(username=to_follow_user)
+            relationship.follower = User.objects.get(username=self_user)
+            relationship.save()
+
+            return redirect('blog:post_detail', post_id)
+        else:
+            all_lists = Relationship.objects.filter(following_id=id)
+            followings = Relationship.objects.filter(follower_id=id)
+            context = {
+                'users': users,
+                'post_detail': post_detail,
+                'post_type_id': post_type.id,
+                'video': video,
+                'comments': comments,
+                'comment_form': comment_form,
+                'post': post,
+                'user': user,
+                'user_info': user_info,
+                'show_button': show_button,
+                'all_lists': all_lists,
+                'followings': followings,
+            }
+            return render(request, 'blog/blogDetail.html', context)
+    else:
+        show_button = "Unfollow"
+        if request.method == "POST":
+            relationship = Relationship.objects.get(Q(follower=self_user) & Q(following=to_follow_user))
+            relationship.delete()
+            return redirect('blog:post_detail', post_id)
+        else:
+            all_lists = Relationship.objects.filter(following_id=id)
+            followings = Relationship.objects.filter(follower_id=id)
+            context = {
+                'users': users,
+                'post_detail': post_detail,
+                'post_type_id': post_type.id,
+                'video': video,
+                'comments': comments,
+                'comment_form': comment_form,
+                'post': post,
+                'user': user,
+                'user_info': user_info,
+                'show_button': show_button,
+                'all_lists': all_lists,
+                'followings': followings,
+            }
+            return render(request, 'blog/blogDetail.html', context)
+
 
 @login_required
 @is_post_owner

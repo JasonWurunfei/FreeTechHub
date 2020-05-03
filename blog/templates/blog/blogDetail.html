@@ -54,6 +54,12 @@
       <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'blog:edit_post' post_detail.id %}">Edit</a></button>
       <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'blog:delete_post' post_detail.id %}">Delete</a> </button>
       <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'blog:show' %}">Back</a></button>
+      {% if self_user != user_info %}
+        <form method="post" action="{% url 'blog:post_detail' post_detail.id %}">
+          {% csrf_token %}
+          <input type="submit"  value="{{ show_button }}" >
+        </form>
+      {% endif %}
     </div>
     <div class="text-muted text-right" style="margin-top: 4rem">{{ post_detail.mod_date }}</div>
   </div>
