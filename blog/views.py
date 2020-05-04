@@ -1,6 +1,6 @@
 import datetime
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from users.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.urls import reverse
@@ -9,7 +9,7 @@ from taggit.models import Tag
 
 from blog.forms import PostForm, CategoryForm
 from blog.models import Post, Video, Category
-from accounts.models import Profile, Relationship
+from accounts.models import Relationship
 from comment.forms import CommentForm
 from comment.models import Comments
 

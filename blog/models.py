@@ -1,15 +1,16 @@
-from django.contrib.auth.models import User
+from users.models import User
 from django.db import models
 from markdownx.utils import markdownify
 from markdownx.models import MarkdownxField
 from django.urls import reverse
 from taggit.managers import TaggableManager
 from .cn_taggit import CnTaggedItem
+from django.conf import settings
 
 
 class Category(models.Model):
     name = models.CharField(max_length=250)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     content = models.CharField(max_length=500, null=True)
 
     class Meta:
@@ -33,7 +34,7 @@ class DateCreateModMixin(models.Model):
     mod_date = models.DateTimeField(auto_now_add=True)
 
 class Post(DateCreateModMixin):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=50, null=True)
     category = models.ForeignKey(Category, verbose_name="Category", on_delete=models.SET_NULL, null=True)
     text = MarkdownxField()

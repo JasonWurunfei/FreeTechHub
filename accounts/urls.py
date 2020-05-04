@@ -6,7 +6,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib.auth import views as auth_views
 
 
-app_name='accounts'
+app_name = 'accounts'
 urlpatterns = [
     path('profile/<int:pk>/', views.profile, name='profile'),
     path('profile/edit/<int:id>/', views.profile_edit, name='edit'),
