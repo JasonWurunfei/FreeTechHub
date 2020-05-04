@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+
+<body>
+  <h1 align="center" style="color:Pink">Homepage</h1>
+  <a type="submit" href="{% url 'blog:post' user.id %}">Post a blog</a>
+  <br/>
+  <a type="submit" href="{% url 'blog:categories' user.id %}">Subject category</a>
+  <hr/>
+  <p>Common Tags:
+    {% for tag in common_tags %}
+      <a class="badge badge-success" >{{ tag }}</a>
+    {% endfor %}
+  </p>
+  {% csrf_token %}
+  {% for content in texts %}
+    <div class="card shadow bg-white">
+      <div class="card-body">
+        <h1 class="card-title"><a href="{% url 'blog:post_detail' content.id %}">{{ content.title }}</a></h1>
+        <p>Category: {{ content.category }}</p>
+        <p>Author: {{ content.user.username }}</p>
+        {% for tag in content.tags.all %}
+          <a class="mr-1 badge badge-info" data-role="tagsinput" href="{% url 'blog:tag_list' tag.slug %}">#{{ tag }}</a>
+        {% endfor %}
+        <p class="card-text">{{ content.body_summary|striptags }}</p>
+        <div> {{ content.mod_date }}</div>
+      </div>
+    </div>
+    {% for item2 in video %}
+      {% if item2.post_id == content.id %}
+        <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
+      {% endif %}
+    {% endfor %}
+    <hr/>
+  {% endfor %}
+</body>
+</html>

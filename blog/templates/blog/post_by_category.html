@@ -1,0 +1,30 @@
+{% extends "Ybase.html" %}
+{% block head %}
+<link rel='stylesheet' href="http://at.alicdn.com/t/font_1635546_c012eszvxjc.css"></link>
+{% endblock %}
+{% block content %}
+<br/>
+<br/>
+<br/>
+<div class="container">
+ <div class="row">
+   <div class="col-12 mb-12">
+     <div class="card shadow bg-white">
+       <div class="card-body">
+         <h1 style=" font-family:Kite One;"> <span class="badge badge-warning">{{ category.name }}</span></h1>
+         {% for post_belonged in posts %}
+         <h2><a href="{% url 'blog:post_detail' post_belonged.id %}" class="text-dark">{{ post_belonged.title }}</a></h2>
+         <p>Written by {{ user.username }} on {{ post_belonged.mod_date }}</p>
+         {{ post_belonged.body_summary|striptags }}
+         <div class="text-right">
+          <a href="{% url 'blog:remove_blog' post_belonged.id %}" type="button" class="btn btn-primary">Remove</a>
+          <a href="{% url 'blog:categories' category.user_id %}" class="btn btn-primary"><i class="iconfont icon-back"></i></a>
+          <hr/>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

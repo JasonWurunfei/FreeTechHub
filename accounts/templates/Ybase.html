@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>{% block title %}{% endblock %}</title>
+  {% load static %}
+  {% block head %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Satisfy">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Kite One">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Frijole">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Indie Flower">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Courgette">
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=style=Damion">
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+  <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed" >
+  <nav class=" navbar navbar-expand navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="/">FreeTechHub</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <div class="input-group">
+        <input class="form-control" type="search" name="q" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+        </div>
+      </div>
+    </form>
+    <ul class="navbar-nav ml-auto ml-md-0">
+       <li class="nav-item">
+        <a class="nav-link"  href="{% url 'blog:show' %}" >blogs</a>
+        </li>
+      <li class="nav-item dropdown">
+        {% if user.is_authenticated %}
+          {% if user.profile.avatar %}
+          <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ user.profile.avatar.url }}" style="width:30px; border:30px;"></a>
+          {% else %}
+          <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+          {% endif %}
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+            <p class="dropdown-item" href="#">signed in as</p>
+            <p class="dropdown-item" href="#">{{ user.username }}</p>
+            <a class="dropdown-item" href="/account/profile/{{ user.id }}/">profile</a>
+            <a class="dropdown-item" href="{% url "accounts:profile_account" user.id %}">setting</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+           </div>
+        {% else %}
+        <li class="nav-item">
+        <a class="nav-link"  href="{% url 'account_login' %}" >login</a>
+        </li>
+       {% endif %}
+      </li>
+    </ul>
+  </nav>
+
+
+    {% block content %}
+
+    {% endblock %}
+
+    {% load static %}
+    <script src="{% static 'js/scripts.js'%}"></script>
+    {% block javascript %}
+    {% endblock %}
+  </body>
+  </html>

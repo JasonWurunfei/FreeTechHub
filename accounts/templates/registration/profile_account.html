@@ -1,0 +1,47 @@
+{% extends "YYYbase.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<br/>
+<br/>
+<div class="container-fluid">
+  <div class="card mb-4">
+    <div class="card  shadow bg-white">
+      <div class="card-body">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <br>
+              {% if user.profile.avatar %}
+              <h2  style=" font-family:Kite One;">My Profile:  <img src="{{ user.profile.avatar.url }}" style="max-width: 13%; border-radius: 50%;" class="col-md-4"></h2>
+              {% else %}
+              <div class="col-md-4"></div>
+              {% endif %}
+              <ul>
+                <li><span class="badge badge-success"><i style=" font-family:Kite One;font-size:20px">Class</i></span>: {{ user.profile.grade }} </li>
+                <br/>
+                <li><span class="badge badge-warning"><i style=" font-family:Kite One;font-size:20px">College_Major</i></span>: {{ user.profile.college_major }} </li>
+                <br/>
+                <li><span class="badge badge-danger"><i style=" font-family:Kite One;font-size:20px">Personalized signature</i>:</span> {{ user.profile.bio }} </li>
+             </ul>
+             {% if self_user != user_info %}
+             <form method="post" action="{% url 'accounts:profile_account' user_info.id %}">
+             {% csrf_token %}
+             <input type="submit"  value="{{ show_button }}" >
+             </form>
+           {% endif %}
+           {% for all_list in all_lists %}
+             <span class="badge badge-success"><i style=" font-family:Kite One;font-size:20px">follower</i></span>:  {{ all_list.follower.username }}
+             <br />
+           {% endfor %}
+           {% for all_list in followings %}
+             <span class="badge badge-success"><i style=" font-family:Kite One;font-size:20px">who I following</i></span>:  {{ all_list.following.username }}
+             <br />
+           {% endfor %}
+           </div>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+</div>
+{% endblock %}

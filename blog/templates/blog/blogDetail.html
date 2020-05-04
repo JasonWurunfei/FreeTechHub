@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <title>Show specific blog</title>
+  <style>
+        .comment-text {margin-bottom: 1.25rem;}
+    </style>
+  <link rel="stylesheet" type="text/css" href="{% static 'code.css' %}">
+</head>
+
+{% load count_likes %}
+
+<body>
+  <header class="masthead text-center text-white d-flex">
+    <div class="container my-auto">
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <h1 style="font-family : 'Fira Code', Impact, sans-serif">
+            {{ post_detail.title }}
+          </h1>
+        </div>
+      </div>
+    </div>
+  </header>
+  <p>Author:{{ post_detail.user.username }}</p>
+  {% for tag in post_detail.tags.all %}
+          <a class="mr-1 badge badge-info" data-role="tagsinput" href="{% url 'blog:tag_list' tag.slug %}">#{{ tag }}</a>
+        {% endfor %}
+  {% if post_detail.category != None %}
+    <a href="{% url 'blog:post_by_category' post_detail.category.id %}">Series:{{ post_detail.category }}</a>
+  {% else %}
+    <p>Series:{{ post_detail.category }}</p>
+  {% endif %}
+  
+  <div id="blog">
+    <p class="detail_content" id="post">{{ post_detail.text|safe }}</p>
+  </div>
+
+  {% for item2 in video %}
+    {% if item2.post_id == post_detail.id %}
+      <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
+    {% endif %}
+  {% endfor %}
+  <br/>
+  <small>Likes {% get_likes_number post_type_id post_detail.id %}</small>
+  <small>Dislikes {% get_dislikes_number post_type_id post_detail.id %}</small>
+
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="btn-group">
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'post_like' post_detail.id 'like' %}">Like</a></button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'post_like' post_detail.id 'dislike' %}">Dislike</a></button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'blog:edit_post' post_detail.id %}">Edit</a></button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'blog:delete_post' post_detail.id %}">Delete</a> </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'blog:show' %}">Back</a></button>
+      {% if self_user != user_info %}
+        <form method="post" action="{% url 'blog:post_detail' post_detail.id %}">
+          {% csrf_token %}
+          <input type="submit"  value="{{ show_button }}" >
+        </form>
+      {% endif %}
+    </div>
+    <div class="text-muted text-right" style="margin-top: 4rem">{{ post_detail.mod_date }}</div>
+  </div>
+
+
+  <div class="col-md-8 card mb-4  mt-3">
+    <div class="card-body">
+      <h2>{{ comments.count }} comments:</h2>
+      {% for comment in comments %}
+        {% for commentator in users %}
+          {% if comment.user_id == commentator.id %}
+            <div style="margin-top:2em;border:1px dashed;padding:2em;" class="comment-text">
+              <blockquote>
+                <p>{{ comment.get_comment_text_md|linebreaks }}</p>
+                <footer>via Commentator:{{ commentator.username }} in {{ comment.date }}</footer>
+                <hr style="border:1px dotted #036" />
+                {% for child_comment in comment.children %}
+                  <blockquote>
+                    <p>Reply:{{ child_comment.text }}</p>
+                    <footer>Replied by author in {{ child_comment.date }}</footer>
+                  </blockquote>
+                {% endfor %}
+              </blockquote>
+              <h4>Reply</h4>
+              <form method="POST" style="margin-top: 1.3em;" action="{% url 'comment_page' post_id=post_detail.id %}">
+                {% csrf_token %}
+                {{ comment_form }}
+                <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                <button type="submit" class="btn btn-primary btn-1g">Reply to the comment</button>
+              </form>
+            </div>
+            <hr/>
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="col-md-8 card mb-4  mt-3 ">
+    <div class="card-body">
+      <div class="card-body">
+        <h3>Leave a comment</h3>
+        <form method="post" style="margin-top: 1.3em;" action="{% url 'comment_page' post_id=post_detail.id %}">
+          {% csrf_token %}
+          {{ comment_form }}
+          <button type="submit" class="btn btn-primary btn-1g">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <title>Show question</title>
+  <link rel="stylesheet" href="{% static 'code.css' %}">
+  <link rel="stylesheet" href="{% static 'tagsinput.css' %}">
+</head>
+
+{% load count_votes %}
+
+<body>
+  <header class="masthead text-center text-white d-flex">
+    <div class="container my-auto">
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <h1 style="font-family : 'Fira Code', Impact, sans-serif">
+            {{ question.title }}
+          </h1>
+        </div>
+      </div>
+    </div>
+  </header>
+  <p class="mb-auto text-muted"> Asked by {{question.user.username }} at {{ question.uploaded_at }}</p>
+  <span class="views-count">Views:{{ question.views }}</span>
+  <hr/>
+  <p class="mb-auto" >{{ question.body|safe }}</p>
+  {% for tag in question.tags.all %}
+          <a class="tags" href="{% url 'QA:tag_list' tag.slug %}">#{{ tag }}</a>
+  {% endfor %}
+  <br/>
+  <small>Up:{% get_up_number question_type_id question.id %}</small>
+  <small>Down:{% get_down_number question_type_id question.id %}</small>
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="btn-group">
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'question_vote' question.id 'up' %}">Up</a></button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'question_vote' question.id 'down' %}">Down</a></button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:edit_question' question.id %}">Edit</a></button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:delete_question' question.id %}">Delete</a> </button>
+      <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:questions' %}">Back</a></button>
+    </div>
+  </div>
+  {% if answer_count > 1 %}
+    <p>{{ answer_count }} Answers</p>
+  {% else %}
+    <p>{{ answer_count }} Answer</p>
+  {% endif %}
+  {% for answer in answers %}
+    <p class="mb-auto">{{ answer.content|safe }}</p>
+    <footer>Answered by {{ answer.user.username }} in {{ answer.answer_time }}</footer>
+    <small>Up:{% get_up_number answer_type_id answer.id %}</small>
+    <small>Down:{% get_down_number answer_type_id answer.id %}</small>
+    <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'answer_vote' answer.id 'up' %}">Up</a></button>
+    <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'answer_vote' answer.id 'down' %}">Down</a></button>
+    <hr/>
+  {% endfor %}
+  <div class="form-group">
+      <form method="POST" action="{% url 'QA:post_answer' question.id%}" class="bs-example form-horizontal">
+        {% csrf_token %}
+        {{ answer_form|safe }}
+        {{ answer_form.media }}
+        <br/>
+        <button type="submit" class="btn btn-success">Post Your Answer</button><br/>
+      </form>
+  </div>
+  <button type="submit" class="btn btn-success"><a href="{% url 'QA:post_question' user_id %}">Ask a question</a></button>
+</body>
+</html>

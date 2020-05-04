@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  {{ form.media }}
+  <link rel="stylesheet" href="{% static 'code.css' %}">
+</head>
+
+<body>
+  {% if post_id %}
+    <h1 align="center" style="color:Pink">Please edit!</h1>
+    <hr/>
+    <form method="POST" action="{% url 'blog:edit_post' post_id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
+      {% csrf_token %}
+      {{ new_category_form }}
+      {{ new_post_form }}
+      {{ new_post_form.media }}
+      <h3>Please choose your video</h3>
+      <input type="file" name="video" multiple="multiple"><br/>
+      <button type="submit" class="btn btn-success">Save</button><br/>
+    </form>
+  {% else %}
+    <h1 align="center" style="color:Pink">Welcome! {{ user.username }}</h1>
+    <div>
+      <a type="submit" href="{% url 'blog:show' %}">Homepage</a>
+    </div>
+    <hr/>
+    <div class="editor">
+      <form method="POST" action="{% url 'blog:post' user.id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
+        {% csrf_token %}
+        {{ form|safe }}
+        <h3>Please choose your video</h3>
+        <input type="file" name="video" multiple="multiple"><br/>
+        <button type="submit" class="btn btn-success">Submit</button><br/>
+      </form>
+    </div>
+  {% endif %}
+</body>
+</html>
