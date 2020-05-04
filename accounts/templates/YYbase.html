@@ -35,11 +35,11 @@
     </form>
     <ul class="navbar-nav ml-auto ml-md-0">
       <li class="nav-item">
-        <a class="nav-link"  href="{% url 'blog:show' %}" >blogs</a>
+          <a class="nav-link"  href="{% url 'blog:show' %}" >blogs</a>
       </li>
       <li class="nav-item dropdown">
-        {% if user.profile.avatar %}
-        <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ user.profile.avatar.url }}" style="width:30px; border:30px;"></a>
+        {% if user.avatar %}
+        <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ user.avatar.url }}" style="width:30px; border:30px;"></a>
         {% else %}
         <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
         {% endif %}

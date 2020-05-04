@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'taggit',
     # system apps
     'accounts',
+    'users',
     'blog.apps.BlogConfig',
     'comment.apps.CommentConfig',
     'likes.apps.LikesConfig',
@@ -167,27 +168,31 @@ LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = ''
 LOGOUT_REDIRECT_URL = '/'
 
-#django-allauth's settings
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+# django-allauth's settings
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 )
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS =3
-ACCOUNT_LOGIN_ATTEMPTS_LIMIT =5
-ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION =False
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE =True
-ACCOUNT_UNIQUE_EMAIL =True
-ACCOUNT_USERNAME_MIN_LENGTH =5
-SOCIALACCOUNT_AUTO_SIGNUP =False
-ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION =False
-ACCOUNT_EMAIL_VERIFICATION ="none"
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_MIN_LENGTH = 1
+SOCIALACCOUNT_AUTO_SIGNUP = False
+ACCOUNT_EMAIL_VERIFICATION = "none"
 LOGIN_REDIRECT_URL = '/'
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL ='/accounts/login/'
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL ='/accounts/login/'
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/accounts/login/'
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/accounts/login/'
 
-#use email to register
+# use email to register
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = False # 是否使用TLS安全传输协议(用于在两个通信应用程序之间提供保密性和数据完整性。)
 EMAIL_USE_SSL = True
@@ -215,3 +220,6 @@ MARKDOWNX_IMAGE_MAX_SIZE = {
 }
 # Crispy forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# abstract user's setting
+AUTH_USER_MODEL = 'users.User'
