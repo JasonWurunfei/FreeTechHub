@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect
+
+from accounts.models import Profile
 from blog.models import Post, Video, Category
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
@@ -7,6 +9,7 @@ def index(request):
 	texts = Post.objects.all()
 	video = []
 	user = request.user
+	coins = Profile.objects.get(user=user).coins
 	users = User.objects.all()
 	paginator = Paginator(texts, 3)
 	page = request.GET.get('page')
@@ -17,7 +20,8 @@ def index(request):
 		'user': user,
 		'users': users,
 		'video': video,
-		'articles': articles
+		'articles': articles,
+		'coins': coins,
 	}
 
 	return render(request, 'home/index.html', context)
