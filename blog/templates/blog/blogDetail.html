@@ -86,7 +86,8 @@
               <h4>Reply</h4>
               <form method="POST" style="margin-top: 1.3em;" action="{% url 'comment_page' post_id=post_detail.id %}">
                 {% csrf_token %}
-                {{ comment_form }}
+                {{ comment_form.media}}
+                  {{ comment_form.as_p }}
                 <input type="hidden" name="parent_id" value="{{ comment.id }}">
                 <button type="submit" class="btn btn-primary btn-1g">Reply to the comment</button>
               </form>
@@ -104,7 +105,8 @@
         <h3>Leave a comment</h3>
         <form method="post" style="margin-top: 1.3em;" action="{% url 'comment_page' post_id=post_detail.id %}">
           {% csrf_token %}
-          {{ comment_form }}
+          {{ comment_form.media}}
+            {{ comment_form.as_p }}
           <button type="submit" class="btn btn-primary btn-1g">Submit</button>
         </form>
       </div>
