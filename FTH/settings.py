@@ -53,6 +53,8 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'six',
     'taggit',
+    'ckeditor',
+    'ckeditor_uploader',
     # system apps
     'accounts',
     'users',
@@ -223,3 +225,13 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # abstract user's setting
 AUTH_USER_MODEL = 'users.User'
+
+# ckeditor options
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'extraPlugins': ['codesnippet', ],
+    },
+}

@@ -34,5 +34,6 @@ urlpatterns = [
     path('markdownx/', include('markdownx.urls')),
     path('search/', include('haystack.urls')),
     path('QA/', include('QA.urls')),
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
