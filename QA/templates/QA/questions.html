@@ -13,8 +13,29 @@
 
 <body>
   <h1 align="center" style="color:Pink">Open questions</h1>
-  <a type="submit" href="{% url 'QA:post_question' user_id %}">Post a question</a>
+  <a type="submit" href="{% url 'QA:post_question' user_id %}">Post common question</a>
+  <br/>
+  <a type="submit" href="{% url 'QA:reward_question' user_id %}">Post a reward</a>
   <hr/>
+  <p>Rewarded question:</p>
+  {% csrf_token %}
+  {% for question in reward_questions %}
+    <h1 class="card-title"><a href="{% url 'QA:show_r_question' question.id%}">{{ question.title }}</a></h1>
+        <p>Publisher: {{ question.user.username }}</p>
+        {% for tag in question.tags.all %}
+          <a class="mr-1 badge badge-info" data-role="tagsinput" href="{% url 'QA:tag_list' tag.slug %}">#{{ tag }}</a>
+        {% endfor %}
+        <p>Rewarded money:{{ question.reward_money }}</p>
+        {% if question.status == False %}
+          <p>Status:Unsolved</p>
+        {% else %}
+          <p>Status:Solved</p>
+        {% endif %}
+        <p class="mb-auto text-muted"> {{ question.uploaded_at }}</p>
+  <hr/>
+  {% endfor %}
+  <hr/>
+  <title>Common questions</title>
   <p>Common Tags:
     {% for tag in common_tags %}
       <a class="badge badge-success" >{{ tag }}</a>

@@ -7,8 +7,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from markdown import markdown
 from taggit.models import Tag
-from QA.forms import QuestionForm, AnswerForm
-from QA.models import Question, Answer
+from QA.forms import QuestionForm, AnswerForm, Rewarded_QuestionForm, Rewarded_AnswerForm
+from QA.models import Question, Answer, Rewarded_question, Rewarded_answer
+from accounts.models import Profile, Coins_Operation
+
 
 def is_user_owner(func):
     def check(request, *args, **kwargs):
@@ -51,16 +53,18 @@ def post_question(request, user_id):
         user = User.objects.get(id=user_id)
         context = {
             'question_form': question_form,
-            'user': user
+            'user': user,
         }
         return render(request, 'QA/post_questions.html', context)
 
 @login_required
 def Questions(request):
     questions = Question.objects.all().order_by('uploaded_at')
+    reward_questions = Rewarded_question.objects.all().order_by('uploaded_at')
     common_tags = Question.tags.most_common()[:4]
     context = {
         'questions': questions,
+        'reward_questions': reward_questions,
         'user_id': request.user.id,
         'common_tags': common_tags,
     }
@@ -154,3 +158,160 @@ def questions_tagged(request, tag_slug=None):
             'question_list': question_list,
         }
         return render(request, 'QA/tag_list.html', context)
+
+def reward_question(request, user_id):
+    user = User.objects.get(id=user_id)
+    if request.method == "POST":
+        r_question_form = Rewarded_QuestionForm(request.POST)
+        if r_question_form.is_valid():
+            new_question = r_question_form.save(commit=False)
+            new_question.title = r_question_form.cleaned_data['title']
+            new_question.body = r_question_form.cleaned_data['body']
+            new_question.reward_money = r_question_form.cleaned_data['reward_money']
+            new_question.note = r_question_form.cleaned_data['note']
+            new_question.user_id = user_id
+            new_question.save()
+
+            r_question_form.save_m2m()
+
+            profile = Profile.objects.get(user=user)
+            balance = profile.coins
+            profile.coins = balance-r_question_form.cleaned_data['reward_money']
+            profile.save()
+
+            Coins_Operation.objects.create(related_profile=profile,
+                                           money=-r_question_form.cleaned_data['reward_money'], reason="Reward question")
+        return redirect(reverse('QA:questions'))
+
+    else:
+        r_question_form = Rewarded_QuestionForm()
+        context = {
+            'r_question_form': r_question_form,
+            'user': user,
+        }
+        return render(request, 'QA/reward_questions.html', context)
+
+def show_r_question(request, question_id):
+    r_question = Rewarded_question.objects.get(id=question_id)
+    owner_id = r_question.user.id
+    r_question.body = markdown(r_question.body, extensions=[
+        'markdown.extensions.extra',
+        'markdown.extensions.codehilite',
+        'markdown.extensions.toc',
+    ])
+    r_answers = Rewarded_answer.objects.filter(question_id=question_id)
+    your_answers = Rewarded_answer.objects.filter(user_id=request.user.id, question_id=question_id)
+    for r_answer in r_answers:
+        r_answer.content = markdown(r_answer.content, extensions=[
+            'markdown.extensions.extra',
+            'markdown.extensions.codehilite',
+            'markdown.extensions.toc',
+        ])
+    for your_answer in your_answers:
+        your_answer.content = markdown(your_answer.content, extensions=[
+            'markdown.extensions.extra',
+            'markdown.extensions.codehilite',
+            'markdown.extensions.toc',
+        ])
+    r_answer_form = Rewarded_AnswerForm()
+    context = {
+        'r_question': r_question,
+        'user_id': request.user.id,
+        'owner_id': owner_id,
+        'r_answers': r_answers,
+        'r_answer_count': len(r_answers),
+        'r_answer_form': r_answer_form,
+        'your_answers': your_answers,
+        'your_answer_count': len(your_answers),
+    }
+    return render(request, 'QA/show_r_question1.html', context)
+
+def edit_r_question(request, question_id):
+    user = request.user
+    edited_r_question = get_object_or_404(Rewarded_question, pk=question_id)
+    if request.method == "POST":
+        new_r_question_form = Rewarded_QuestionForm(request.POST, instance=edited_r_question)
+        if new_r_question_form.is_valid():
+            edited_r_question = new_r_question_form.save(commit=False)
+            edited_r_question.title = new_r_question_form.cleaned_data['title']
+            edited_r_question.body = new_r_question_form.cleaned_data['body']
+            edited_r_question.reward_money = new_r_question_form.cleaned_data['reward_money']
+            edited_r_question.note = new_r_question_form.cleaned_data['note']
+            edited_r_question.uploaded_at = datetime.datetime.now()
+
+            profile = Profile.objects.get(user=user)
+            balance = profile.coins
+            profile.coins = balance - (new_r_question_form.cleaned_data['reward_money'] -
+                                       Rewarded_question.objects.get(id=question_id).reward_money)
+            profile.save()
+
+            edited_r_question.save()
+            new_r_question_form.save_m2m()
+
+            Coins_Operation.objects.update(money=-new_r_question_form.cleaned_data['reward_money'])
+            return redirect(reverse('QA:show_r_question', args=(question_id,)))
+    else:
+        new_r_question_form = Rewarded_QuestionForm(instance=edited_r_question)
+        context = {
+            'new_r_question_form': new_r_question_form,
+            'r_question_id': question_id,
+            'user': user,
+        }
+        return render(request, 'QA/reward_questions.html', context)
+
+def delete_r_question(request, question_id):
+    r_question = Rewarded_question.objects.get(id=question_id)
+    r_question.delete()
+    return redirect(reverse('QA:questions'))
+
+def post_r_answer(request, question_id):
+    if request.method == "POST":
+        r_answer_form = Rewarded_AnswerForm(request.POST)
+        if r_answer_form.is_valid():
+            new_r_answer = r_answer_form.save(commit=False)
+            new_r_answer.content = r_answer_form.cleaned_data['content']
+            new_r_answer.user_id = request.user.id
+            new_r_answer.question_id = question_id
+            new_r_answer.save()
+
+        return redirect(reverse('QA:show_r_question', args=(question_id,)))
+
+def edit_r_answer(request, r_answer_id):
+    edited_r_answer = get_object_or_404(Rewarded_answer, pk=r_answer_id)
+    if request.method == "POST":
+        new_r_answer_form = Rewarded_AnswerForm(request.POST, instance=edited_r_answer)
+        if new_r_answer_form.is_valid():
+            edited_r_answer = new_r_answer_form.save(commit=False)
+            edited_r_answer.content = new_r_answer_form.cleaned_data['content']
+            edited_r_answer.save()
+
+            return redirect(reverse('QA:show_r_question', args=(edited_r_answer.question.id,)))
+    else:
+        your_answers = Rewarded_answer.objects.filter(user_id=request.user.id, question_id=edited_r_answer.question.id)
+        new_r_answer_form = Rewarded_AnswerForm(instance=edited_r_answer)
+        context = {
+            'new_r_answer_form': new_r_answer_form,
+            'r_question':edited_r_answer.question,
+            'r_answer_id': r_answer_id,
+            'user_id': request.user.id,
+            'owner': edited_r_answer.question.user.id,
+            'your_answer_count': len(your_answers),
+        }
+        return render(request, 'QA/show_r_question1.html', context)
+
+def delete_r_answer(request, r_answer_id):
+    r_answer = Rewarded_answer.objects.get(id=r_answer_id)
+    question_id = r_answer.question.id
+    r_answer.delete()
+    return redirect(reverse('QA:show_r_question', args=(question_id,)))
+
+def accept_answer(request, r_answer_id):
+    r_answer = Rewarded_answer.objects.get(id=r_answer_id)
+    Rewarded_answer.objects.update(status=True)
+    profile = Profile.objects.get(user=r_answer.user)
+    r_question = r_answer.question
+    Rewarded_question.objects.update(status=True)
+    profile.coins = profile.coins + r_question.reward_money
+    profile.save()
+    Coins_Operation.objects.create(related_profile=profile, money=+r_question.reward_money, reason='Solve question')
+    return redirect(reverse('QA:show_r_question', args=(r_question.id,)))
