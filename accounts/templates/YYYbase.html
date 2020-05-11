@@ -34,10 +34,7 @@
     </form>
     <ul class="navbar-nav ml-auto ml-md-0">
        <li class="nav-item">
-        <a class="nav-link"  href="{% url 'QA:questions' %}" >QA</a>
-       </li>
-       <li class="nav-item">
-        <a class="nav-link"  href="{% url 'blog:show' %}" >blogs</a>
+         <a class="nav-link"  href="{% url 'blog:show' %}" >blogs</a>
        </li>
       <li class="nav-item dropdown">
         {% if user.is_authenticated %}
@@ -50,8 +47,7 @@
             <p class="dropdown-item" href="#">signed in as</p>
             <p class="dropdown-item" href="#">{{ user.username }}</p>
             <a class="dropdown-item" href="/account/profile/{{ user.id }}/">profile</a>
-            <a class="dropdown-item" href="{% url 'accounts:profile_account' user.id %}">setting</a>
-            <a class="dropdown-item" href="{% url 'accounts:coins' user.id %}">Your coins: {{ coins }}</a>
+            <a class="dropdown-item" href="{% url "accounts:profile_account" user.id %}">setting</a>
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
            </div>
@@ -68,10 +64,10 @@
       <div class="col-lg-3">
         <h1 class="my-4" style=" font-family:Kite One;">Setting</h1>
         <div class="list-group">
-          <a class="list-group-item" href="{% url 'accounts:edit' user.id %}">Edit</a>
-          <a class="list-group-item" href="{% url 'accounts:profile_account' user.id %}">Account</a>
+          <a class="list-group-item" href="{% url "accounts:edit" user.id %}">Edit</a>
+          <a class="list-group-item" href="{% url "accounts:profile_account" user.id %}">Account</a>
           <a class="list-group-item" href="{% url 'account_email' %}">Change Email</a>
-          <a class="list-group-item" href="{% url 'account_change_password' %}">Change Password</a>
+          <a class="list-group-item"href="{% url 'account_change_password' %}">Change Password</a>
         </div>
       </div>
       <!-- /.col-lg-3 -->

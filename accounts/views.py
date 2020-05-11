@@ -10,8 +10,8 @@ from users.models import User
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from blog.models import Post
-from .forms import ProfileForm, RechargeForm
-from .models import Profile, Relationship, Coins_Operation
+from .forms import ProfileForm
+from .models import Relationship
 from django.views.decorators.csrf import csrf_protect
 from django.db.models import Q
 
@@ -30,11 +30,9 @@ def is_owner(func):
 def profile(request, pk):
     user = get_object_or_404(User, pk=pk)
     contents = Post.objects.filter(user=user)
-    coins = Profile.objects.get(user=user).coins
     context = {
         'user': user,
         'contents': contents,
-        'coins': coins,
     }
     return render(request, 'registration/profile.html', context)
 
@@ -45,8 +43,7 @@ def profile_account(request, id):
     user = get_object_or_404(User, id=id)
     user_info = get_object_or_404(User, id=id)
     self_user = request.user
-    to_follow_user = User.objects.get(id=id)
-    coins = Profile.objects.get(user=user).coins
+    to_follow_user = get_object_or_404(User, id=id)
 
     if not Relationship.objects.filter(follower=request.user, following=to_follow_user).exists():
         show_button = "follow"
@@ -97,43 +94,8 @@ def profile_edit(request, id):
         else:
             return HttpResponse("The input of registration form is wrong. Please re-enter")
     elif request.method == 'GET':
-        form = ProfileForm(initial=initial_data, instance=profile)
-        context = {'form': form, 'profile': profile, 'user': user}
+        form = ProfileForm(initial=initial_data, instance=user)
+        context = {'form': form,  'user': user}
         return render(request, 'registration/edit.html', context)
     else:
         return HttpResponse("ERROR")
-
-def coins(request, id):
-    user = User.objects.get(id=id)
-    balance = Profile.objects.get(user=user).coins
-    return render(request, 'registration/profile_coins.html', locals())
-
-def recharge_coins(request, id):
-    user = User.objects.get(id=id)
-    profile = Profile.objects.get(user=user)
-    if request.method == "POST":
-        recharge_form = RechargeForm(request.POST)
-        if recharge_form.is_valid():
-            balance = profile.coins
-            recharge_money = recharge_form.cleaned_data['coins']
-            profile.coins = balance + recharge_money
-            profile.save()
-
-            Coins_Operation.objects.create(related_profile=profile, money=+recharge_money, reason="Recharge")
-            return redirect('accounts:coins', id)
-    else:
-        recharge_form = RechargeForm()
-        balance = profile.coins
-        context = {
-            'recharge_form': recharge_form,
-            'user': user,
-            'balance': balance,
-        }
-        return render(request, 'registration/recharge_coins.html', context)
-
-def transaction_records(request, id):
-    user = User.objects.get(id=id)
-    profile = Profile.objects.get(user=user)
-    balance = profile.coins
-    operations = Coins_Operation.objects.filter(related_profile=profile)
-    return render(request, 'registration/coins_record.html', locals())
