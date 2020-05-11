@@ -43,8 +43,8 @@
         </li>
       <li class="nav-item dropdown">
         {% if user.is_authenticated %}
-          {% if user.profile.avatar %}
-          <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ user.profile.avatar.url }}" style="width:30px; border:30px;"></a>
+          {% if user.avatar %}
+          <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ user.avatar.url }}" style="width:30px; border:30px;"></a>
           {% else %}
           <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
           {% endif %}
@@ -55,7 +55,7 @@
             <a class="dropdown-item" href="{% url 'accounts:profile_account' user.id %}">setting</a>
             <a class="dropdown-item" href="{% url 'accounts:coins' user.id %}">Your coins: {{ coins }}</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/account/LOGOUT/">Logout</a>
+            <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
            </div>
         {% else %}
         <li class="nav-item">

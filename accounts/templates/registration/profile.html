@@ -4,42 +4,42 @@
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Courgette">
 <div id="layoutSidenav_content">
   <main>
-   <div class="container-fluid">
-    <div class="card mb-4">
-     {% for content in contents %}
-     <div class="card shadow bg-white">
-      <div class="card-body">
-        <h1 class="card-title" style=" font-family:Kite One;"><a href="{% url 'blog:post_detail' content.pk  %}">{{ content.title }}</a></h1>
-          <p><i style=" font-family:Damion;">Author: {{ user.username }}</i></p>
-        {% for user in users %}
-        {% if user.id == content.user_id %}
-          <p><i style=" font-family:Damion;">Author: {{ user.username }}</i></p>
+    <div class="container-fluid">
+      <div class="card mb-4">
+        {% for content in contents %}
+        <div class="card shadow bg-white">
+          <div class="card-body">
+            <h1 class="card-title" style=" font-family:Kite One;"><a href="{% url 'blog:post_detail' content.pk  %}">{{ content.title }}</a></h1>
+            <p><i style=" font-family:Damion;">Author: {{ user.username }}</i></p>
+            {% for user in users %}
+            {% if user.id == content.user_id %}
+              <p><i style=" font-family:Damion;">Author: {{ user.username }}</i></p>
+            {% endif %}
+            {% endfor %}
+            <p class="card-text"><i style=" font-family:Damion;">{{ content.body_summary|striptags }}</i></p>
+            <div><i style=" font-family:Damion;"> {{ content.mod_date }}</i></div>
+            <a href="/blog/edit_post/{{ content.id }}" type="button" class="btn btn-primary ">Edit</a>
+            <a href="/blog/delete_post/{{ content.id }}" type="button" class="btn btn-danger ">Delete></a>
+          </div>
+        </div>
+        {% for item1 in img %}
+        {% if item1.post_id == content.id %}
+          <img src="/media/{{ item1.image }}" height="200" width="300"/>
         {% endif %}
         {% endfor %}
-          <p class="card-text"><i style=" font-family:Damion;">{{ content.body_summary|striptags }}</i></p>
-          <div><i style=" font-family:Damion;"> {{ content.mod_date }}</i></div>
-      <a href="/blog/edit_post/{{ content.id }}" type="button" class="btn btn-primary ">Edit</a>
-      <a href="/blog/delete_post/{{ content.id }}" type="button" class="btn btn-danger ">Delete></a>
+        {% for item2 in video %}
+        {% if item2.post_id == content.id %}
+          <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
+        {% endif %}
+        {% endfor %}
+        <hr/>
+        {% endfor %}
       </div>
+      <div class=" mb-4">
+        <div>
+          <a type="submit" href="{% url 'blog:post' user.id %}"><button class="btn btn-primary" type="button"><i >Post a blog</i></button></a>
+        </div>
       </div>
-      {% for item1 in img %}
-      {% if item1.post_id == content.id %}
-      <img src="/media/{{ item1.image }}" height="200" width="300"/>
-      {% endif %}
-      {% endfor %}
-      {% for item2 in video %}
-      {% if item2.post_id == content.id %}
-      <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
-      {% endif %}
-      {% endfor %}
-      <hr/>
-      {% endfor %}
-    </div>
-    <div class=" mb-4">
-      <div>
-       <a type="submit" href="{% url 'blog:post' user.id %}"><button class="btn btn-primary" type="button"><i >Post a blog</i></button></a>
-     </div>
-    </div>
     </div>
   </main>
 </div>

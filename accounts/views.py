@@ -1,5 +1,4 @@
 import json
-from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.contrib.auth import login, logout, authenticate
 from django.views.decorators.http import require_POST
@@ -7,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRe
 from django.http import HttpResponse
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.encoding import force_text
-from django.contrib.auth.models import User
+from users.models import User
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from blog.models import Post
@@ -15,6 +14,7 @@ from .forms import ProfileForm, RechargeForm
 from .models import Profile, Relationship, Coins_Operation
 from django.views.decorators.csrf import csrf_protect
 from django.db.models import Q
+
 
 def is_owner(func):
     def check(request, *args, **kwargs):
@@ -42,8 +42,8 @@ def profile(request, pk):
 @login_required
 def profile_account(request, id):
     id = id
-    user = User.objects.get(id=id)
-    user_info = User.objects.get(id=id)
+    user = get_object_or_404(User, id=id)
+    user_info = get_object_or_404(User, id=id)
     self_user = request.user
     to_follow_user = User.objects.get(id=id)
     coins = Profile.objects.get(user=user).coins
@@ -58,7 +58,7 @@ def profile_account(request, id):
 
             return redirect('accounts:profile_account', id)
         else:
-        #    all_lists = Relationship.objects.get(following_id=id)
+         #   all_lists = Relationship.objects.get(following_id=id)
          #   all_lists = user.following_users.all()
          #   relationship = Relationship.objects.all()
             all_lists = Relationship.objects.filter(following_id=id)
@@ -81,22 +81,16 @@ def profile_account(request, id):
             return render(request, 'registration/profile_account.html', locals())
 
 
-
 @login_required
 @is_owner
 def profile_edit(request, id):
     user = User.objects.get(id=id)
-    profile = Profile.objects.get(user_id=id)
     initial_data = {
         'user': user,
-        'college_major': profile.college_major,
-        'grade': profile.grade,
-        'bio': profile.bio,
-        'avatar': profile.avatar,
     }
 
     if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        form = ProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             return render(request, 'registration/profile_account.html', {'user': user})

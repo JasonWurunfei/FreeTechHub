@@ -1,4 +1,5 @@
-from .models import Profile
+from accounts.models import Profile
+from users.models import User
 from django import forms
 
 class ProfileForm(forms.ModelForm):

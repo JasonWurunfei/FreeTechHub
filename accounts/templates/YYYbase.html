@@ -41,8 +41,8 @@
        </li>
       <li class="nav-item dropdown">
         {% if user.is_authenticated %}
-          {% if user.profile.avatar %}
-          <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ user.profile.avatar.url }}" style="width:30px; border:30px;"></a>
+          {% if user.avatar %}
+          <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ user.avatar.url }}" style="width:30px; border:30px;"></a>
           {% else %}
           <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
           {% endif %}
@@ -50,10 +50,10 @@
             <p class="dropdown-item" href="#">signed in as</p>
             <p class="dropdown-item" href="#">{{ user.username }}</p>
             <a class="dropdown-item" href="/account/profile/{{ user.id }}/">profile</a>
-            <a class="dropdown-item" href="{% url "accounts:profile_account" user.id %}">setting</a>
-            <a class="dropdown-item" href="{% url "accounts:coins" user.id %}">Your coins: {{ coins }}</a>
+            <a class="dropdown-item" href="{% url 'accounts:profile_account' user.id %}">setting</a>
+            <a class="dropdown-item" href="{% url 'accounts:coins' user.id %}">Your coins: {{ coins }}</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="/account/LOGOUT/">Logout</a>
+            <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
            </div>
         {% else %}
         <li class="nav-item">
@@ -64,28 +64,21 @@
     </ul>
   </nav>
    <div class="container">
-
     <div class="row">
-
       <div class="col-lg-3">
-
         <h1 class="my-4" style=" font-family:Kite One;">Setting</h1>
         <div class="list-group">
-          <a class="list-group-item" href="{% url "accounts:edit" user.id %}">Edit</a>
-          <a class="list-group-item" href="{% url "accounts:profile_account" user.id %}">Account</a>
+          <a class="list-group-item" href="{% url 'accounts:edit' user.id %}">Edit</a>
+          <a class="list-group-item" href="{% url 'accounts:profile_account' user.id %}">Account</a>
           <a class="list-group-item" href="{% url 'account_email' %}">Change Email</a>
           <a class="list-group-item" href="{% url 'account_change_password' %}">Change Password</a>
         </div>
-
       </div>
       <!-- /.col-lg-3 -->
 
       <div class="col-lg-9">
-             {% block content %}
-
-              {% endblock %}
-
-
+        {% block content %}
+        {% endblock %}
         <!-- /.row -->
       </div>
       <!-- /.col-lg-9 -->

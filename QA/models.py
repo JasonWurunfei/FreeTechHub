@@ -1,13 +1,15 @@
-from django.contrib.auth.models import User
+from users.models import User
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from markdownx.models import MarkdownxField
 from taggit.managers import TaggableManager
 from blog.cn_taggit import CnTaggedItem
 
+
 class Question(models.Model):
     title = models.TextField(max_length=50, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     body = MarkdownxField()
     tags = TaggableManager(blank=True, through=CnTaggedItem)
     views = models.PositiveIntegerField(default=0)
@@ -35,7 +37,7 @@ class Question(models.Model):
 class Answer(models.Model):
     content = MarkdownxField()
     question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     answer_time = models.DateTimeField(auto_now_add=True)
 
     class Meta:
