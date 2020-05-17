@@ -4,6 +4,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Show specific blog</title>
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <!-- JS, Popper.js, and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
   <style>
     .comment-text {margin-bottom: 1.25rem;}
   </style>
@@ -13,29 +20,21 @@
 {% load count_likes %}
 
 <body>
-  <header class="masthead text-center text-white d-flex">
-    <div class="container my-auto">
-      <div class="row">
-        <div class="col-lg-10 mx-auto">
-          <h1 style="font-family : 'Fira Code', Impact, sans-serif">
-            {{ post_detail.title }}
-          </h1>
-        </div>
-      </div>
-    </div>
-  </header>
-  <p>Author:{{ post_detail.user.username }}</p>
+  <h1 style="font-family : 'Fira Code', Impact, sans-serif">
+    {{ post_detail.title }}
+  </h1>
+  <p>Author: <span class="badge badge-primary">{{ post_detail.user.username }}</span></p>
   {% for tag in post_detail.tags.all %}
           <a class="mr-1 badge badge-info" data-role="tagsinput" href="{% url 'blog:tag_list' tag.slug %}">#{{ tag }}</a>
         {% endfor %}
   {% if post_detail.category != None %}
-    <a href="{% url 'blog:post_by_category' post_detail.category.id %}">Series:{{ post_detail.category }}</a>
+    <a href="{% url 'blog:post_by_category' post_detail.category.id %}" class="badge badge-info">Series:  {{ post_detail.category }}</a>
   {% else %}
     <p>Series:{{ post_detail.category }}</p>
   {% endif %}
   
-  <div id="blog">
-    <p class="detail_content" id="post">{{ post_detail.text|safe }}</p>
+  <div id="blog" class="card">
+    <p class="detail_content card-text" id="post">{{ post_detail.text|safe }}</p>
   </div>
 
   {% for item2 in video %}
@@ -49,19 +48,19 @@
 
   <div class="d-flex justify-content-between align-items-center">
     <div class="btn-group">
-      <button type="button" class="btn btn-sm btn-outline-secondary">
+      <button type="button" class="btn btn-sm btn-outline-info">
         <a href="{% url 'post_like' post_detail.id 'like' %}">Like</a>
       </button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">
+      <button type="button" class="btn btn-sm btn-outline-info">
         <a href="{% url 'post_like' post_detail.id 'dislike' %}">Dislike</a>
       </button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">
+      <button type="button" class="btn btn-sm btn-outline-info">
         <a href="{% url 'blog:edit_post' post_detail.id %}">Edit</a>
       </button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">
+      <button type="button" class="btn btn-sm btn-outline-info">
         <a href="{% url 'blog:delete_post' post_detail.id %}">Delete</a> 
       </button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">
+      <button type="button" class="btn btn-sm btn-outline-info">
         <a href="{% url 'blog:show' %}">Back</a>
       </button>
       {% if self_user != user_info %}
