@@ -20,7 +20,7 @@
         <h1 class="card-title"><a href="{% url 'blog:post_detail' blog.id%}">{{ blog.title }}</a></h1>
         <p>Author: {{ blog.user.username }}</p>
         {% for tag in blog.tags.all %}
-          <a class="mr-1 badge badge-info" >#{{ tag }}</a>
+          <a class="mr-1 badge badge-info" href="{% url 'blog:tag_list' tag.slug %}">#{{ tag }}</a>
         {% endfor %}
         <p class="mb-auto text-muted"> {{ blog.mod_date }}</p>
       </div>

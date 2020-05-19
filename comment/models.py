@@ -1,3 +1,5 @@
+from markdownx.models import MarkdownxField
+
 from users.models import User
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -10,7 +12,8 @@ from markdown import markdown
 class Comments(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
-    text = models.TextField()
+    text = MarkdownxField()
+    status = models.BooleanField(default=False)
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
@@ -19,9 +22,6 @@ class Comments(models.Model):
 
     class Meta:
         ordering = ['date']
-
-    def get_comment_text_md(self):
-        return mark_safe(markdown(self.text))
 
     def __str__(self):
         return self.text

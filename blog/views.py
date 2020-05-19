@@ -6,13 +6,11 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.urls import reverse
 from markdown import markdown
 from taggit.models import Tag
-
 from blog.forms import PostForm, CategoryForm
 from blog.models import Post, Video, Category
 from accounts.models import Relationship
 from comment.forms import CommentForm
 from comment.models import Comments
-
 from django.db.models import Q
 
 def is_post_owner(func):
@@ -111,7 +109,6 @@ def show_blog(request, post_id):
         'markdown.extensions.toc',
     ])
     post_type = ContentType.objects.get(app_label='blog', model='post')
-    users = User.objects.all()
     video = []
     videos = Video.objects.filter(post=post_detail.id)
     if len(videos) == 1:
@@ -123,13 +120,27 @@ def show_blog(request, post_id):
             video.append(videos[q])
 
     comments = Comments.objects.filter(object_id=post_id, parent=None)
+    for comment in comments:
+        comment.text = markdown(comment.text, extensions=[
+            'markdown.extensions.extra',
+            'markdown.extensions.codehilite',
+            'markdown.extensions.toc',
+        ])
+        child_comments = comment.children()
+        print(child_comments)
+        for child_comment in child_comments:
+            child_comment.text = markdown(child_comment.text, extensions=[
+                'markdown.extensions.extra',
+                'markdown.extensions.codehilite',
+                'markdown.extensions.toc',
+            ])
     comment_form = CommentForm()
 
     post = Post.objects.get(id=post_id)
     id = post.user_id
     user = User.objects.get(id=id)
-    user_info = User.objects.get(id=id)
     self_user = request.user
+    user_info = User.objects.get(id=id)
     to_follow_user = User.objects.get(id=id)
 
     if not Relationship.objects.filter(follower=request.user, following=to_follow_user).exists():
@@ -145,7 +156,6 @@ def show_blog(request, post_id):
             all_lists = Relationship.objects.filter(following_id=id)
             followings = Relationship.objects.filter(follower_id=id)
             context = {
-                'users': users,
                 'post_detail': post_detail,
                 'post_type_id': post_type.id,
                 'video': video,
@@ -169,7 +179,6 @@ def show_blog(request, post_id):
             all_lists = Relationship.objects.filter(following_id=id)
             followings = Relationship.objects.filter(follower_id=id)
             context = {
-                'users': users,
                 'post_detail': post_detail,
                 'post_type_id': post_type.id,
                 'video': video,
