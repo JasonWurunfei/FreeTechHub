@@ -1,10 +1,11 @@
 from django import forms
 from comment.models import Comments
-from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from markdownx.fields import MarkdownxFormField
+# from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 
 class CommentForm(forms.ModelForm):
-    text = forms.CharField(widget=CKEditorUploadingWidget())
+    text = MarkdownxFormField()
 
     class Meta:
         model = Comments

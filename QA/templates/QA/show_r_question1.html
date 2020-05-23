@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <title>Show rewarded question</title>
+  <link rel="stylesheet" href="{% static 'code.css' %}">
+  <link rel="stylesheet" href="{% static 'tagsinput.css' %}">
+</head>
+
+<body>
+  <header class="masthead text-center text-white d-flex">
+    <div class="container my-auto">
+      <div class="row">
+        <div class="col-lg-10 mx-auto">
+          <h1 style="font-family : 'Fira Code', Impact, sans-serif">
+            {{ r_question.title }}
+          </h1>
+        </div>
+      </div>
+    </div>
+  </header>
+  <p class="mb-auto text-muted"> Asked by {{r_question.user.username }} at {{ r_question.uploaded_at }}</p>
+  {% if r_question.status == False %}
+    <p class="mb-auto text-muted">Status:Unsolved</p>
+  {% else %}
+    <p class="mb-auto text-muted">Status:Solved</p>
+  {% endif %}
+  <p class="mb-auto">Rewarded coins:{{ r_question.reward_money }}</p>
+  <p class="mb-auto" >{{ r_question.body|safe }}</p>
+  {% for tag in r_question.tags.all %}
+          <a class="tags" href="{% url 'QA:tag_list' tag.slug %}">#{{ tag }}</a>
+  {% endfor %}
+  <br/>
+  <div class="d-flex justify-content-between align-items-center">
+    <div class="btn-group">
+      {% if r_question.status == False %}
+        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:edit_r_question' r_question.id %}">Edit</a></button>
+        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:delete_r_question' r_question.id %}">Delete</a> </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:questions' %}">Back</a></button>
+      {% else %}
+        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:questions' %}">Back</a></button>
+      {% endif %}
+    </div>
+  </div>
+  <hr/>
+  {% if owner_id == user_id %}
+    {% if r_question.status == False %}
+      {% if r_answer_count > 1 %}
+      <p>{{ r_answer_count }} submitted Answers</p>
+      {% else %}
+      <p>{{ r_answer_count }} submitted Answer</p>
+      {% endif %}
+      {% for r_answer in r_answers %}
+        <p class="mb-auto">{{ r_answer.content|safe }}</p>
+        <footer>Answered by {{ r_answer.user.username }} in {{ r_answer.answer_time }}</footer>
+        <a href="{% url 'QA:accept_answer' r_answer.id %}"><button type="button" class="btn btn-sm btn-outline-secondary">Accept</button></a>
+        <hr/>
+      {% endfor %}
+    {% else %}
+      {% for r_answer in r_answers %}
+        {% if r_answer.status == True %}
+          <p class="mb-auto">Accepted answer:</p>
+          <p class="mb-auto">{{ r_answer.content|safe }}</p>
+          <footer>Answered by {{ r_answer.user.username }} in {{ r_answer.answer_time }}</footer>
+          <hr/>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% else %}
+    {% if your_answer_count == 0 %}
+      <div class="form-group">
+          <form method="POST" action="{% url 'QA:post_r_answer' r_question.id%}" class="bs-example form-horizontal">
+          {% csrf_token %}
+          {{ r_answer_form|safe }}
+          {{ r_answer_form.media }}
+          <br/>
+          <button type="submit" class="btn btn-success">Post Your Answer</button><br/>
+          </form>
+      </div>
+    {% else %}
+      {% if new_r_answer_form %}
+        <h1 align="center" style="color:Pink">Please edit!</h1>
+        <form method="POST" action="{% url 'QA:edit_r_answer' r_answer_id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
+        {% csrf_token %}
+        {{ new_r_answer_form|safe }}
+        {{ new_r_answer_form.media }}
+        <button type="submit" class="btn btn-success">Save</button><br/>
+        </form>
+      {% else %}
+        {% if r_question.status == False %}
+          {% for your_answer in your_answers %}
+            <p class="mb-auto">{{ your_answer.content|safe }}</p>
+            <footer>Answered by {{ your_answer.user.username }} in {{ your_answer.answer_time }}</footer>
+            <p class="mb-auto">Unaccepted</p>
+            <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:edit_r_answer' your_answer.id %}">Edit</a></button>
+            <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:delete_r_answer' your_answer.id %}">Delete</a> </button>
+            <hr/>
+          {% endfor %}
+        {% else %}
+          {% for your_answer in your_answers %}
+            <p class="mb-auto">Congratulations! Your answer has been accepted</p>
+            <p class="mb-auto">{{ your_answer.content|safe }}</p>
+            <footer>Answered by {{ your_answer.user.username }} in {{ your_answer.answer_time }}</footer>
+            <hr/>
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  {% endif %}
+</body>
+</html>

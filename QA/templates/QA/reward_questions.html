@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="UTF-8">
+  <title>reward_question</title>
+  <link rel="stylesheet" href="{% static 'code.css' %}">
+  <link rel="stylesheet" href="{% static 'tagsinput.css' %}">
+  <script src="tagsinput.js"></script>
+</head>
+<body>
+    {% if new_r_question_form %}
+      <h1 align="center" style="color:Pink">Edit rewarded question,{{ user.username }}</h1>
+        <hr/>
+        <div class="form-group">
+          <form method="POST" action="{% url 'QA:edit_r_question' r_question_id %}" class="bs-example form-horizontal">
+            {% csrf_token %}
+            {{ new_r_question_form|safe }}
+            {{ new_r_question_form.media }}
+            <br/>
+            <button type="submit" class="btn btn-success">Save</button><br/>
+          </form>
+        </div>
+    {% else %}
+      <h1 align="center" style="color:Pink">Reward a public question! {{ user.username }}</h1>
+        <hr/>
+        <div class="form-group">
+          <form method="POST" action="{% url 'QA:reward_question' user.id %}" class="bs-example form-horizontal">
+            {% csrf_token %}
+            {{ r_question_form|safe }}
+            {{ r_question_form.media }}
+            <br/>
+            <button type="submit" class="btn btn-success">Submitted</button><br/>
+          </form>
+        </div>
+    {% endif %}
+</body>
+</html>

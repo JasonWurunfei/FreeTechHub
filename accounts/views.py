@@ -10,8 +10,8 @@ from users.models import User
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from blog.models import Post
-from .forms import ProfileForm
-from .models import Relationship
+from .forms import ProfileForm, RechargeForm
+from .models import Relationship, Coins_Operation
 from django.views.decorators.csrf import csrf_protect
 from django.db.models import Q
 
@@ -99,3 +99,36 @@ def profile_edit(request, id):
         return render(request, 'registration/edit.html', context)
     else:
         return HttpResponse("ERROR")
+
+def coins(request, id):
+    user = User.objects.get(id=id)
+    balance = user.coins
+    return render(request, 'registration/profile_coins.html', locals())
+
+def recharge_coins(request, id):
+    profile = User.objects.get(id=id)
+    if request.method == "POST":
+        recharge_form = RechargeForm(request.POST)
+        if recharge_form.is_valid():
+            balance = profile.coins
+            recharge_money = recharge_form.cleaned_data['coins']
+            profile.coins = balance + recharge_money
+            profile.save()
+
+            Coins_Operation.objects.create(related_profile=profile, money=+recharge_money, reason="Recharge")
+            return redirect('accounts:coins', id)
+    else:
+        recharge_form = RechargeForm()
+        balance = profile.coins
+        context = {
+            'recharge_form': recharge_form,
+            'user': profile,
+            'balance': balance,
+        }
+        return render(request, 'registration/recharge_coins.html', context)
+
+def transaction_records(request, id):
+    user = User.objects.get(id=id)
+    balance = user.coins
+    operations = Coins_Operation.objects.filter(related_profile=user)
+    return render(request, 'registration/coins_record.html', locals())
