@@ -1,6 +1,5 @@
 import datetime
 from django.contrib.auth.decorators import login_required
-
 from accounts.models import Coins_Operation
 from users.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -34,6 +33,28 @@ def is_question_owner(func):
 
     return check
 
+def is_r_question_owner(func):
+    def check(request, *args, **kwargs):
+        r_question_id = kwargs["question_id"]
+        r_question = Rewarded_question.objects.get(id=r_question_id)
+        if r_question.user_id != request.user.id:
+            return HttpResponse("It is not yours ! You are not permitted !",
+                                status=403)
+        return func(request, *args, **kwargs)
+
+    return check
+
+def is_r_answer_owner(func):
+    def check(request, *args, **kwargs):
+        r_answer_id = kwargs["r_answer_id"]
+        r_answer = Rewarded_answer.objects.get(id=r_answer_id)
+        if r_answer.user_id != request.user.id:
+            return HttpResponse("It is not yours ! You are not permitted !",
+                                status=403)
+        return func(request, *args, **kwargs)
+
+    return check
+
 @login_required
 @is_user_owner
 def post_question(request, user_id):
@@ -58,7 +79,6 @@ def post_question(request, user_id):
         }
         return render(request, 'QA/post_questions.html', context)
 
-@login_required
 def Questions(request):
     questions = Question.objects.all().order_by('uploaded_at')
     reward_questions = Rewarded_question.objects.all().order_by('uploaded_at')
@@ -161,6 +181,7 @@ def questions_tagged(request, tag_slug=None):
         }
         return render(request, 'QA/tag_list.html', context)
 
+@login_required
 def reward_question(request, user_id):
     user = User.objects.get(id=user_id)
     if request.method == "POST":
@@ -192,6 +213,7 @@ def reward_question(request, user_id):
         }
         return render(request, 'QA/reward_questions.html', context)
 
+@login_required
 def show_r_question(request, question_id):
     r_question = Rewarded_question.objects.get(id=question_id)
     owner_id = r_question.user.id
@@ -227,6 +249,8 @@ def show_r_question(request, question_id):
     }
     return render(request, 'QA/show_r_question1.html', context)
 
+@login_required
+@is_r_question_owner
 def edit_r_question(request, question_id):
     user = request.user
     edited_r_question = get_object_or_404(Rewarded_question, pk=question_id)
@@ -259,11 +283,14 @@ def edit_r_question(request, question_id):
         }
         return render(request, 'QA/reward_questions.html', context)
 
+@login_required
+@is_r_question_owner
 def delete_r_question(request, question_id):
     r_question = Rewarded_question.objects.get(id=question_id)
     r_question.delete()
     return redirect(reverse('QA:questions'))
 
+@login_required
 def post_r_answer(request, question_id):
     if request.method == "POST":
         r_answer_form = Rewarded_AnswerForm(request.POST)
@@ -276,6 +303,8 @@ def post_r_answer(request, question_id):
 
         return redirect(reverse('QA:show_r_question', args=(question_id,)))
 
+@login_required
+@is_r_answer_owner
 def edit_r_answer(request, r_answer_id):
     edited_r_answer = get_object_or_404(Rewarded_answer, pk=r_answer_id)
     if request.method == "POST":
@@ -299,12 +328,15 @@ def edit_r_answer(request, r_answer_id):
         }
         return render(request, 'QA/show_r_question1.html', context)
 
+@login_required
+@is_r_answer_owner
 def delete_r_answer(request, r_answer_id):
     r_answer = Rewarded_answer.objects.get(id=r_answer_id)
     question_id = r_answer.question.id
     r_answer.delete()
     return redirect(reverse('QA:show_r_question', args=(question_id,)))
 
+@login_required
 def accept_answer(request, r_answer_id):
     r_answer = Rewarded_answer.objects.get(id=r_answer_id)
     Rewarded_answer.objects.update(status=True)
