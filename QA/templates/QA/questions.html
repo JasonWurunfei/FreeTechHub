@@ -7,56 +7,125 @@
   <link rel="stylesheet" href="{% static 'code.css' %}">
   <link rel="stylesheet" href="{% static 'tagsinput.css' %}">
   <script src="tagsinput.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
-
 {% load count_votes %}
 
 <body>
-  <h1 align="center" style="color:Pink">Open questions</h1>
-  <a type="submit" href="{% url 'QA:post_question' user_id %}">Post common question</a>
-  <br/>
-  <a type="submit" href="{% url 'QA:reward_question' user_id %}">Post a reward</a>
-  <hr/>
-  <p>Rewarded questions:</p>
-  {% csrf_token %}
-  {% for question in reward_questions %}
-    <h1 class="card-title"><a href="{% url 'QA:show_r_question' question.id%}">{{ question.title }}</a></h1>
-        <p>Publisher: {{ question.user.username }}</p>
-        {% for tag in question.tags.all %}
-          <a class="mr-1 badge badge-info" data-role="tagsinput" href="{% url 'QA:tag_list' tag.slug %}">#{{ tag }}</a>
-        {% endfor %}
-        <p>Rewarded money:{{ question.reward_money }}</p>
-        {% if question.status == False %}
-          <p>Status:Unsolved</p>
+  <nav class=" navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">FreeTechHub</a>
+      <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fa fa-bars"></i>
+    </button>
+    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <div class="input-group">
+        <input class="form-control" type="search" name="q" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+    </form>
+    <ul class="navbar-nav ml-auto ml-md-0">
+      <li class="nav-item">
+        <a class="nav-link"  href="{% url 'QA:questions' %}" >QA</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  href="{% url 'blog:show' %}" >blogs</a>
+      </li>
+      <li class="nav-item dropdown">
+        {% if user.is_authenticated %}
+          {% if user.profile.avatar %}
+            <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src="{{ user.profile.avatar.url }}" style="width:30px; border:30px;">
+            </a>
+          {% else %}
+            <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-user-o"></i>
+            </a>
+          {% endif %}
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+            <p class="dropdown-item text-warning" href="#">signed in as</p>
+            <p class="dropdown-item text-warning" href="#">{{ user.username }}</p>
+            <a class="dropdown-item text-warning" href="/account/profile/{{ user.id }}/">
+              <i class="fa fa-vcard-o fa-spin text-primary"></i>profile
+            </a>
+            <a class="dropdown-item text-warning" href="{% url 'accounts:profile_account' user.id %}">
+              <i class="fa fa-cog fa-spin text-success"></i>setting
+            </a>
+            <a class="dropdown-item text-warning" href="{% url 'accounts:coins' user.id %}">
+              <i class="fa fa-rmb fa-spin text-info"></i>Your coins: {{ user.coins }}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item text-warning" href="{% url 'account_logout' %}">
+              <i class="fa fa-power-off text-danger"></i>Logout
+            </a>
+          </div>
         {% else %}
-          <p>Status:Solved</p>
+          <li class="nav-item">
+          <a class="nav-link"  href="{% url 'account_login' %}" >login</a>
+          </li>
         {% endif %}
-        <p class="mb-auto text-muted"> {{ question.uploaded_at }}</p>
-  <hr/>
-  {% endfor %}
-  <hr/>
-  <title>Common questions</title>
-  <p>Common Tags:
-    {% for tag in common_tags %}
-      <a class="badge badge-success" >{{ tag }}</a>
-    {% endfor %}
-  </p>
-  {% csrf_token %}
-  {% for question in questions %}
-    <div class="col-md-6">
-      <div class="cards">
-        <h1 class="card-title"><a href="{% url 'QA:show_question' question.id%}">{{ question.title }}</a></h1>
-        <p>Questioner: {{ question.user.username }}</p>
-        {% for tag in question.tags.all %}
-          <a class="mr-1 badge badge-info" data-role="tagsinput" href="{% url 'QA:tag_list' tag.slug %}">#{{ tag }}</a>
-        {% endfor %}
-        <p class="mb-auto text-muted"> {{ question.uploaded_at }}</p>
-        <span class="views-count">Views:{{ question.views }}</span>
-        <span>Answers:{{ question.answer_number }}</span>
-        <span>Votes:{% get_up_number question.type_id question.id %}</span>
+      </li>
+    </ul>
+  </nav>
+  <div class="container">
+    <h1 align="center" style="color:Pink">Open questions</h1>
+    <br>
+    <a type="submit" href="{% url 'QA:post_question' user_id %}" class="btn btn-primary"><i class="fa fa-hand-o-right fa-fw"></i>Post common question</a>
+    <a type="submit" href="{% url 'QA:reward_question' user_id %}" class="btn btn-primary"><i class="fa fa-hand-o-right fa-fw"></i>Post a reward</a>
+    <hr/>
+    <div class="card shadow bg-white">
+      <div class="card-body">
+        <p>Rewarded questions:</p>
+        {% csrf_token %}
+        {% for question in reward_questions %}
+          <h1 class="card-title"><a href="{% url 'QA:show_r_question' question.id%}">{{ question.title }}</a></h1>
+          <p>Publisher: {{ question.user.username }}</p>
+          {% for tag in question.tags.all %}
+            <a class="mr-1 badge badge-info card-link" data-role="tagsinput" href="{% url 'QA:tag_list' tag.slug %}">#{{ tag }}</a>
+          {% endfor %}
+          <p class="card-text">Rewarded money:{{ question.reward_money }}</p>
+          {% if question.status == False %}
+            <p>Status:Unsolved</p>
+          {% else %}
+            <p>Status:Solved</p>
+          {% endif %}
+          <p class="mb-auto text-muted"> {{ question.uploaded_at }}</p>
       </div>
     </div>
     <hr/>
-  {% endfor %}
+    {% endfor %}
+    <hr/>
+    <div class="card shadow bg-white">
+      <div class="card-body">
+        <title>Common questions</title>
+        <p>Common Tags:
+          {% for tag in common_tags %}
+            <a class="badge badge-success" >{{ tag }}</a>
+          {% endfor %}
+        </p>
+        {% csrf_token %}
+        {% for question in questions %}
+          <div class="col-md-6">
+            <div class="cards">
+              <h1 class="card-title"><a href="{% url 'QA:show_question' question.id%}">{{ question.title }}</a></h1>
+              <p>Questioner: {{ question.user.username }}</p>
+              {% for tag in question.tags.all %}
+                <a class="mr-1 badge badge-info" data-role="tagsinput" href="{% url 'QA:tag_list' tag.slug %}">#{{ tag }}</a>
+              {% endfor %}
+              <p class="mb-auto text-muted"> {{ question.uploaded_at }}</p>
+              <span class="views-count">Views:{{ question.views }}</span>
+              <span>Answers:{{ question.answer_number }}</span>
+              <span>Votes:{% get_up_number question.type_id question.id %}</span>
+            </div>
+          </div>
+          <hr/>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 </body>
 </html>

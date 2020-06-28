@@ -20,96 +20,148 @@
 {% load count_likes %}
 
 <body>
-  <h1 style="font-family : 'Fira Code', Impact, sans-serif">
-    {{ post_detail.title }}
-  </h1>
-  <p>Author: <span class="badge badge-primary">{{ post_detail.user.username }}</span></p>
-  {% for tag in post_detail.tags.all %}
-          <a class="mr-1 badge badge-info" data-role="tagsinput" href="{% url 'blog:tag_list' tag.slug %}">#{{ tag }}</a>
-        {% endfor %}
-  {% if post_detail.category != None %}
-    <a href="{% url 'blog:post_by_category' post_detail.category.id %}" class="badge badge-info">Series:  {{ post_detail.category }}</a>
-  {% else %}
-    <p>Series:{{ post_detail.category }}</p>
-  {% endif %}
-  
-  <div id="blog" class="card">
-    <p class="detail_content card-text" id="post">{{ post_detail.text|safe }}</p>
-  </div>
-
-  {% for item2 in video %}
-    {% if item2.post_id == post_detail.id %}
-      <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
+  <nav class=" navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">FreeTechHub</a>
+      <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fa fa-bars"></i>
+    </button>
+    <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
+      <div class="input-group">
+        <input class="form-control" type="search" name="q" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
+        <div class="input-group-append">
+          <button class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
+        </div>
+      </div>
+    </form>
+    <ul class="navbar-nav ml-auto ml-md-0">
+      <li class="nav-item">
+        <a class="nav-link"  href="{% url 'QA:questions' %}" >QA</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  href="{% url 'blog:show' %}" >blogs</a>
+      </li>
+      <li class="nav-item dropdown">
+        {% if user.is_authenticated %}
+          {% if user.profile.avatar %}
+            <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src="{{ user.profile.avatar.url }}" style="width:30px; border:30px;">
+            </a>
+          {% else %}
+            <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-user-o"></i>
+            </a>
+          {% endif %}
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+            <p class="dropdown-item text-warning" href="#">signed in as</p>
+            <p class="dropdown-item text-warning" href="#">{{ user.username }}</p>
+            <a class="dropdown-item text-warning" href="/account/profile/{{ user.id }}/">
+              <i class="fa fa-vcard-o fa-spin text-primary"></i>profile
+            </a>
+            <a class="dropdown-item text-warning" href="{% url 'accounts:profile_account' user.id %}">
+              <i class="fa fa-cog fa-spin text-success"></i>setting
+            </a>
+            <a class="dropdown-item text-warning" href="{% url 'accounts:coins' user.id %}">
+              <i class="fa fa-rmb fa-spin text-info"></i>Your coins: {{ user.coins }}
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item text-warning" href="{% url 'account_logout' %}">
+              <i class="fa fa-power-off text-danger"></i>Logout
+            </a>
+          </div>
+        {% else %}
+          <li class="nav-item">
+          <a class="nav-link"  href="{% url 'account_login' %}" >login</a>
+          </li>
+        {% endif %}
+      </li>
+    </ul>
+  </nav>
+  <div class="container">
+    <h1 style="font-family : 'Fira Code', Impact, sans-serif">
+      {{ post_detail.title }}
+    </h1>
+    <p>Author: <span class="badge badge-primary">{{ post_detail.user.username }}</span></p>
+    {% for tag in post_detail.tags.all %}
+      <a class="mr-1 badge badge-info" data-role="tagsinput" href="{% url 'blog:tag_list' tag.slug %}">#{{ tag }}</a>
+    {% endfor %}
+    {% if post_detail.category != None %}
+      <a href="{% url 'blog:post_by_category' post_detail.category.id %}" class="badge badge-info">Series:  {{ post_detail.category }}</a>
+    {% else %}
+      <p>Series:{{ post_detail.category }}</p>
     {% endif %}
-  {% endfor %}
-  <br/>
-  <small>Likes {% get_likes_number post_type_id post_detail.id %}</small>
-  <small>Dislikes {% get_dislikes_number post_type_id post_detail.id %}</small>
-
-  <div class="d-flex justify-content-between align-items-center">
-    <div class="btn-group">
-      <button type="button" class="btn btn-sm btn-outline-info">
-        <a href="{% url 'post_like' post_detail.id 'like' %}">Like</a>
-      </button>
-      <button type="button" class="btn btn-sm btn-outline-info">
-        <a href="{% url 'post_like' post_detail.id 'dislike' %}">Dislike</a>
-      </button>
-      <button type="button" class="btn btn-sm btn-outline-secondary">
-        <a href="{% url 'blog:show' %}">Back</a>
-      </button>
-      {% if self_user != user_info %}
+    <div id="blog" class="card">
+      <p class="detail_content card-text" id="post">{{ post_detail.text|safe }}</p>
+    </div>
+    {% for item2 in video %}
+      {% if item2.post_id == post_detail.id %}
+        <video src="/media/{{ item2.content }}" height="200" width="300" controls></video>
+      {% endif %}
+    {% endfor %}
+    <br/>
+    <small>Likes {% get_likes_number post_type_id post_detail.id %}</small>
+    <small>Dislikes {% get_dislikes_number post_type_id post_detail.id %}</small>
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="btn-group">
+        <button type="button" class="btn btn-sm btn-outline-info">
+          <a href="{% url 'post_like' post_detail.id 'like' %}">Like</a>
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-info">
+          <a href="{% url 'post_like' post_detail.id 'dislike' %}">Dislike</a>
+        </button>
+        {% if self_user != user_info %}
         <form method="post" action="{% url 'blog:post_detail' post_detail.id %}">
           {% csrf_token %}
-          <input type="submit"  value="{{ show_button }}" >
+          <input type="submit" class="btn btn-sm btn-outline-info" value="{{ show_button }}" >
         </form>
-      {% endif %}
+        {% endif %}
+        <button type="button" class="btn btn-sm btn-outline-secondary">
+          <a href="{% url 'blog:show' %}">Back</a>
+        </button>
+
+      </div>
+      <div class="text-muted text-right" style="margin-top: 4rem">{{ post_detail.mod_date }}</div>
     </div>
-    <div class="text-muted text-right" style="margin-top: 4rem">{{ post_detail.mod_date }}</div>
-  </div>
-
-
-  <div class="col-md-8 card mb-4  mt-3">
-    <div class="card-body">
-      <h2>{{ comments.count }} comment(s):</h2>
-      {% for comment in comments %}
-        <div style="margin-top:2em;border:1px dashed;padding:2em;" class="comment-text">
-          <blockquote>
-            <p>{{ comment.text|safe }}</p>
-            <footer>via Commentator:{{ comment.user.username }} in {{ comment.date }}</footer>
-            <hr style="border:1px dotted #036" />
-            {% for child_comment in comment.children %}
-              <blockquote>
-                <p>Reply: {{ child_comment.text|safe }}</p>
-                <footer>Replied by author in {{ child_comment.date }}</footer>
-              </blockquote>
-            {% endfor %}
-          </blockquote>
-          {% if comment.status == False %}
-            <button type="submit" ><a href="{% url 'comment:create_c_comment' comment.id %}">Reply</a></button>
-          {% else %}
-            <form method="POST" style="margin-top: 1.3em;" action="{% url 'comment:create_c_comment' comment.id %}">
-              {% csrf_token %}
-              {{ comment_form.media}}
-              {{ comment_form.as_p }}
-              <button type="submit" class="btn btn-primary btn-1g">Reply to the comment</button>
-            </form>
-          {% endif %}
-        </div>
-        <hr/>
-      {% endfor %}
-    </div>
-  </div>
-
-  <div class="col-md-8 card mb-4  mt-3 ">
-    <div class="card-body">
+    <div class="col-md-8 card mb-4  mt-3">
       <div class="card-body">
-        <h3>Leave a comment</h3>
-        <form method="post" style="margin-top: 1.3em;" action="{% url 'comment:create_comment' post_detail.id %}">
-          {% csrf_token %}
-          {{ comment_form.media}}
-          {{ comment_form.as_p }}
-          <button type="submit" class="btn btn-primary btn-1g">Submit</button>
-        </form>
+        <h2>{{ comments.count }} comment(s):</h2>
+        {% for comment in comments %}
+          <div style="margin-top:2em;border:1px dashed;padding:2em;" class="comment-text">
+            <blockquote>
+              <p>{{ comment.text|safe }}</p>
+              <footer>via Commentator:{{ comment.user.username }} in {{ comment.date }}</footer>
+              <hr style="border:1px dotted #036" />
+              {% for child_comment in comment.children %}
+                <blockquote>
+                  <p>Reply: {{ child_comment.text|safe }}</p>
+                  <footer>Replied by author in {{ child_comment.date }}</footer>
+                </blockquote>
+              {% endfor %}
+            </blockquote>
+            {% if comment.status == False %}
+              <button type="submit" ><a href="{% url 'comment:create_c_comment' comment.id %}">Reply</a></button>
+            {% else %}
+              <form method="POST" style="margin-top: 1.3em;" action="{% url 'comment:create_c_comment' comment.id %}">
+                {% csrf_token %}
+                {{ comment_form.media}}
+                {{ comment_form.as_p }}
+                <button type="submit" class="btn btn-primary btn-1g">Reply to the comment</button>
+              </form>
+            {% endif %}
+          </div>
+          <hr/>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-md-8 card mb-4  mt-3 ">
+      <div class="card-body">
+        <div class="card-body">
+          <h3>Leave a comment</h3>
+          <form method="post" style="margin-top: 1.3em;" action="{% url 'comment:create_comment' post_detail.id %}">
+            {% csrf_token %}
+            {{ comment_form.media}}
+            {{ comment_form.as_p }}
+            <button type="submit" class="btn btn-primary btn-1g">Submit</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>

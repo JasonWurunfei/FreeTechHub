@@ -9,28 +9,28 @@
   <title>{% block title %}{% endblock %}</title>
   {% load static %}
   {% block head %}{% endblock %}
-  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Satisfy">
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Kite One">
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Frijole">
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Indie Flower">
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Courgette">
-  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=style=Damion">
+{#  <link rel="stylesheet" href="{% static 'css/styles.css' %}">#}
+{#  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Satisfy">#}
+{#  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Kite One">#}
+{#  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Frijole">#}
+{#  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Indie Flower">#}
+{#  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Courgette">#}
+{#  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=style=Damion">#}
   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
   <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
   <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
   <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body class="sb-nav-fixed" >
-  <nav class=" navbar navbar-expand navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="/">FreeTechHub</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+<nav class=" navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand" href="/">FreeTechHub</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fa fa-bars"></i></button>
     <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
       <div class="input-group">
         <input class="form-control" type="search" name="q" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
         <div class="input-group-append">
-          <button class="btn btn-primary" type="button"><i class="fas fa-search"></i></button>
+          <button class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
         </div>
       </div>
     </form>
@@ -40,22 +40,22 @@
        </li>
        <li class="nav-item">
         <a class="nav-link"  href="{% url 'blog:show' %}" >blogs</a>
-        </li>
+       </li>
       <li class="nav-item dropdown">
         {% if user.is_authenticated %}
-          {% if user.avatar %}
-          <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ user.avatar.url }}" style="width:30px; border:30px;"></a>
+          {% if user.profile.avatar %}
+          <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ user.profile.avatar.url }}" style="width:30px; border:30px;"></a>
           {% else %}
-          <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+          <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-o"></i></a>
           {% endif %}
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-            <p class="dropdown-item" href="#">signed in as</p>
-            <p class="dropdown-item" href="#">{{ user.username }}</p>
-            <a class="dropdown-item" href="/account/profile/{{ user.id }}/">profile</a>
-            <a class="dropdown-item" href="{% url 'accounts:profile_account' user.id %}">setting</a>
-            <a class="dropdown-item" href="{% url 'accounts:coins' user.id %}">Your coins: {{ user.coins }}</a>
+            <p class="dropdown-item text-warning" href="#">signed in as</p>
+            <p class="dropdown-item text-warning" href="#">{{ user.username }}</p>
+            <a class="dropdown-item text-warning" href="/account/profile/{{ user.id }}/"><i class="fa fa-vcard-o fa-spin text-primary"></i>profile</a>
+            <a class="dropdown-item text-warning" href="{% url 'accounts:profile_account' user.id %}"><i class="fa fa-cog fa-spin text-success"></i>setting</a>
+            <a class="dropdown-item text-warning" href="{% url 'accounts:coins' user.id %}"><i class="fa fa-rmb fa-spin text-info"></i>Your coins: {{ user.coins }}</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
+            <a class="dropdown-item text-warning" href="{% url 'account_logout' %}"><i class="fa fa-power-off text-danger"></i>Logout</a>
            </div>
         {% else %}
         <li class="nav-item">
