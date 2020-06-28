@@ -100,11 +100,15 @@ def profile_edit(request, id):
     else:
         return HttpResponse("ERROR")
 
+@login_required
+@is_owner
 def coins(request, id):
     user = User.objects.get(id=id)
     balance = user.coins
     return render(request, 'registration/profile_coins.html', locals())
 
+@login_required
+@is_owner
 def recharge_coins(request, id):
     profile = User.objects.get(id=id)
     if request.method == "POST":
@@ -127,6 +131,8 @@ def recharge_coins(request, id):
         }
         return render(request, 'registration/recharge_coins.html', context)
 
+@login_required
+@is_owner
 def transaction_records(request, id):
     user = User.objects.get(id=id)
     balance = user.coins
