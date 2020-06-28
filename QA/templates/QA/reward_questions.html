@@ -68,6 +68,7 @@
   <div class="container">
     {% if new_r_question_form %}
       <h1 align="center" style="color:Pink">Edit rewarded question,{{ user.username }}</h1>
+<<<<<<< HEAD
       <hr/>
       <div class="form-group">
         <form method="POST" action="{% url 'QA:edit_r_question' r_question_id %}" class="bs-example form-horizontal">
@@ -90,6 +91,36 @@
         <button type="submit" class="btn btn-success">Submitted</button><br/>
       </form>
     </div>
+=======
+        <hr/>
+        <div class="form-group">
+          <form method="POST" action="{% url 'QA:edit_r_question' r_question_id %}" class="bs-example form-horizontal">
+            {% csrf_token %}
+            {{ new_r_question_form|safe }}
+            {{ new_r_question_form.media }}
+            {% if error %}
+              <a style='color:brown'>{{ error }}</a>
+            {% endif %}
+            <br/>
+            <button type="submit" class="btn btn-success">Save</button><br/>
+          </form>
+        </div>
+    {% else %}
+      <h1 align="center" style="color:Pink">Reward a public question! {{ user.username }}</h1>
+        <hr/>
+        <div class="form-group">
+          <form method="POST" action="{% url 'QA:reward_question' user.id %}" class="bs-example form-horizontal">
+            {% csrf_token %}
+            {{ r_question_form|safe }}
+            {{ r_question_form.media }}
+            {% if error %}
+              <a style='color:brown'>{{ error }}</a>
+            {% endif %}
+            <br/>
+            <button type="submit" class="btn btn-success">Submitted</button><br/>
+          </form>
+        </div>
+>>>>>>> 1aac051d49ac97735228bcdcfdbde1741a5ec366
     {% endif %}
   </div>
 </body>

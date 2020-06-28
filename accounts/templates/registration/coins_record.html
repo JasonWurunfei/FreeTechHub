@@ -33,6 +33,9 @@
                           <th class="table_3">
                             <div>Reason</div>
                           </th>
+                          <th class="table_4">
+                            <div>Related Question:</div>
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
@@ -41,6 +44,7 @@
                         <td>{{ operation.operated_time }}</td>
                         <td>{{ operation.money }}</td>
                         <td>{{ operation.reason }}</td>
+                        <td>{{ operation.related_question.title }}</td>
                       </tr>
                       {% endfor %}
                       </tbody>
