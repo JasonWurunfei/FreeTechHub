@@ -27,6 +27,7 @@
     <p class="mb-auto text-muted">Status:Solved</p>
   {% endif %}
   <p class="mb-auto">Rewarded coins:{{ r_question.reward_money }}</p>
+  <p class="mb-auto">Note:{{ r_question.note|safe }}</p>
   <p class="mb-auto" >{{ r_question.body|safe }}</p>
   {% for tag in r_question.tags.all %}
           <a class="tags" href="{% url 'QA:tag_list' tag.slug %}">#{{ tag }}</a>

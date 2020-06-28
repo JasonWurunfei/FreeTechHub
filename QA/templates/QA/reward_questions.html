@@ -17,6 +17,9 @@
             {% csrf_token %}
             {{ new_r_question_form|safe }}
             {{ new_r_question_form.media }}
+            {% if error %}
+              <a style='color:brown'>{{ error }}</a>
+            {% endif %}
             <br/>
             <button type="submit" class="btn btn-success">Save</button><br/>
           </form>
@@ -29,6 +32,9 @@
             {% csrf_token %}
             {{ r_question_form|safe }}
             {{ r_question_form.media }}
+            {% if error %}
+              <a style='color:brown'>{{ error }}</a>
+            {% endif %}
             <br/>
             <button type="submit" class="btn btn-success">Submitted</button><br/>
           </form>

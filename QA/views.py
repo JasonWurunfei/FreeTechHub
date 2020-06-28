@@ -36,6 +36,7 @@ def is_question_owner(func):
 def is_r_question_owner(func):
     def check(request, *args, **kwargs):
         r_question_id = kwargs["question_id"]
+        print(r_question_id)
         r_question = Rewarded_question.objects.get(id=r_question_id)
         if r_question.user_id != request.user.id:
             return HttpResponse("It is not yours ! You are not permitted !",
@@ -187,24 +188,32 @@ def reward_question(request, user_id):
     if request.method == "POST":
         r_question_form = Rewarded_QuestionForm(request.POST)
         if r_question_form.is_valid():
-            new_question = r_question_form.save(commit=False)
-            new_question.title = r_question_form.cleaned_data['title']
-            new_question.body = r_question_form.cleaned_data['body']
-            new_question.reward_money = r_question_form.cleaned_data['reward_money']
-            new_question.note = r_question_form.cleaned_data['note']
-            new_question.user_id = user_id
-            new_question.save()
-
-            r_question_form.save_m2m()
-
+            reward_money = r_question_form.cleaned_data['reward_money']
             balance = user.coins
-            user.coins = balance-r_question_form.cleaned_data['reward_money']
-            user.save()
+            if reward_money > balance:
+                error = "Sorry! Your coins are not enough for rewarding this question!"
+                context = {
+                    'r_question_form': r_question_form,
+                    'user': user,
+                    'error': error,
+                }
+                return render(request, 'QA/reward_questions.html', context)
+            else:
+                new_question = r_question_form.save(commit=False)
+                new_question.title = r_question_form.cleaned_data['title']
+                new_question.body = r_question_form.cleaned_data['body']
+                new_question.reward_money = reward_money
+                new_question.note = r_question_form.cleaned_data['note']
+                new_question.user_id = user_id
+                new_question.save()
 
-            Coins_Operation.objects.create(related_profile=user,
-                                           money=-r_question_form.cleaned_data['reward_money'], reason="Reward question")
+                r_question_form.save_m2m()
+
+                user.coins = balance-reward_money
+                user.save()
+                print(new_question.id)
+                Coins_Operation.objects.create(related_profile=user, related_question=new_question, money=-reward_money, reason="Reward question")
         return redirect(reverse('QA:questions'))
-
     else:
         r_question_form = Rewarded_QuestionForm()
         context = {
@@ -257,23 +266,35 @@ def edit_r_question(request, question_id):
     if request.method == "POST":
         new_r_question_form = Rewarded_QuestionForm(request.POST, instance=edited_r_question)
         if new_r_question_form.is_valid():
-            edited_r_question = new_r_question_form.save(commit=False)
-            edited_r_question.title = new_r_question_form.cleaned_data['title']
-            edited_r_question.body = new_r_question_form.cleaned_data['body']
-            edited_r_question.reward_money = new_r_question_form.cleaned_data['reward_money']
-            edited_r_question.note = new_r_question_form.cleaned_data['note']
-            edited_r_question.uploaded_at = datetime.datetime.now()
+            reward_money = new_r_question_form.cleaned_data['reward_money']
+            balance = user.coins + Rewarded_question.objects.get(id=question_id).reward_money
+            if reward_money > balance:
+                error = "Sorry! Your coins are not enough for rewarding this question!"
+                context = {
+                    'new_r_question_form': new_r_question_form,
+                    'r_question_id': question_id,
+                    'user': user,
+                    'error': error,
+                }
+                return render(request, 'QA/reward_questions.html', context)
+            else:
+                edited_r_question = new_r_question_form.save(commit=False)
+                edited_r_question.title = new_r_question_form.cleaned_data['title']
+                edited_r_question.body = new_r_question_form.cleaned_data['body']
+                edited_r_question.reward_money = reward_money
+                edited_r_question.note = new_r_question_form.cleaned_data['note']
+                edited_r_question.uploaded_at = datetime.datetime.now()
 
-            balance = user.coins
-            user.coins = balance - (new_r_question_form.cleaned_data['reward_money'] -
-                                       Rewarded_question.objects.get(id=question_id).reward_money)
-            user.save()
+                user.coins = balance - reward_money
+                user.save()
 
-            edited_r_question.save()
-            new_r_question_form.save_m2m()
+                edited_r_question.save()
+                new_r_question_form.save_m2m()
 
-            Coins_Operation.objects.update(money=-new_r_question_form.cleaned_data['reward_money'])
-            return redirect(reverse('QA:show_r_question', args=(question_id,)))
+                operation = Coins_Operation.objects.get(related_question=question_id)
+                operation.money = -reward_money
+                operation.save()
+                return redirect(reverse('QA:show_r_question', args=(question_id,)))
     else:
         new_r_question_form = Rewarded_QuestionForm(instance=edited_r_question)
         context = {
@@ -286,8 +307,15 @@ def edit_r_question(request, question_id):
 @login_required
 @is_r_question_owner
 def delete_r_question(request, question_id):
+    user = request.user
     r_question = Rewarded_question.objects.get(id=question_id)
+    r_operation = Coins_Operation.objects.get(related_question=question_id)
+    r_operation.delete()
+    user.coins = user.coins + r_question.reward_money
+    user.save()
     r_question.delete()
+
+
     return redirect(reverse('QA:questions'))
 
 @login_required
