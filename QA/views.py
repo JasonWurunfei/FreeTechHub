@@ -80,6 +80,7 @@ def post_question(request, user_id):
         }
         return render(request, 'QA/post_questions.html', context)
 
+@login_required
 def Questions(request):
     questions = Question.objects.all().order_by('uploaded_at')
     reward_questions = Rewarded_question.objects.all().order_by('uploaded_at')
