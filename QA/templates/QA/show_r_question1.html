@@ -1,65 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "YYbase.html" %}
 {% load static %}
-<head>
+{% block head %}
   <meta charset="UTF-8">
   <title>Show rewarded question</title>
   <link rel="stylesheet" href="{% static 'code.css' %}">
   <link rel="stylesheet" href="{% static 'tagsinput.css' %}">
-</head>
-
-<body>
-  <header class="masthead text-center text-white d-flex">
-    <div class="container my-auto">
-      <div class="row">
-        <div class="col-lg-10 mx-auto">
-          <h1 style="font-family : 'Fira Code', Impact, sans-serif">
-            {{ r_question.title }}
-          </h1>
-        </div>
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Courgette">
+  <link rel="stylesheet"  href="//at.alicdn.com/t/font_1635546_inorz0tgz08.css">
+  <link rel="stylesheet"  href="//at.alicdn.com/t/font_1635546_ojnne0v95ze.css">
+  <link rel="stylesheet"  href="//at.alicdn.com/t/font_1635546_nrfrqhub98.css">
+{% endblock %}
+{% block content %}
+  <div class="container-fluid">
+      <h1 class="text-center" >{{ r_question.title }}</h1>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col" ><p >Asked by {{r_question.user.username }} at {{ r_question.uploaded_at }}</p></div>
+      <div class="col" >
+        {% if r_question.status == False %}
+          <p >Status: <span class="badge badge-danger">Unsolved</span></p>
+        {% else %}
+          <p >Status:<span class="badge badge-success">Solved</span></p>
+        {% endif %}
       </div>
+      <div class="col" ><p ><i class="iconfont icon-jinbi">coins:{{ r_question.reward_money }}</i> </p></div>
+      <div class="col" >
+        {% for tag in r_question.tags.all %}
+          <a class="text-muted" href="{% url 'QA:tag_list' tag.slug %}"><i class="iconfont icon-biaoqian">{{ tag }}</i></a>
+        {% endfor %}
+      </div>
+      <div class="col" >  <p class="mb-auto"><i class="iconfont icon-note">Note</i>:{{ r_question.note|safe }}</p></div>
     </div>
-  </header>
-  <p class="mb-auto text-muted"> Asked by {{r_question.user.username }} at {{ r_question.uploaded_at }}</p>
-  {% if r_question.status == False %}
-    <p class="mb-auto text-muted">Status:Unsolved</p>
-  {% else %}
-    <p class="mb-auto text-muted">Status:Solved</p>
-  {% endif %}
-  <p class="mb-auto">Rewarded coins:{{ r_question.reward_money }}</p>
-  <p class="mb-auto">Note:{{ r_question.note|safe }}</p>
-  <p class="mb-auto" >{{ r_question.body|safe }}</p>
-  {% for tag in r_question.tags.all %}
-    <a class="tags" href="{% url 'QA:tag_list' tag.slug %}">#{{ tag }}</a>
-  {% endfor %}
-  <br/>
+  </div>
+  <div class="container">
+    <div class="card">
+      <div class="card-body"><p>{{ r_question.body|safe }}</p></div>
+    </div>
+  </div>
 
+  <div class="container">
   {% if owner_id == user_id %}
     {% if r_question.status == False %}
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="btn-group">
-          <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:edit_r_question' r_question.id %}">Edit</a></button>
-          <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:delete_r_question' r_question.id %}">Delete</a> </button>
-          <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:questions' %}">Back</a></button>
-        </div>
+         <p class="text-right">
+          <a type="button" class="btn btn-primary" href="{% url 'QA:edit_r_question' r_question.id %}">Edit</a>
+          <a type="button"  class="btn btn-primary" href="{% url 'QA:delete_r_question' r_question.id %}">Delete</a>
+          <a type="button"  class="btn btn-primary" href="{% url 'QA:questions' %}">>>Back</a>
+        </p>
       </div>
-      <hr/>
-      {% if r_answer_count > 1 %}
-        <p>{{ r_answer_count }} submitted Answers</p>
-      {% else %}
-        <p>{{ r_answer_count }} submitted Answer</p>
-      {% endif %}
+      <div class="container">
+        <div class="card">
+        {% if r_answer_count > 1 %}
+          <div class="card-body"><p>{{ r_answer_count }} submitted Answers</p></div>
+        {% else %}
+          <div class="card-body"><p>{{ r_answer_count }} submitted Answer</p></div>
+        {% endif %}
+    </div>
+  </div>
       {% for r_answer in r_answers %}
         <p class="mb-auto">{{ r_answer.content|safe }}</p>
         <footer>Answered by {{ r_answer.user.username }} in {{ r_answer.answer_time }}</footer>
-        <a href="{% url 'QA:accept_answer' r_answer.id %}"><button type="button" class="btn btn-sm btn-outline-secondary">Accept</button></a>
+        <a href="{% url 'QA:accept_answer' r_answer.id %}"><button type="button" class="btn btn-primary">Accept</button></a>
         <hr/>
       {% endfor %}
     {% else %}
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="btn-group">
-          <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:questions' %}">Back</a></button>
-        </div>
+  </br>
+      <div class="container-fluid">
+          <a type="button" class="btn btn-primary" href="{% url 'QA:questions' %}">>>Back</a>
       </div>
       <hr/>
       {% for r_answer in r_answers %}
@@ -72,23 +79,20 @@
       {% endfor %}
     {% endif %}
   {% else %}
-    <div class="d-flex justify-content-between align-items-center">
-      <div class="btn-group">
-        <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:questions' %}">Back</a></button>
-      </div>
+    <div class="container-fluid">
+      <a type="button" class="btn btn-warning" href="{% url 'QA:questions' %}">>>Back</a>
     </div>
     <hr/>
     {% if r_question.status == False %}
       {% if your_answer_count == 0 %}
       <div class="form-group">
-        <form method="POST" action="{% url 'QA:post_r_answer' r_question.id%}" class="bs-example form-horizontal">
+          <form method="POST" action="{% url 'QA:post_r_answer' r_question.id%}" class="bs-example form-horizontal">
           {% csrf_token %}
           {{ r_answer_form|safe }}
           {{ r_answer_form.media }}
           <br/>
-          <button type="submit" class="btn btn-success">Post Your Answer</button>
-          <br/>
-        </form>
+          <button type="submit" class="btn btn-success">Post Your Answer</button><br/>
+          </form>
       </div>
       {% else %}
         {% if new_r_answer_form %}
@@ -104,12 +108,14 @@
             <p class="mb-auto">{{ your_answer.content|safe }}</p>
             <footer>Answered by {{ your_answer.user.username }} in {{ your_answer.answer_time }}</footer>
             <p class="mb-auto">Status:Unaccepted</p>
-            <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:edit_r_answer' your_answer.id %}">Edit</a></button>
-            <button type="button" class="btn btn-sm btn-outline-secondary"><a href="{% url 'QA:delete_r_answer' your_answer.id %}">Delete</a> </button>
+            <a type="button" class="btn btn-primary" href="{% url 'QA:edit_r_answer' your_answer.id %}">Edit</a>
+            <a type="button" class="btn btn-primary" href="{% url 'QA:delete_r_answer' your_answer.id %}">Delete</a> 
             <hr/>
           {% endfor %}
         {% endif %}
       {% endif %}
+      <div class="container">
+        <div class="card">
     {% else %}
       {% for r_answer in r_answers %}
         {% if r_answer.status == True %}
@@ -127,6 +133,7 @@
         {% endif %}
       {% endfor %}
     {% endif %}
+  </div>
+</div>
   {% endif %}
-</body>
-</html>
+{% endblock %}
