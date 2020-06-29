@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+{% load crispy_forms_tags %}
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>eidt blog</title>
   {{ form.media }}
   <link rel="stylesheet" href="{% static 'code.css' %}">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -91,7 +92,7 @@
       <div class="editor">
         <form method="POST" action="{% url 'blog:post' user.id %}" enctype="multipart/form-data" class="bs-example form-horizontal">
           {% csrf_token %}
-          {{ form|safe }}
+          {{ form|crispy }}
           <h3>Please choose your video</h3>
           <input type="file" name="video" multiple="multiple"><br/>
           <button type="submit" class="btn btn-success">Submit</button><br/>

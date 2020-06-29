@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+{% load crispy_forms_tags %}
 <head>
   <meta charset="UTF-8">
   <title>post_questions</title>
@@ -90,7 +91,7 @@
       <div class="form-group">
         <form method="POST" action="{% url 'QA:post_question' user.id%}" class="bs-example form-horizontal">
           {% csrf_token %}
-          {{ question_form|safe }}
+          {{ question_form|crispy }}
           {{ question_form.media }}
           <br/>
           <button type="submit" class="btn btn-success">Finished</button><br/>
