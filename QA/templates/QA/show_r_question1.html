@@ -39,45 +39,53 @@
     </div>
   </div>
 
+
   <div class="container">
-  {% if owner_id == user_id %}
-    {% if r_question.status == False %}
-         <p class="text-right">
+    {% if owner_id == user_id %}
+      {% if r_question.status == False %}
+
+        <p class="text-right">
           <a type="button" class="btn btn-primary" href="{% url 'QA:edit_r_question' r_question.id %}">Edit</a>
           <a type="button"  class="btn btn-primary" href="{% url 'QA:delete_r_question' r_question.id %}">Delete</a>
           <a type="button"  class="btn btn-primary" href="{% url 'QA:questions' %}">>>Back</a>
         </p>
-      </div>
-      <div class="container">
-        <div class="card">
-        {% if r_answer_count > 1 %}
-          <div class="card-body"><p>{{ r_answer_count }} submitted Answers</p></div>
-        {% else %}
-          <div class="card-body"><p>{{ r_answer_count }} submitted Answer</p></div>
-        {% endif %}
-    </div>
-  </div>
-      {% for r_answer in r_answers %}
-        <p class="mb-auto">{{ r_answer.content|safe }}</p>
-        <footer>Answered by {{ r_answer.user.username }} in {{ r_answer.answer_time }}</footer>
-        <a href="{% url 'QA:accept_answer' r_answer.id %}"><button type="button" class="btn btn-primary">Accept</button></a>
-        <hr/>
-      {% endfor %}
-    {% else %}
-  </br>
-      <div class="container-fluid">
-          <a type="button" class="btn btn-primary" href="{% url 'QA:questions' %}">>>Back</a>
-      </div>
-      <hr/>
-      {% for r_answer in r_answers %}
-        {% if r_answer.status == True %}
-          <p class="mb-auto">Accepted answer:</p>
-          <p class="mb-auto">Answer:{{ r_answer.content|safe }}</p>
+
+        <div class="container">
+          <div class="card">
+            {% if r_answer_count > 1 %}
+              <div class="card-body"><h2>{{ r_answer_count }} submitted Answers</h2></div>
+            {% else %}
+              <div class="card-body"><h2>{{ r_answer_count }} submitted Answer</h2></div>
+            {% endif %}
+          </div>
+        </div>
+
+        {% for r_answer in r_answers %}
+          <p class="mb-auto">{{ r_answer.content|safe }}</p>
           <footer>Answered by {{ r_answer.user.username }} in {{ r_answer.answer_time }}</footer>
+          <a href="{% url 'QA:accept_answer' r_answer.id %}"><button type="button" class="btn btn-primary">Accept</button></a>
           <hr/>
-        {% endif %}
-      {% endfor %}
-    {% endif %}
+        {% endfor %}
+
+      {% else %}
+
+        <div class="container-fluid">
+            <a type="button" class="btn btn-primary" href="{% url 'QA:questions' %}">>>Back</a>
+        </div>
+        <hr/>
+
+        {% for r_answer in r_answers %}
+          {% if r_answer.status == True %}
+            <p class="mb-auto">Accepted answer:</p>
+            <p class="mb-auto">Answer:{{ r_answer.content|safe }}</p>
+            <footer>Answered by {{ r_answer.user.username }} in {{ r_answer.answer_time }}</footer>
+            <hr/>
+          {% endif %}
+        {% endfor %}
+
+      {% endif %}
+  </div>
+  
   {% else %}
     <div class="container-fluid">
       <a type="button" class="btn btn-warning" href="{% url 'QA:questions' %}">>>Back</a>

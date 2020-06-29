@@ -81,20 +81,11 @@ def show(request):
     common_tags = Post.tags.most_common()[:4]
     user = request.user
     users = User.objects.all()
-    for i in range(len(texts)):
-        videos = Video.objects.filter(post=texts[i].id)
-        if len(videos) == 1:
-            video.append(videos[0])
-        if len(videos) == 0:
-            video.append(None)
-        if len(videos) >= 2:
-            for q in range(len(videos)):
-                video.append(videos[q])
+
     context = {
         'texts': texts,
         'user': user,
         'users': users,
-        'video': video,
         'common_tags': common_tags,
     }
 
@@ -103,37 +94,21 @@ def show(request):
 @login_required
 def show_blog(request, post_id):
     post_detail = get_object_or_404(Post, pk=post_id)
-    post_detail.text = markdown(post_detail.text, extensions=[
+    markdown_extensions = [
         'markdown.extensions.extra',
         'markdown.extensions.codehilite',
         'markdown.extensions.toc',
-    ])
+    ]
+    post_detail.text = markdown(post_detail.text, extensions=markdown_extensions)
     post_type = ContentType.objects.get(app_label='blog', model='post')
-    video = []
-    videos = Video.objects.filter(post=post_detail.id)
-    if len(videos) == 1:
-        video.append(videos[0])
-    if len(videos) == 0:
-        video.append(None)
-    if len(videos) >= 2:
-        for q in range(len(videos)):
-            video.append(videos[q])
 
     comments = Comments.objects.filter(object_id=post_id, parent=None)
     for comment in comments:
-        comment.text = markdown(comment.text, extensions=[
-            'markdown.extensions.extra',
-            'markdown.extensions.codehilite',
-            'markdown.extensions.toc',
-        ])
+        comment.text = markdown(comment.text, extensions=markdown_extensions)
         child_comments = comment.children()
         print(child_comments)
         for child_comment in child_comments:
-            child_comment.text = markdown(child_comment.text, extensions=[
-                'markdown.extensions.extra',
-                'markdown.extensions.codehilite',
-                'markdown.extensions.toc',
-            ])
+            child_comment.text = markdown(child_comment.text, extensions=markdown_extensions)
     comment_form = CommentForm()
 
     post = Post.objects.get(id=post_id)
@@ -143,6 +118,17 @@ def show_blog(request, post_id):
     user_info = User.objects.get(id=id)
     to_follow_user = User.objects.get(id=id)
 
+    context = {
+        'post_detail': post_detail,
+        'post_type_id': post_type.id,
+        'comments': comments,
+        'comment_form': comment_form,
+        'post': post,
+        'user': user,
+        'self_user':self_user,
+        'user_info': user_info,
+    }
+
     if not Relationship.objects.filter(follower=request.user, following=to_follow_user).exists():
         show_button = "follow"
         if request.method == "POST":
@@ -150,48 +136,38 @@ def show_blog(request, post_id):
             relationship.following = User.objects.get(username=to_follow_user)
             relationship.follower = User.objects.get(username=self_user)
             relationship.save()
-
             return redirect('blog:post_detail', post_id)
         else:
             all_lists = Relationship.objects.filter(following_id=id)
             followings = Relationship.objects.filter(follower_id=id)
-            context = {
-                'post_detail': post_detail,
-                'post_type_id': post_type.id,
-                'video': video,
-                'comments': comments,
-                'comment_form': comment_form,
-                'post': post,
-                'user': user,
-                'user_info': user_info,
+            context.update({
                 'show_button': show_button,
                 'all_lists': all_lists,
                 'followings': followings,
-            }
+            })
             return render(request, 'blog/blogDetail.html', context)
+
     else:
+
         show_button = "Unfollow"
         if request.method == "POST":
             relationship = Relationship.objects.get(Q(follower=self_user) & Q(following=to_follow_user))
             relationship.delete()
+            context.update({
+                'show_button': show_button,
+            })
             return redirect('blog:post_detail', post_id)
+
         else:
             all_lists = Relationship.objects.filter(following_id=id)
             followings = Relationship.objects.filter(follower_id=id)
-            context = {
-                'post_detail': post_detail,
-                'post_type_id': post_type.id,
-                'video': video,
-                'comments': comments,
-                'comment_form': comment_form,
-                'post': post,
-                'user': user,
-                'user_info': user_info,
+
+            context.update({
                 'show_button': show_button,
                 'all_lists': all_lists,
                 'followings': followings,
-            }
-            return render(request, 'blog/blogDetail.html', context)
+            })
+        return render(request, 'blog/blogDetail.html', context)
 
 
 @login_required

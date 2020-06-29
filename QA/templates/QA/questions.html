@@ -77,11 +77,11 @@
     <a type="submit" href="{% url 'QA:post_question' user_id %}" class="btn btn-primary"><i class="fa fa-hand-o-right fa-fw"></i>Post common question</a>
     <a type="submit" href="{% url 'QA:reward_question' user_id %}" class="btn btn-primary"><i class="fa fa-hand-o-right fa-fw"></i>Post a reward</a>
     <hr/>
-    <div class="card shadow bg-white">
-      <div class="card-body">
-        <p>Rewarded questions:</p>
-        {% csrf_token %}
-        {% for question in reward_questions %}
+
+    <h2>Rewarded questions:</h2>
+    {% for question in reward_questions %}
+      <div class="card shadow bg-white">
+        <div class="card-body">
           <h1 class="card-title"><a href="{% url 'QA:show_r_question' question.id%}">{{ question.title }}</a></h1>
           <p>Publisher: {{ question.user.username }}</p>
           {% for tag in question.tags.all %}
@@ -94,21 +94,21 @@
             <p>Status:Solved</p>
           {% endif %}
           <p class="mb-auto text-muted"> {{ question.uploaded_at }}</p>
+        </div>
       </div>
-    </div>
-    <hr/>
     {% endfor %}
-    <hr/>
-    <div class="card shadow bg-white">
-      <div class="card-body">
-        <title>Common questions</title>
-        <p>Common Tags:
-          {% for tag in common_tags %}
-            <a class="badge badge-success" >{{ tag }}</a>
-          {% endfor %}
-        </p>
-        {% csrf_token %}
-        {% for question in questions %}
+    
+    <h2>Common questions</h2>
+    {% for question in questions %}
+      <div class="card shadow bg-white">
+        <div class="card-body">
+
+          <p>Common Tags:
+            {% for tag in common_tags %}
+              <a class="badge badge-success" >{{ tag }}</a>
+            {% endfor %}
+          </p>
+        
           <div class="col-md-6">
             <div class="cards">
               <h1 class="card-title"><a href="{% url 'QA:show_question' question.id%}">{{ question.title }}</a></h1>
@@ -122,10 +122,11 @@
               <span>Votes:{% get_up_number question.type_id question.id %}</span>
             </div>
           </div>
-          <hr/>
-        {% endfor %}
+        </div>
       </div>
+    {% endfor %}
+
     </div>
-  </div>
+    
 </body>
 </html>
